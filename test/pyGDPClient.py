@@ -2,7 +2,7 @@ import pyGDP
 from tkFileDialog import askopenfilename
 
 def openFile():
-    filePath = askopenfilename(filetypes=[("all","*"),("shp","*.shp")])
+    filePath = askopenfilename(filetypes=[("all","*"),("zip","*.zip")])
     try:
         open(filePath).read()
     except IOError:
@@ -33,13 +33,26 @@ def getInput(listInput):
 
 def main():
     
+    """
     filePath = openFile()
-    print filePath
+    # encode the zip file
+    fileHandle = pyGDP.encodeZipFolder(filePath)
+    # upload the file to geoserver
+    shpfile = pyGDP.uploadService(fileHandle)
+    # now the file should be online
+    """
+    
+    shapefiles = pyGDP.getAvailableFilesFromGeoServer()
+    for k in shapefiles:
+        print k
+    
+    shpfile = getInput(shapefiles)
+    
     #print attributes
-    attributes = pyGDP.getAttributesFromShape(filePath)
+    attributes = pyGDP.getAttributes(shpfile)
     usr_attribute = getInput(attributes)
     
-    values = pyGDP.getValuesFromShape(filePath, usr_attribute)
+    values = pyGDP.getValues(shpfile, usr_attribute)
     usr_value = getInput(values)
     
     
@@ -48,23 +61,27 @@ def main():
     dataSetURIs = pyGDP.getDataSetURI()
     
     # dataSet = getInput(dataSetURIs)
-    dataSet = dataSetURIs[4]
-    dataTypes = pyGDP.getDataType(dataSet)
+    dataSetURI = dataSetURIs[4]
+    # get the available variables in the dataset
+    dataTypes = pyGDP.getDataType(dataSetURI)
     for i in dataTypes:
         print i
     
-    timeRange = pyGDP.getDataSetTimeRange(dataSet, dataTypes[0]) 
+    # get the begin and the end time range
+    timeRange = pyGDP.getDataSetTimeRange(dataSetURI, dataTypes[0])
     for i in timeRange:
         print i
     
-    d1,d2,d3,d4 = pyGDP.submitFeatureWeightedRequest(filePath, dataSet, dataTypes[0], usr_attribute, usr_value, timeRange[0], timeRange[0])
+    d1,d2,d3,d4 = pyGDP.submitFeatureWeightedRequest(shpfile, dataSetURI, dataTypes[0], usr_attribute, usr_value, timeRange[0], timeRange[0])
+    #pyGDP.submitFeatureWeightedRequest(shpfile, dataSetURI, dataTypes[0], usr_attribute, usr_value, timeRange[0], timeRange[0])
     
     print d1
     print d2
     print d3
     print d4
     
-    """ 
+    
+    """
     # instantiate WPS client
     filePath = openXML()
     # another request
