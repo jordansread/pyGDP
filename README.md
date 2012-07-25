@@ -7,7 +7,6 @@ Dependencies
 =============
 pyGDp requires lxml.etree, owslib.
 
-May not work correctly due to personal patches on owslib. Will be fixing.
 
 Usage
 ==============
@@ -16,7 +15,8 @@ Usage
 
 import pyGDP
 
-Usage to be inserted soon.
+Usage to be inserted soon. 
+Example client available in test folder.
 ...
 
 Support
