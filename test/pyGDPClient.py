@@ -48,31 +48,41 @@ def main():
     
     shpfile = getInput(shapefiles)
     
-    #print attributes
+    print ''
+    print 'Getting Attributes'
     attributes = pyGDP.getAttributes(shpfile)
     usr_attribute = getInput(attributes)
     
+    print ''
+    print 'Getting Values'
     values = pyGDP.getValues(shpfile, usr_attribute)
     usr_value = getInput(values)
     
-    
+    print ''
+    print 'Getting available DataSet URIs'
     # we now have user_attribute & user_value
     # time to select a datasetURI, data type, and time
     dataSetURIs = pyGDP.getDataSetURI()
-    
     # dataSet = getInput(dataSetURIs)
-    dataSetURI = dataSetURIs[4]
+    dataSetURI = getInput(dataSetURIs)
+    
+    print ''
+    print 'Getting available dataTypes'
     # get the available variables in the dataset
     dataTypes = pyGDP.getDataType(dataSetURI)
-    for i in dataTypes:
-        print i
+    dataType  = getInput(dataTypes)
+    
+    print '' 
+    print 'getting Time from DataSet'
     
     # get the begin and the end time range
-    timeRange = pyGDP.getDataSetTimeRange(dataSetURI, dataTypes[0])
+    timeRange = pyGDP.getDataSetTimeRange(dataSetURI, dataType)
     for i in timeRange:
         print i
     
-    d1,d2,d3,d4 = pyGDP.submitFeatureWeightedRequest(shpfile, dataSetURI, dataTypes[0], usr_attribute, usr_value, timeRange[0], timeRange[0])
+    print ''
+    print 'Submitting request'
+    d1,d2,d3,d4 = pyGDP.submitFeatureWeightedRequest(shpfile, dataSetURI, dataType, usr_attribute, usr_value, timeRange[0], timeRange[0])
     #pyGDP.submitFeatureWeightedRequest(shpfile, dataSetURI, dataTypes[0], usr_attribute, usr_value, timeRange[0], timeRange[0])
     
     print d1
