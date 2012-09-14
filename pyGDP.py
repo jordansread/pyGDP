@@ -18,9 +18,9 @@ import sys
 import os
 
 #global urls for GDP and services
-GDP_URL = 'http://cida-eros-gdp2.er.usgs.gov:8082/geoserver/wfs' 
-WFS_URL = 'http://cida-eros-gdp2.er.usgs.gov:8082/geoserver/wfs'
-upload_URL = 'http://cida-eros-gdp2.er.usgs.gov:8082/geoserver'
+GDP_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
+WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
+upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
 WPS_URL = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
 WPS_Service = 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
 
