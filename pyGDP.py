@@ -18,7 +18,6 @@ import sys
 import os
 
 #global urls for GDP and services
-GDP_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
 WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
 upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
 WPS_URL = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
@@ -348,7 +347,7 @@ class pyGDPwebProcessing():
         Sets up a cgi request to the wfs for features specified.
         """
         
-        service_url = GDP_URL
+        service_url = WFS_URL
         
         qs = []
         if service_url.find('?') != -1:
@@ -452,7 +451,7 @@ class pyGDPwebProcessing():
         with the file and the attribute chosen.
         """
         
-        service_url = GDP_URL
+        service_url = WFS_URL
         qs = []
         if service_url.find('?') != -1:
                 qs = cgi.parse_qsl(service_url.split('?')[1])
@@ -502,7 +501,7 @@ class pyGDPwebProcessing():
         """
         Returns a list of available files currently on geoserver.
         """
-        wfs = WebFeatureService(GDP_URL)
+        wfs = WebFeatureService(WFS_URL)
         shapefiles = wfs.contents.keys()
         return shapefiles
     
