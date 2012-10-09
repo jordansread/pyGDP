@@ -1,4 +1,5 @@
 import pyGDP
+import os
 from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
@@ -33,7 +34,5 @@ class TestProcessRequestUsingPolygon(object):
 	 
 	outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value)
   
-	print outputFile_handle
-	print outputFile_handle.size
-
-	assert_equal(1, 1)
+	# ALERT: Fragile Test :)
+	print os.path.getsize(outputFile_handle, 18416)
