@@ -437,10 +437,15 @@ class pyGDPwebProcessing():
         execution = POST.execute(None, [], request=request)
         if method == 'getDataSetTime':
             seekterm = 'time'
-        else:
+        elif method == 'getDataType':
             seekterm = 'name'
+        elif method == 'getDataLongName':
+            seekterm = 'description'
+        elif method == 'getDataUnits':
+            seekterm = 'unitsstring'
         if not verbose:
             sys.stdout = old_stdout
+    
         return self._parseXMLNodesForTagText(execution.response, seekterm)
     
     def _generateFeatureRequest(self, typename, attribute=None):
@@ -543,7 +548,24 @@ class pyGDPwebProcessing():
             
         algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
         return self._generateRequest(dataSetURI, algorithm, method='getDataType', varID=None, verbose=verbose)
+    
+    def getDataLongName(self, dataSetURI, verbose=False):
+        """
+            Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
+            If verbose = True, will print on screen the waiting seq. for response document.
+            """
         
+        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
+        return self._generateRequest(dataSetURI, algorithm, method='getDataLongName', varID=None, verbose=verbose)
+
+    def getDataUnits(self, dataSetURI, verbose=False):
+        """
+            Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
+            If verbose = True, will print on screen the waiting seq. for response document.
+            """
+        
+        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
+        return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
         
         
     def getDataSetURI(self):
