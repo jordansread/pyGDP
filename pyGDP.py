@@ -18,9 +18,9 @@ import sys
 import os
 
 #global urls for GDP and services
-WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
+WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
 upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
-WPS_URL = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
+WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
 WPS_Service = 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
 
 # namespace definition
@@ -32,7 +32,6 @@ OGC_NAMESPACE = 'http://www.opengis.net/ogc'
 GML_NAMESPACE = 'http://www.opengis.net/gml'
 GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
 DRAW_NAMESPACE = 'gov.usgs.cida.gdp.draw'
-DRAW_SCHEMA_LOCATION = 'http://cida.usgs.gov/qa/climate/derivative/xsd/draw.xsd'
 SMPL_NAMESPACE = 'gov.usgs.cida.gdp.sample'
 UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
 CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
@@ -423,8 +422,7 @@ class pyGDPwebProcessing():
         Will return a list containing the info requested for (either data types or time range).
         """
         
-        wps_Service = 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
-        POST = WebProcessingService(wps_Service, verbose=False)
+        POST = WebProcessingService(WPS_Service, verbose=False)
         
         xmlGen = gdpXMLGenerator()
         root = xmlGen.getXMLRequestTree(dataSetURI, algorithm, method, varID, verbose)           
@@ -439,10 +437,15 @@ class pyGDPwebProcessing():
         execution = POST.execute(None, [], request=request)
         if method == 'getDataSetTime':
             seekterm = 'time'
-        else:
+        elif method == 'getDataType':
             seekterm = 'name'
+        elif method == 'getDataLongName':
+            seekterm = 'description'
+        elif method == 'getDataUnits':
+            seekterm = 'unitsstring'
         if not verbose:
             sys.stdout = old_stdout
+    
         return self._parseXMLNodesForTagText(execution.response, seekterm)
     
     def _generateFeatureRequest(self, typename, attribute=None):
@@ -545,7 +548,24 @@ class pyGDPwebProcessing():
             
         algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
         return self._generateRequest(dataSetURI, algorithm, method='getDataType', varID=None, verbose=verbose)
+    
+    def getDataLongName(self, dataSetURI, verbose=False):
+        """
+            Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
+            If verbose = True, will print on screen the waiting seq. for response document.
+            """
         
+        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
+        return self._generateRequest(dataSetURI, algorithm, method='getDataLongName', varID=None, verbose=verbose)
+
+    def getDataUnits(self, dataSetURI, verbose=False):
+        """
+            Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
+            If verbose = True, will print on screen the waiting seq. for response document.
+            """
+        
+        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
+        return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
         
         
     def getDataSetURI(self):
