@@ -26,6 +26,6 @@ class TestDatasetIntrospection(object):
 
 	datatypes = testPyGDP.getDataType(DATASET_URI, True)
 
-	assert_equal(len(datatypes), 4)
+	assert_equal(len(datatypes), 3)
 
 	assert('ppt' in datatypes)
