@@ -29,3 +29,17 @@ class TestDatasetIntrospection(object):
 	assert_equal(len(datatypes), 3)
 
 	assert('ppt' in datatypes)
+
+	
+    def test_get_time_range(self):
+	DATASET_URI = 'dods://cida.usgs.gov/qa/thredds/dodsC/prism'
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+	datatype = 'ppt'
+	trange = testPyGDP.getTimeRange(DATASET_URI, datatype)
+
+	assert_equal(len(trange), 2)
+
+	assert_equal(trange[0], '1895-01-01T00:00:00Z')
+
+	
