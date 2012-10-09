@@ -35,4 +35,4 @@ class TestProcessRequestUsingPolygon(object):
 	outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value)
   
 	# ALERT: Fragile Test :)
-	print os.path.getsize(outputFile_handle, 18416)
+	assert_equal(os.path.getsize(outputFile_handle), 18416)
