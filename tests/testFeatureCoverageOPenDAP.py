@@ -5,7 +5,7 @@ from nose.tools import assert_not_equal
  
 class TestFeatureCoverageOPenDAP(object):
  
-    def skip_test_submit_FCOD(self):
+    def test_submit_FCOD(self):
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
 	shapefile = 'sample:CONUS_States'

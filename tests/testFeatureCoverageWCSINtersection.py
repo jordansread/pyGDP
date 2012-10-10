@@ -5,7 +5,7 @@ from nose.tools import assert_not_equal
  
 class TestFeatureCoverageWCSIntersection(object):
  
-    def test_submit_FCOD(self):
+    def test_submit_WCSIntersection(self):
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
 	shapefile = 'sample:CONUS_States'
