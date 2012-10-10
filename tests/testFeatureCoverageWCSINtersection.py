@@ -5,7 +5,7 @@ from nose.tools import assert_not_equal
  
 class TestFeatureCoverageOPenDAP(object):
  
-    def skip_test_submit_FCOD(self):
+    def test_submit_FCOD(self):
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
 	shapefile = 'sample:CONUS_States'
@@ -18,9 +18,4 @@ class TestFeatureCoverageOPenDAP(object):
 
 	outputFile_handle = testPyGDP.submitFeatureCoverageOPenDAP(shapefile, dataSetURI, dataType, timeStart, timeEnd, attribute, value, verbose=True)
 
-	# This test is not currently working because what comes from 
-	# testPyGDP.submitFeatureCoverageOPenDAP() is a NoneType
-	# even though I've verified that it constistently writes a 
-	# file of the size below. I expect a string to come back from 
-	# this function
-	assert_equal(os.path.getsize(outputFile_handle), 2067840)
+	assert_equal(os.path.getsize(outputFile_handle), 18416)
