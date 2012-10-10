@@ -644,31 +644,27 @@ class pyGDPwebProcessing():
         """
         
         wps = WebProcessingService(WPS_URL)
-        
-        # if verbose=True, then will we will monitor the status of the call.
-        # if verbose=False, then we will return only the file outputpath.
-        if not verbose:
-            # redirects the standard output to avoid printing request status
-            old_stdout = sys.stdout
-            result = StringIO()
+
+        old_stdout = sys.stdout
+        new_stdout = sys.stdout
+        # create StringIO() for listening to print
+        result = StringIO()
+        if not verbose: # redirect standard output
             sys.stdout = result
-            
-            # executes the request
-            execution = wps.execute(processid, inputs, output = "OUTPUT")
-            monitorExecution(execution, download=True)    
-            
-            # sets the standard output back to original
-            sys.stdout = old_stdout
-            result_string = result.getvalue()
-            
-            #parses the redirected output to get the filepath of the saved file
-            output = result_string.split('\n')
-            tmp = output[len(output) - 2].split(' ')
-            return tmp[len(tmp)-1]
-    
-        # executes the request
+        
         execution = wps.execute(processid, inputs, output = "OUTPUT")
-        monitorExecution(execution, download=True)   
+        monitorExecution(execution, download=False) # monitors for success
+    
+        # redirect standard output after successful execution
+        sys.stdout = result
+        monitorExecution(execution, download=True)
+                
+        result_string = result.getvalue()
+        output = result_string.split('\n')
+        tmp = output[len(output) - 2].split(' ')  
+        sys.stdout = old_stdout
+        return tmp[len(tmp)-1]
+
     
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stat='MEAN', grpby='STATISTIC', 
