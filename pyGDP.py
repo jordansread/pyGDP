@@ -1,8 +1,8 @@
 # dependencies: lxml.etree, owslib
 # =============================================================================
-# Author : Xao Yang <xyang@usgs.gov>
+# Authors : Xao Yang, Jordan Walker, Jordan Read
 #
-# Contact email: xyang@usgs.gov
+# Contact email: jread@usgs.gov
 # =============================================================================
 from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
