@@ -3,7 +3,7 @@ import os
 from nose.tools import assert_equal
 from nose.tools import assert_not_equal
  
-class TestFeatureCoverageOPenDAP(object):
+class TestFeatureCoverageWCSIntersection(object):
  
     def test_submit_FCOD(self):
         testPyGDP = pyGDP.pyGDPwebProcessing()
@@ -16,6 +16,6 @@ class TestFeatureCoverageOPenDAP(object):
 	timeStart = '1950-01-01T00:00:00.000Z'
 	timeEnd = '1951-01-31T00:00:00.000Z'
 
-	outputFile_handle = testPyGDP.submitFeatureCoverageOPenDAP(shapefile, dataSetURI, dataType, timeStart, timeEnd, attribute, value, verbose=True)
+	outputFile_handle = testPyGDP.submitFeatureCoverageWCSIntersection(shapefile, dataSetURI, dataType, timeStart, timeEnd, attribute, value, verbose=True)
 
 	assert_equal(os.path.getsize(outputFile_handle), 18416)
