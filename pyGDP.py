@@ -646,7 +646,6 @@ class pyGDPwebProcessing():
         wps = WebProcessingService(WPS_URL)
 
         old_stdout = sys.stdout
-        new_stdout = sys.stdout
         # create StringIO() for listening to print
         result = StringIO()
         if not verbose: # redirect standard output
