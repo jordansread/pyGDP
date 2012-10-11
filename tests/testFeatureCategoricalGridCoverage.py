@@ -10,7 +10,7 @@ class TestFeatureCategoricalGridCoverage(object):
         
 	shapefile = 'sample:CONUS_States'
 	attribute = 'STATE'
-	value = 'Alabama'
+	value = 'Rhode Island'
 	dataSetURI = 'http://cida.usgs.gov/ArcGIS/services/statsgo_numid/MapServer/WCSServer'
 	dataType = '1'
 
@@ -21,4 +21,4 @@ class TestFeatureCategoricalGridCoverage(object):
 	# even through I've verified that it consistently writes a file
 	# of the size below. I expect a string to come back from this
 	# function
-	assert_equal(os.path.getsize(outputFile_handle), 18416)
+	assert_equal(os.path.getsize(outputFile_handle), 650)
