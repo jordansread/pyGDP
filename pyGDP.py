@@ -1,6 +1,6 @@
 # dependencies: lxml.etree, owslib
 # =============================================================================
-# Authors : Xao Yang, Jordan Walker, Jordan Read
+# Authors : Xao Yang, Jordan Walker, Jordan Read, Curtis Price
 #
 # Contact email: jread@usgs.gov
 # =============================================================================
@@ -16,6 +16,7 @@ import base64
 import cgi
 import sys
 import os
+import zipfile
 
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
@@ -254,6 +255,85 @@ class pyGDPwebProcessing():
         fout.write(encode)
         fout.close()
         return filename
+
+    def shapeToZip(self,inShape, outZip=None, allFiles=True):
+        """Packs a shapefile to ZIP format.
+        
+        arguments
+        -inShape -  input shape file
+        
+        -outZip -   output ZIP file (optional)
+          default: <inShapeName>.zip in same folder as inShape
+          (If full path not specified, output is written to
+          to same folder as inShape)
+        
+        -allFiles - Include all files? (optional)
+          True (default) - all shape file components
+          False - just .shp,.shx,.dbf,.prj,shp.xml files
+        
+        reference: Esri, Inc, 1998, Esri Shapefile Technical Description
+          http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf
+        
+        author: Curtis Price, cprice@usgs.gov"""
+    
+        if not os.path.splitext(inShape)[1] == ".shp":
+            raise Exception, "inShape must be a *.shp"
+    
+        if not os.path.exists(inShape):
+            raise Exception, "%s not found" % inShape
+    
+        # get shapefile root name "path/file.shp" -> "file"
+        # and shapefile path
+        rootName = os.path.splitext(os.path.basename(inShape))[0]
+        inShape = os.path.realpath(inShape)
+        inDir = os.path.dirname(inShape)
+    
+        # output zip file path
+        if outZip in [None,""]:
+            # default output: shapefilepath/shapefilename.zip
+            outDir = inDir
+            outZip = os.path.join(outDir,rootName) + ".zip"
+        else:
+            outDir = os.path.dirname(outZip)
+            if outDir.strip() in ["","."]:
+                # if full path not specified, use input shapefile folder
+                outDir = os.path.dirname(os.path.realpath(inShape))
+            else:
+                # if output path does exist, raise an exception
+                if not os.path.exists(outDir):
+                    raise Exception, "Output folder %s not found" % outDir
+            outZip = os.path.join(outDir,outZip)
+            # enforce .zip extension
+            outZip = os.path.splitext(outZip)[0] + ".zip"
+
+        if not os.access(outDir, os.W_OK):
+            raise Exception, "Output directory %s not writeable" % outDir
+
+        if os.path.exists(outZip):
+            os.unlink(outZip)
+
+        try:
+            # open zipfile
+            zf = zipfile.ZipFile(outZip, 'w', zipfile.ZIP_DEFLATED)
+            # write shapefile parts to zipfile
+            ShapeExt = ["shp","shx","dbf","prj","shp.xml"]
+            if allFiles: ShapeExt += ["sbn","sbx","fbn","fbx",
+                                  "ain","aih","isx","mxs","atx","cpg"]
+            for f in ["%s.%s" % (os.path.join(inDir,rootName),ext)
+                  for ext in ShapeExt]:
+                if os.path.exists(f):
+                    zf.write(f)
+                    ##print f # debug print
+            return outZip
+        except Exception, msg:
+            raise Exception, \
+                "Could not write zipfile " + outZip + "\n" + str(msg)
+        finally:
+            try:
+                # close the output file
+                zf.close()
+            except:
+                pass
 
     def uploadShapeFile(self, filePath):
         """
@@ -644,31 +724,26 @@ class pyGDPwebProcessing():
         """
         
         wps = WebProcessingService(WPS_URL)
-        
-        # if verbose=True, then will we will monitor the status of the call.
-        # if verbose=False, then we will return only the file outputpath.
-        if not verbose:
-            # redirects the standard output to avoid printing request status
-            old_stdout = sys.stdout
-            result = StringIO()
+
+        old_stdout = sys.stdout
+        # create StringIO() for listening to print
+        result = StringIO()
+        if not verbose: # redirect standard output
             sys.stdout = result
-            
-            # executes the request
-            execution = wps.execute(processid, inputs, output = "OUTPUT")
-            monitorExecution(execution, download=True)    
-            
-            # sets the standard output back to original
-            sys.stdout = old_stdout
-            result_string = result.getvalue()
-            
-            #parses the redirected output to get the filepath of the saved file
-            output = result_string.split('\n')
-            tmp = output[len(output) - 2].split(' ')
-            return tmp[len(tmp)-1]
-    
-        # executes the request
+        
         execution = wps.execute(processid, inputs, output = "OUTPUT")
-        monitorExecution(execution, download=True)   
+        monitorExecution(execution, download=False) # monitors for success
+    
+        # redirect standard output after successful execution
+        sys.stdout = result
+        monitorExecution(execution, download=True)
+                
+        result_string = result.getvalue()
+        output = result_string.split('\n')
+        tmp = output[len(output) - 2].split(' ')  
+        sys.stdout = old_stdout
+        return tmp[len(tmp)-1]
+
     
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stat='MEAN', grpby='STATISTIC', 
