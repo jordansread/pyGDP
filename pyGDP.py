@@ -722,7 +722,6 @@ class pyGDPwebProcessing():
         This function makes a call to the Web Processing Service with
         the specified user inputs.
         """
-        
         wps = WebProcessingService(WPS_URL)
 
         old_stdout = sys.stdout
