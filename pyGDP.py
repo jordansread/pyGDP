@@ -37,6 +37,9 @@ SMPL_NAMESPACE = 'gov.usgs.cida.gdp.sample'
 UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
 CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
 
+# misc variables
+URL_timeout = 2		# seconds
+
 # list of namespaces used by this module
 namespaces = {
      None  : WPS_DEFAULT_NAMESPACE,
@@ -239,8 +242,7 @@ class pyGDPwebProcessing():
         """
         #check extension
         if not filename.endswith('.zip'):
-            print 'Wrong filetype.'
-            return
+            raise Exception('Wrong filetype.')
         
         #encode the file
         with open(filename, 'rb') as fin:
@@ -362,8 +364,7 @@ class pyGDPwebProcessing():
         fileCheckString = "upload:" + filename
         shapefiles = self.getShapefiles()
         if fileCheckString in shapefiles:
-            print 'File exists already.'
-            return
+            raise Exception('File exists already.')
         
         xmlGen = gdpXMLGenerator()
         root = xmlGen.getUploadXMLtree(filename, upload_URL, filedata)
@@ -416,7 +417,6 @@ class pyGDPwebProcessing():
                 if valTerm not in value:
                     value.append(valTerm)
                 begin_index = end_index
-                #print begin_index
             else:
                 break
         return value, ntuple
@@ -566,7 +566,7 @@ class pyGDPwebProcessing():
         """
         # makes a call to get an xml document containing list of shapefiles
         urlen = self._generateFeatureRequest(shapefile)
-        linesToParse = urlopen(urlen) 
+        linesToParse = urlopen(urlen, timeout = URL_timeout) 
         
         # gets back from the linesToParse document, all lines with 2nd arg
         lines = self._getLinesContaining(linesToParse, 'xsd:element maxOccurs=')
@@ -598,7 +598,7 @@ class pyGDPwebProcessing():
         """
         
         urlen = self._generateFeatureRequest(shapefile, attribute)
-        inputObject = urlopen(urlen)
+        inputObject = urlopen(urlen, timeout = URL_timeout)
         shapefileterm = shapefile.split(':')
         
         strinx = inputObject.read()
@@ -695,9 +695,8 @@ class pyGDPwebProcessing():
         if isinstance(geoType, list):
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
-            if value==None and gmlIDs==None:
-                print 'must input a value and attribute for shapefile'
-                return
+            if value==None or gmlIDs==None:
+                raise Exception('must input a value AND attribute for shapefile')
             else:
                 tmpID = []
                 if gmlIDs is None:
@@ -714,8 +713,7 @@ class pyGDPwebProcessing():
                 query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
                 return WFSFeatureCollection(WFS_URL, query)
         else:
-            print 'Geotype is not a shapefile or a recognizable polygon.'
-            return None
+            raise Exception('Geotype is not a shapefile or a recognizable polygon.')
     
     def _executeRequest(self, processid, inputs, verbose):
         """
