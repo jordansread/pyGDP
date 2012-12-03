@@ -19,10 +19,10 @@ import os
 import zipfile
 
 #global urls for GDP and services
-WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
+WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
 upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
 WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
-WPS_Service = 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
+WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
 
 # namespace definition
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
@@ -39,20 +39,21 @@ CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
 
 # misc variables
 URL_timeout = 2		# seconds
+WPS_attempts= 5		# tries with null response before failing
 
 # list of namespaces used by this module
 namespaces = {
-     None  : WPS_DEFAULT_NAMESPACE,
-    'wps'  : WPS_DEFAULT_NAMESPACE,
-    'ows'  : DEFAULT_OWS_NAMESPACE,
-    'xlink': XLINK_NAMESPACE,
-    'xsi'  : XSI_NAMESPACE,
-    'wfs'  : WFS_NAMESPACE,
-    'ogc'  : OGC_NAMESPACE,
-    'gml'  : GML_NAMESPACE,
+     None  	: WPS_DEFAULT_NAMESPACE,
+    'wps'  	: WPS_DEFAULT_NAMESPACE,
+    'ows'  	: DEFAULT_OWS_NAMESPACE,
+    'xlink'	: XLINK_NAMESPACE,
+    'xsi'  	: XSI_NAMESPACE,
+    'wfs'  	: WFS_NAMESPACE,
+    'ogc'  	: OGC_NAMESPACE,
+    'gml'  	: GML_NAMESPACE,
     'sample': SMPL_NAMESPACE,
     'upload': UPLD_NAMESPACE,
-    'csw': CSW_NAMESPACE
+    'csw'	: CSW_NAMESPACE
 }
 
 class gdpXMLGenerator():
@@ -695,7 +696,7 @@ class pyGDPwebProcessing():
         if isinstance(geoType, list):
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
-            if value==None or gmlIDs==None:
+            if value==None and gmlIDs==None:
                 raise Exception('must input a value AND attribute for shapefile')
             else:
                 tmpID = []
