@@ -660,12 +660,12 @@ class pyGDPwebProcessing():
         print 'Or you may utilize the web gdp @ http://cida.usgs.gov/gdp/ to get a dataSet matching your specified shapefile.'
         print
             
-        dataSetURIs = ['http://regclim.coas.oregonstate.edu:8080/thredds/dodsC/regcmdata/NCEP/merged/monthly/RegCM3_A2_monthly_merged_NCEP.ncml',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml',
-                           'http://cida.usgs.gov/qa/thredds/dodsC/prism',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/maurer/maurer_brekke_w_meta.ncml',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/alaska_grid.w_meta.ncml',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/gmo/GMO_w_meta.ncml']
+        dataSetURIs = ['dods://regclim.coas.oregonstate.edu:8080/thredds/dodsC/regcmdata/EH5/ena/Daily/RegCM3_Daily_ena_EH5.ncml',
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/sleuth',
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/prism',
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/nsidc'
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/maurer/monthly',
+                           'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml']
         return dataSetURIs    
     
     def getGMLIDs(self, shapefile, attribute, value):
@@ -697,7 +697,7 @@ class pyGDPwebProcessing():
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
             if value==None and gmlIDs==None:
-                raise Exception('must input a value AND attribute for shapefile')
+                raise Exception('must input a shapefile OR a polygon')
             else:
                 tmpID = []
                 if gmlIDs is None:
