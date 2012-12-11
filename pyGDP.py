@@ -19,10 +19,10 @@ import os
 import zipfile
 
 #global urls for GDP and services
-WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs' 
+WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
 upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
 WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
-WPS_Service = 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
+WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
 
 # namespace definition
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
@@ -39,20 +39,21 @@ CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
 
 # misc variables
 URL_timeout = 2		# seconds
+WPS_attempts= 5		# tries with null response before failing
 
 # list of namespaces used by this module
 namespaces = {
-     None  : WPS_DEFAULT_NAMESPACE,
-    'wps'  : WPS_DEFAULT_NAMESPACE,
-    'ows'  : DEFAULT_OWS_NAMESPACE,
-    'xlink': XLINK_NAMESPACE,
-    'xsi'  : XSI_NAMESPACE,
-    'wfs'  : WFS_NAMESPACE,
-    'ogc'  : OGC_NAMESPACE,
-    'gml'  : GML_NAMESPACE,
+     None  	: WPS_DEFAULT_NAMESPACE,
+    'wps'  	: WPS_DEFAULT_NAMESPACE,
+    'ows'  	: DEFAULT_OWS_NAMESPACE,
+    'xlink'	: XLINK_NAMESPACE,
+    'xsi'  	: XSI_NAMESPACE,
+    'wfs'  	: WFS_NAMESPACE,
+    'ogc'  	: OGC_NAMESPACE,
+    'gml'  	: GML_NAMESPACE,
     'sample': SMPL_NAMESPACE,
     'upload': UPLD_NAMESPACE,
-    'csw': CSW_NAMESPACE
+    'csw'	: CSW_NAMESPACE
 }
 
 class gdpXMLGenerator():
@@ -659,12 +660,12 @@ class pyGDPwebProcessing():
         print 'Or you may utilize the web gdp @ http://cida.usgs.gov/gdp/ to get a dataSet matching your specified shapefile.'
         print
             
-        dataSetURIs = ['http://regclim.coas.oregonstate.edu:8080/thredds/dodsC/regcmdata/NCEP/merged/monthly/RegCM3_A2_monthly_merged_NCEP.ncml',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/conus_grid.w_meta.ncml',
-                           'http://cida.usgs.gov/qa/thredds/dodsC/prism',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/maurer/maurer_brekke_w_meta.ncml',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/dcp/alaska_grid.w_meta.ncml',
-                           'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/gmo/GMO_w_meta.ncml']
+        dataSetURIs = ['dods://regclim.coas.oregonstate.edu:8080/thredds/dodsC/regcmdata/EH5/ena/Daily/RegCM3_Daily_ena_EH5.ncml',
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/sleuth',
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/prism',
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/nsidc'
+                           'dods://cida.usgs.gov/qa/thredds/dodsC/maurer/monthly',
+                           'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml']
         return dataSetURIs    
     
     def getGMLIDs(self, shapefile, attribute, value):
@@ -695,8 +696,8 @@ class pyGDPwebProcessing():
         if isinstance(geoType, list):
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
-            if value==None or gmlIDs==None:
-                raise Exception('must input a value AND attribute for shapefile')
+            if value==None and gmlIDs==None:
+                raise Exception('must input a shapefile OR a polygon')
             else:
                 tmpID = []
                 if gmlIDs is None:
