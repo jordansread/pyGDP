@@ -697,7 +697,7 @@ class pyGDPwebProcessing():
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
             if value==None and gmlIDs==None:
-                raise Exception('must input a shapefile OR a polygon')
+                raise Exception('must input a value AND attribute for shapefile')
             else:
                 tmpID = []
                 if gmlIDs is None:
