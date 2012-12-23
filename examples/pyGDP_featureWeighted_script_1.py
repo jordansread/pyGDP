@@ -44,7 +44,7 @@ for d in dataSetURIs:
     print d
 
 # Set our datasetURI
-dataSetURI = 'dods://igsarm-cida-thredds1.er.usgs.gov:8080/thredds/dodsC/gmo/GMO_w_meta.ncml'
+dataSetURI = 'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml'
 # Get the available data types associated with the dataset
 dataType = 'Prcp'
 # Get available time range on the dataset

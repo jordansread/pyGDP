@@ -716,7 +716,7 @@ class pyGDPwebProcessing():
         else:
             raise Exception('Geotype is not a shapefile or a recognizable polygon.')
     
-    def _executeRequest(self, processid, inputs, verbose):
+    def _executeRequest(self, processid, inputs, output, verbose):
         """
         This function makes a call to the Web Processing Service with
         the specified user inputs.
@@ -729,7 +729,7 @@ class pyGDPwebProcessing():
         if not verbose: # redirect standard output
             sys.stdout = result
         
-        execution = wps.execute(processid, inputs, output = "OUTPUT")
+        execution = wps.execute(processid, inputs, output)
         monitorExecution(execution, download=False) # monitors for success
     
         # redirect standard output after successful execution
@@ -767,8 +767,8 @@ class pyGDPwebProcessing():
                   ("SUMMARIZE_TIMESTEP", timeStep), 
                   ("SUMMARIZE_FEATURE_ATTRIBUTE",summAttr), 
                   ("FEATURE_COLLECTION", featureCollection)]
-        
-        return self._executeRequest(processid, inputs, verbose)
+        output = "OUTPUT"
+        return self._executeRequest(processid, inputs, output, verbose)
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
                                      verbose=False, coverage='true'):
@@ -786,7 +786,8 @@ class pyGDPwebProcessing():
                    ("TIME_END",endTime),
                    ("REQUIRE_FULL_COVERAGE",coverage),
                    ("FEATURE_COLLECTION", featureCollection)]
-        return self._executeRequest(processid, inputs, verbose)    
+        output = "OUTPUT"
+        return self._executeRequest(processid, inputs, output, verbose)    
 
     def submitFeatureCoverageWCSIntersection(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true'):
         """
@@ -801,7 +802,8 @@ class pyGDPwebProcessing():
                   ("DATASET_ID", varID),
                   ("REQUIRE_FULL_COVERAGE",coverage), 
                   ("FEATURE_COLLECTION", featureCollection)]
-        return self._executeRequest(processid, inputs, verbose)
+        output = "OUTPUT"
+        return self._executeRequest(processid, inputs, output, verbose)
     
     def submitFeatureCategoricalGridCoverage(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true', delim='COMMA'):
@@ -819,4 +821,5 @@ class pyGDPwebProcessing():
                ("DELIMITER", delim),
                ("REQUIRE_FULL_COVERAGE",coverage),
                ("FEATURE_COLLECTION", featureCollection)]
-        return self._executeRequest(processid, inputs, verbose)
+        output = "OUTPUT"
+        return self._executeRequest(processid, inputs, output, verbose)
