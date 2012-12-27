@@ -6,7 +6,7 @@ shapefile = 'sample:CONUS_States'
 attribute = 'STATE'
 value = 'Alabama'
 
-dataSetURI = 'http://cida.usgs.gov/ArcGIS/services/statsgo_numid/MapServer/WCSServer'
+dataSetURI = 'http://cida.usgs.gov/ArcGIS/services/SSURGO_Products/MapServer/WCSServer'
 
 dataType = '1'
 
