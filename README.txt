@@ -2,7 +2,8 @@ pyGDP
 =================
 
 pyGDP provides a fast and efficient way of making calls to the USGS GeoData Portal.
-pyGDP has the following Algorithms: 
+
+pyGDP has the following algorithms: 
 	- FeatureCategoricalGridCoverage
 	- FeatureWeightedGridStatistics
 	- FeatureCoverageOPenDap
@@ -30,7 +31,9 @@ https://github.com/geopython/OWSLib
 
 For lxml, window users can find unofficial window binaries of lxml
 and other interesting packages here:
-http://www.lfd.uci.edu/~gohlke/pythonlibs/
+http://www.lfd.uci.edu/~gohlke/pythonlibs/ 
+
+OWSlib and lxml are included in the Enthought Python Distribution (EPD).
 
 For OSX users, you can installation instructions here:
 http://lxml.de/installation.html
@@ -38,7 +41,7 @@ or use macports
 
 Support
 =================
-Contact xyang@usgs.gov or jread@usgs.gov for questions, issues.
+Contact jread@usgs.gov for questions, issues.
 
 Thanks
 =================
