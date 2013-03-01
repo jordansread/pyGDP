@@ -18,9 +18,11 @@ import sys
 import os
 import zipfile
 
+__version__ = '1.1.1'
+
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
-upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
+upload_URL = 'http://cida.usgs.gov/gdp/geoserver'
 WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
 WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
 
