@@ -7,6 +7,7 @@
 from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
 from owslib.wfs import WebFeatureService
+from owslib.csw import CatalogueServiceWeb
 from owslib.etree import etree
 from StringIO import StringIO
 from urllib import urlencode
@@ -649,24 +650,45 @@ class pyGDPwebProcessing():
         return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
         
         
-    def getDataSetURI(self):
-        """
-        This function will not be implemented. This function is only implemented to give a few dataset URIs which may not work
-        with certain datasets and will with others within the bounding box requirements.
-        """ 
-            
-        print 'The dataSetURI outputs a select few URIs and may not work with the specific shapefile you are providing.'
-        print 'To ensure compatibility, we recommend selecting a dataSetURI that is specific to the shapefile.' 
-        print 'Or you may utilize the web gdp @ http://cida.usgs.gov/gdp/ to get a dataSet matching your specified shapefile.'
-        print
-            
-        dataSetURIs = ['dods://regclim.coas.oregonstate.edu:8080/thredds/dodsC/regcmdata/EH5/ena/Daily/RegCM3_Daily_ena_EH5.ncml',
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/sleuth',
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/prism',
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/nsidc'
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/maurer/monthly',
-                           'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml']
-        return dataSetURIs    
+    def getDataSetURI(self, anyText='',CSWURL='http://cida.usgs.gov/gdp/geonetwork/srv/en/csw',BBox=None):
+				"""
+
+				Searches a given CSW server and returns metadata content for the datasets found.
+
+				Arguments
+				---------
+
+				- anyText - A string that will be submitted to the CSW search. (Optional, default is empty which will return all records.)
+				- CSWURL - A base URL for the CSW server to be searched. (Optional, defaults to the CDIA/GDP CSW server.)
+				- BBox - A lat/lon bounding box in [minx,miny,maxx,maxy] that will be used to limit results to datasets that atleast partially intersect. (Optional)
+
+				"""
+
+				csw = CatalogueServiceWeb(CSWURL)
+				csw.getrecords(keywords=[anyText], outputschema='http://www.isotc211.org/2005/gmd', esn='full', maxrecords=100)
+				dataSetURIs = [['title','abstract',['urls']]]
+				for rec in csw.records:
+					title=csw.records[rec].identification.title
+					abstract=csw.records[rec].identification.abstract
+					urls=[]
+					try:
+						for onlineresource in range(len(csw.records[rec].distribution.online)):
+							urls.append(csw.records[rec].distribution.online[onlineresource].url)
+					except AttributeError:
+						pass
+					else:
+						pass
+					for ident in range(len(csw.records[rec].identificationinfo)):
+						try:
+							for operation in range(len(csw.records[rec].identificationinfo[ident].operations)):
+								urls.append(csw.records[rec].identificationinfo[ident].operations[0]['connectpoint'][0].url)
+						except AttributeError:
+							pass
+						else:
+							pass
+					entry=[title,abstract,urls]
+					dataSetURIs.append(entry)
+				return dataSetURIs    
     
     def getGMLIDs(self, shapefile, attribute, value):
         """

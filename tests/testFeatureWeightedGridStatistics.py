@@ -25,11 +25,11 @@ class TestFeatureWeightedGridStatistics(object):
 	attribute  = 'STATE'
 	value 	   = 'Wisconsin'
 	userPoly   = [(-102.8184, 39.5273), (-102.8184, 37.418), (-101.2363, 37.418), (-101.2363,39.5273), (-102.8184, 39.5273)]
-	datasetURI = 'dods://cida.usgs.gov/qa/thredds/dodsC/prism'
+	datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
 	dataType   = 'ppt'
 	timeStart  = '1900-01-01T00:00:00.000Z'
-	timeEnd    = '1950-01-01T00:00:00.000Z'
-	 
+	timeEnd    = '1900-03-01T00:00:00.000Z'
+
 	outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value)
   
-	assert_equal(os.path.getsize(outputFile_handle), 18416)
+	assert_equal(os.path.getsize(outputFile_handle), 133)
