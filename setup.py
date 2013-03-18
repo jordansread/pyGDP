@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-
 import ast
 import sys
+from pyGDP import __version__
 
 try:
     from setuptools import setup
@@ -10,17 +9,11 @@ except:
 
 from setuptools import find_packages
 
-def Version():
-    """Get the package version string."""
-    for line in open('pyGDP.py'):
-        if line.startswith('__version__'):
-            return ast.literal_eval(line.split('=')[1].strip())
-
 # TODO: include the examples in the sdist
 setup(
     name = 'gdp',
-    version = Version(),
-    description = ('Interface to the USGS GeoData Portal'),
+    version = __version__,
+    description = 'Interface to the USGS GeoData Portal',
     long_description = open('README.txt').read(),
     license='Public Domain',  # Authors are US Govt, so this should be okay.
     maintainer='Jordan Read',  # Originally Xao Yang
