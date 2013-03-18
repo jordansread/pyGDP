@@ -17,7 +17,7 @@ pyGDP request lxml.etree and owslib
 Usage
 =================
 
-You can find example usages and scripts in the test folder.
+You can find example usages and scripts in the examples folder.
 
 Installation
 ==================
