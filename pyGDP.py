@@ -26,6 +26,7 @@ WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
 upload_URL = 'http://cida.usgs.gov/gdp/geoserver'
 WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
 WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
+CSWURL='http://cida.usgs.gov/gdp/geonetwork/srv/en/csw'
 
 # namespace definition
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
@@ -652,7 +653,7 @@ class pyGDPwebProcessing():
         return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
         
         
-    def getDataSetURI(self, anyText='',CSWURL='http://cida.usgs.gov/gdp/geonetwork/srv/en/csw',BBox=None):
+    def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
 				"""
 
 				Searches a given CSW server and returns metadata content for the datasets found.
@@ -666,7 +667,7 @@ class pyGDPwebProcessing():
 
 				"""
 
-				csw = CatalogueServiceWeb(CSWURL)
+				csw = CatalogueServiceWeb(CSWURL, skip_caps=True)
 				csw.getrecords(keywords=[anyText], outputschema='http://www.isotc211.org/2005/gmd', esn='full', maxrecords=100)
 				dataSetURIs = [['title','abstract',['urls']]]
 				for rec in csw.records:
