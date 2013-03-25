@@ -11,11 +11,11 @@ from setuptools import find_packages
 
 # TODO: include the examples in the sdist
 setup(
-    name = 'gdp',
+    name = 'pyGDP',
     version = __version__,
     description = 'Interface to the USGS GeoData Portal',
     long_description = open('README.txt').read(),
-    license='Public Domain',  # Authors are US Govt, so this should be okay.
+    license='Public Domain',
     maintainer='Jordan Read',  # Originally Xao Yang
     maintainer_email='jread@usgs.gov',
     packages=find_packages(),
