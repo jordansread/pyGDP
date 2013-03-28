@@ -691,7 +691,9 @@ class pyGDPwebProcessing():
 							pass
 					entry=[title,abstract,urls]
 					dataSetURIs.append(entry)
-				return dataSetURIs    
+				for i,dataset in enumerate(dataSetURIs):
+					dataSetURIs[i][2]=[uri.replace("http", "dods") if "/dodsC/" in uri else uri for uri in dataset[2]]
+				return dataSetURIs
     
     def getGMLIDs(self, shapefile, attribute, value):
         """

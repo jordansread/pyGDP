@@ -25,7 +25,7 @@ class TestCSWreturnsurl(object):
 	dataseturis=testPyGDP.getDataSetURI(anyText='prism')
 
 	assert_equal(len(dataseturis), 2)
-	assert_equal(dataseturis[1][2][0], 'http://cida.usgs.gov/thredds/dodsC/prism')
+	assert_equal(dataseturis[1][2][0], 'dods://cida.usgs.gov/thredds/dodsC/prism')
 
 
 	
