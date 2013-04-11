@@ -1,5 +1,15 @@
-#!/usr/bin/python
 import pyGDP
+
+"""
+This simple client script demonstrates the basic workflow of the Geo Data Portal in python. 
+
+Shapefile upload has not been implemented here.
+
+The CSW Client is very rudimentary, copy and paste of the "dods" url is required.
+
+The client requests only the first time step of a dataset to minimize processing overhead of the demonstration.
+
+"""
 
 def getInput(listInput):
     
@@ -48,7 +58,6 @@ def getInput_4():
 
 def main():
     gdp = pyGDP.pyGDPwebProcessing()
-    WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
     sfiles = gdp.getShapefiles()
     for s in sfiles:
         print s
