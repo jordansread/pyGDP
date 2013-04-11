@@ -19,7 +19,7 @@ timeEnd = '1979-01-23T00:00:00.000Z'
 
 
 print 'Processing request.'
-outputPath = pyGDP.submitFeatureWeightedGridStatistics(shapefile, dataSet, dataType, timeBegin, timeEnd, user_attribute, user_value)
+outputPath = pyGDP.submitFeatureWeightedGridStatistics(shapefile, dataSet, dataType, timeBegin, timeEnd, user_attribute, user_value, verbose=True)
         
 jd,precip =np.loadtxt(outputPath,unpack=True,skiprows=3,delimiter=',',
     converters={0: mdates.strpdate2num('%Y-%m-%dT%H:%M:%SZ')}) 
