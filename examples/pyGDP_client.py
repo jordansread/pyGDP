@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import pyGDP
 
 def getInput(listInput):
@@ -34,7 +35,7 @@ def getInput_3(listInput):
 
     print '\n' + 'Choose an OPeNDAP url from the list above:'
     usrinput = str(raw_input())
-    while 'dods' not in userinput:
+    while 'dods' not in usrinput:
         print "This doesn't appear to be a valid dods url. Please enter an OPeNDAP url."
         usrinput = str(raw_input())
     return usrinput
@@ -47,6 +48,7 @@ def getInput_4():
 
 def main():
     gdp = pyGDP.pyGDPwebProcessing()
+    WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
     sfiles = gdp.getShapefiles()
     for s in sfiles:
         print s
@@ -64,10 +66,9 @@ def main():
     value = getInput_2(values)
 
     print
-    print 'Enter a search term or press enter to return all datasets in catalog.'
     searchString = getInput_4()
-    datasetURIs = gdp.getDataSetURI()
-    dataSetURI = getInput(datasetURIs)
+    datasetURIs = gdp.getDataSetURI(anyText=searchString)
+    dataSetURI = getInput_3(datasetURIs)
     
     print ''
     print 'Getting available dataTypes'
@@ -83,7 +84,7 @@ def main():
     
     print
     print 'Submitting request'
-    output = gdp.submitFeatureWeightedGridStatistics(shapefile, dataSetURI, dataType, timeRange[0], timeRange[0], 'STATE', 'Wisconsin')
+    output = gdp.submitFeatureWeightedGridStatistics(shapefile, dataSetURI, dataType, timeRange[0], timeRange[0], attribute, value, verbose=True)
     print output
     
 if __name__=="__main__":
