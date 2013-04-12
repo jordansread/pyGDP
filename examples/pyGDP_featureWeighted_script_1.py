@@ -1,8 +1,9 @@
 import pyGDP
+import pprint
 """
 This example script calls into the geoserver to obtain
-the name of the shapefile 'sample:CONUS_States' sets up the
-proper inputs and submits a request into GDP.
+the name of the shapefile 'sample:CONUS_States' searches for PRISM data 
+and submits a featureWeightedGridStatistics request into GDP.
 """
 
 pyGDP = pyGDP.pyGDPwebProcessing()
@@ -11,51 +12,49 @@ shapefiles = pyGDP.getShapefiles()
 print 'Available shapefiles: '
 for shapefile in shapefiles:
     print shapefile
-print 
 
 # Grab the file and get its attributes:
 shapefile = 'sample:CONUS_States'
 attributes = pyGDP.getAttributes(shapefile)
 for attr in attributes:
     print attr
-print
 
-# Grab the values from 'OBJECTID' and 'upload:OKCNTYD'
+# Grab the values from the 'STATE' attribute:
 usr_attribute = 'STATE'
 values = pyGDP.getValues(shapefile, usr_attribute)
 for v in values:
     print v
-print
 
-"""
-Instead of specifically specifying a value, we get request to get
-the gmlID of these values and append them to a gmlID to be used
-as an input instead of value.
-"""
-wisGMLID = pyGDP.getGMLIDs(shapefile, usr_attribute, 'Wisconsin')
+
+# Instead of specifically specifying a value, we get request to get
+# the gmlID of these values and append them to a gmlID to be used
+# as an input instead of value.
 michGMLID = pyGDP.getGMLIDs(shapefile, usr_attribute, 'Michigan')
-minnGDMLID = pyGDP.getGMLIDs(shapefile, usr_attribute, 'Minnesota')
-gmlIDs = wisGMLID + michGMLID + minnGDMLID
+gmlIDs = michGMLID
 
-# our shapefile = 'upload:OKCNTYD', usr_attribute = 'OBJECTID', and usr_value = 13
-# We get the dataset URI that we are interested in
-dataSetURIs = pyGDP.getDataSetURI()
-for d in dataSetURIs:
-    print d
+# We get the dataset URI that we are interested in by searching for prism:
+dataSetURIs = pyGDP.getDataSetURI(anyText='prism')
+pp = pprint.PrettyPrinter(indent=5,width=60)
+pp.pprint(dataSetURIs)
 
 # Set our datasetURI
-dataSetURI = 'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml'
+dataSetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
 # Get the available data types associated with the dataset
-dataType = 'Prcp'
+datatypes = pyGDP.getDataType(dataSetURI)
+for dt in datatypes:
+	print dt
+
+# Set the dataType. Note that leaving dataType out below will select all.
+dataType = 'ppt'
 # Get available time range on the dataset
 timeRange = pyGDP.getTimeRange(dataSetURI, dataType)
 for t in timeRange:
     print t
 
-"""
-Instead of submitting in a value, we submit a list of gmlIDs associated
-with either a small portion of that value, or multiple values.
-"""
+
+# Instead of submitting in a value, we submit a list of gmlIDs associated
+# with either a small portion of that value, or multiple values.
+
 value = None
-path = pyGDP.submitFeatureWeightedGridStatistics(shapefile, dataSetURI, dataType, timeRange[0], timeRange[0], usr_attribute, value, gmlIDs)
+path = pyGDP.submitFeatureWeightedGridStatistics(shapefile, dataSetURI, dataType, timeRange[0], timeRange[0], usr_attribute, value, gmlIDs, verbose=True)
 print path
