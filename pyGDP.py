@@ -757,7 +757,13 @@ class pyGDPwebProcessing():
             sys.stdout = result
         
         execution = wps.execute(processid, inputs, output)
-        monitorExecution(execution, download=False) # monitors for success
+        while execution.isComplete==False:
+            try:
+                monitorExecution(execution, sleepSecs=1, download=False) # monitors for success
+                print
+            except Exception:
+                print 'An error occured while checking status, checking again.'
+                pass
     
         # redirect standard output after successful execution
         sys.stdout = result
