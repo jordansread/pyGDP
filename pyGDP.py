@@ -12,6 +12,7 @@ from owslib.etree import etree
 from StringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
+from time import sleep
 import owslib.util as util
 import base64
 import cgi
@@ -757,13 +758,25 @@ class pyGDPwebProcessing():
             sys.stdout = result
         
         execution = wps.execute(processid, inputs, output)
-        while execution.isComplete==False:
+        
+        sleepSecs=10
+        err_count=1
+        
+        while execution.isComplete()==False:
             try:
-                monitorExecution(execution, sleepSecs=1, download=False) # monitors for success
-                print
+                monitorExecution(execution, sleepSecs, download=False) # monitors for success
+                err_count=1
             except Exception:
-                print 'An error occured while checking status, checking again.'
-                pass
+                # Switch to printing status. Notify that errors are occuring and keep checking 10 times.
+                print 'An error occurred while checking status, checking again.'
+                print 'This is error number %s of 10.' % err_count
+                print 'Sleeping %d seconds...' % sleepSecs
+                err_count+=1
+                if err_count > 10:
+                    raise Exception('The status document at failed to return ten times, status checking has aborted. There has been network or server issue preventing the status document from being retrieved the request may still be running. For more information, check the status url %s' % execution.statusLocation)
+                sleep(sleepSecs)
+				
+        # monitorExecution(execution, sleepSecs=1, download=False) # monitors for success
     
         # redirect standard output after successful execution
         sys.stdout = result
