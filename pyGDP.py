@@ -767,7 +767,6 @@ class pyGDPwebProcessing():
                 monitorExecution(execution, sleepSecs, download=False) # monitors for success
                 err_count=1
             except Exception:
-                # Switch to printing status. Notify that errors are occuring and keep checking 10 times.
                 print 'An error occurred while checking status, checking again.'
                 print 'This is error number %s of 10.' % err_count
                 print 'Sleeping %d seconds...' % sleepSecs
@@ -775,8 +774,6 @@ class pyGDPwebProcessing():
                 if err_count > 10:
                     raise Exception('The status document at failed to return ten times, status checking has aborted. There has been network or server issue preventing the status document from being retrieved the request may still be running. For more information, check the status url %s' % execution.statusLocation)
                 sleep(sleepSecs)
-				
-        # monitorExecution(execution, sleepSecs=1, download=False) # monitors for success
     
         # redirect standard output after successful execution
         sys.stdout = result
