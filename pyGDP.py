@@ -786,11 +786,13 @@ class pyGDPwebProcessing():
         return tmp[len(tmp)-1]
 
     
-    def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
-                                            gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stat='MEAN', grpby='STATISTIC', 
+    def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varIDs, startTime, endTime, attribute='the_geom', value=None,
+                                            gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stats='MEAN', grpby='STATISTIC', 
                                             timeStep='false', summAttr='false'):
         """
         Makes a featureWeightedGridStatistics algorithm call. 
+        The web service interface implemented is summarized here: 
+        https://my.usgs.gov/confluence/display/GeoDataPortal/Generating+Area+Weighted+Statistics+Of+A+Gridded+Dataset+For+A+Set+Of+Vector+Polygon+Features
         """
         
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
@@ -798,19 +800,57 @@ class pyGDPwebProcessing():
             return
         
         processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
-        inputs = [("FEATURE_ATTRIBUTE_NAME",attribute), 
-                  ("DATASET_URI", dataSetURI), 
-                  ("DATASET_ID", varID), 
+        
+        solo_inputs = [("FEATURE_ATTRIBUTE_NAME",attribute), 
+                  ("DATASET_URI", dataSetURI),  
                   ("TIME_START",startTime),
                   ("TIME_END",endTime), 
                   ("REQUIRE_FULL_COVERAGE",coverage), 
                   ("DELIMITER",delim), 
-                  ("STATISTICS",stat), 
                   ("GROUP_BY", grpby),
                   ("SUMMARIZE_TIMESTEP", timeStep), 
                   ("SUMMARIZE_FEATURE_ATTRIBUTE",summAttr), 
                   ("FEATURE_COLLECTION", featureCollection)]
+                  
+        if isinstance(stats, list):
+            num_stats=len(stats)
+        else:
+            num_stats=1
+                  
+        if isinstance(varIDs, list):
+            num_varIDs=len(varIDs)
+        else:
+            num_varIDs=1
+        
+        inputs = [('','')]*(len(solo_inputs)+num_varIDs+num_stats)
+        
+        count=0
+        
+        for solo_input in solo_inputs:
+            inputs[count] = solo_input
+            count+=1
+        
+        if num_stats > 1:
+            for stat in stats:
+                if stat not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
+                    raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat)
+                inputs[count] = ("STATISTICS",stat)
+                count+=1
+        elif num_stats == 1:
+            if stats not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
+                raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat)
+            inputs[count] = ("STATISTICS",stats)
+            count+=1
+                 
+        if num_varIDs > 1:
+            for var in varIDs:
+                inputs[count] = ("DATASET_ID",var)
+                count+=1
+        elif num_varIDs == 1:
+            inputs[count] = ("DATASET_ID",varIDs)
+        
         output = "OUTPUT"
+        
         return self._executeRequest(processid, inputs, output, verbose)
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
