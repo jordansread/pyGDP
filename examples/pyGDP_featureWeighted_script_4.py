@@ -14,6 +14,7 @@ user_attribute = 'REGION'
 user_value = 'Great Lakes Region'
 dataSet = 'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml'
 dataType = 'Prcp'
+#dataType = ['Prcp','Tavg','Tmax','Tmin']
 timeBegin = '1970-01-23T00:00:00.000Z'
 timeEnd = '1979-01-23T00:00:00.000Z'
 
