@@ -772,7 +772,7 @@ class pyGDPwebProcessing():
                 print 'Sleeping %d seconds...' % sleepSecs
                 err_count+=1
                 if err_count > 10:
-                    raise Exception('The status document at failed to return ten times, status checking has aborted. There has been network or server issue preventing the status document from being retrieved the request may still be running. For more information, check the status url %s' % execution.statusLocation)
+                    raise Exception('The status document failed to return ten times, status checking has aborted. There has been a network or server issue preventing the status document from being retrieved, the request may still be running. For more information, check the status url %s' % execution.statusLocation)
                 sleep(sleepSecs)
     
         # redirect standard output after successful execution
@@ -786,13 +786,15 @@ class pyGDPwebProcessing():
         return tmp[len(tmp)-1]
 
     
-    def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varIDs, startTime, endTime, attribute='the_geom', value=None,
-                                            gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stats='MEAN', grpby='STATISTIC', 
+    def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
+                                            gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stat='MEAN', grpby='STATISTIC', 
                                             timeStep='false', summAttr='false'):
         """
         Makes a featureWeightedGridStatistics algorithm call. 
         The web service interface implemented is summarized here: 
         https://my.usgs.gov/confluence/display/GeoDataPortal/Generating+Area+Weighted+Statistics+Of+A+Gridded+Dataset+For+A+Set+Of+Vector+Polygon+Features
+        
+        Note that varID and stat can be a list of strings.
         """
         
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
@@ -812,13 +814,15 @@ class pyGDPwebProcessing():
                   ("SUMMARIZE_FEATURE_ATTRIBUTE",summAttr), 
                   ("FEATURE_COLLECTION", featureCollection)]
                   
-        if isinstance(stats, list):
-            num_stats=len(stats)
+        if isinstance(stat, list):
+            num_stats=len(stat)
+            if num_stats > 7:
+                raise Exception('Too many statistics were submitted.')
         else:
             num_stats=1
                   
-        if isinstance(varIDs, list):
-            num_varIDs=len(varIDs)
+        if isinstance(varID, list):
+            num_varIDs=len(varID)
         else:
             num_varIDs=1
         
@@ -831,23 +835,23 @@ class pyGDPwebProcessing():
             count+=1
         
         if num_stats > 1:
-            for stat in stats:
-                if stat not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
-                    raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat)
-                inputs[count] = ("STATISTICS",stat)
+            for stat_in in stat:
+                if stat_in not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
+                    raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat_in)
+                inputs[count] = ("STATISTICS",stat_in)
                 count+=1
         elif num_stats == 1:
-            if stats not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
+            if stat not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
                 raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat)
-            inputs[count] = ("STATISTICS",stats)
+            inputs[count] = ("STATISTICS",stat)
             count+=1
                  
         if num_varIDs > 1:
-            for var in varIDs:
+            for var in varID:
                 inputs[count] = ("DATASET_ID",var)
                 count+=1
         elif num_varIDs == 1:
-            inputs[count] = ("DATASET_ID",varIDs)
+            inputs[count] = ("DATASET_ID",varID)
         
         output = "OUTPUT"
         

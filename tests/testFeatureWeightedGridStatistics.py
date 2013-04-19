@@ -33,3 +33,41 @@ class TestFeatureWeightedGridStatistics(object):
         outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value)
 
         assert_equal(os.path.getsize(outputFile_handle), 133)
+
+    def test_submit_FWGS_multi_stat_var(self):
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+        shapefile  = 'sample:CONUS_States'
+        attribute  = 'STATE'
+        value 	   = 'Wisconsin'
+        datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
+        dataType   = ['ppt','tmx']
+        gmlIDs=None
+        verbose=False
+        coverage='true'
+        delim='COMMA'
+        stats      = ['MEAN','STD_DEV']
+        timeStart  = '1900-01-01T00:00:00.000Z'
+        timeEnd    = '1900-03-01T00:00:00.000Z'
+
+        outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value, gmlIDs, verbose, coverage, delim, stats)
+
+        assert_equal(os.path.getsize(outputFile_handle), 375)
+
+    def test_submit_FWGS_multi_stat_var_named(self):
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+        shapefile  = 'sample:CONUS_States'
+        shapefileAttribute  = 'STATE'
+        attributeValue 	   = 'Wisconsin'
+        datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
+        dataType   = ['ppt','tmx']
+        Coverage='true'
+        Delim='COMMA'
+        stats      = ['MEAN','STD_DEV']
+        timeStart  = '1900-01-01T00:00:00.000Z'
+        timeEnd    = '1900-03-01T00:00:00.000Z'
+
+        outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(geoType=shapefile, dataSetURI=datasetURI, varID=dataType, startTime=timeStart, endTime=timeEnd, attribute=shapefileAttribute, value=attributeValue, gmlIDs=None, verbose=False, coverage=Coverage, delim=Delim, stat=stats, grpby='STATISTIC', timeStep='false', summAttr='false')
+
+        assert_equal(os.path.getsize(outputFile_handle), 375)
