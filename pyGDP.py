@@ -717,7 +717,10 @@ class pyGDPwebProcessing():
     def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
         """
         This function returns a featurecollection. It takes a geotype and determines if
-        the geotype is a shapfile or polygon.
+        the geotype is a shapfile or polygon. 
+        
+        If value is set to the string 'all_values', a FeatureCollection with all features will be returned.
+        
         """
         
         # This is a polygon
@@ -727,6 +730,10 @@ class pyGDPwebProcessing():
             if value==None and gmlIDs==None:
                 raise Exception('must input a value AND attribute for shapefile')
             else:
+                if value=='all_values':
+                    # Using an empty gmlIDs element results in all features being returned to the constructed WFS query.
+                    gmlIDs=[]
+                    print 'All shapefile attributes will be used.'
                 tmpID = []
                 if gmlIDs is None:
                     if type(value) == type(tmpID):
@@ -735,10 +742,15 @@ class pyGDPwebProcessing():
                             tuples = self.getTuples(geoType, attribute)
                             tmpID = self._getFilterID(tuples, v)
                             gmlIDs = gmlIDs + tmpID
+                        print tmpID
+                        if tmpID == []:
+                            raise Exception("Didn't find any features matching given attribute values.")
                     else:
                         tuples = self.getTuples(geoType, attribute)
                         gmlIDs = self._getFilterID(tuples, value)
-                
+                        if gmlIDs==[]:
+                            raise Exception("Didn't find any features matching given attribute value.")
+            
                 query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
                 return WFSFeatureCollection(WFS_URL, query)
         else:
@@ -795,6 +807,7 @@ class pyGDPwebProcessing():
         https://my.usgs.gov/confluence/display/GeoDataPortal/Generating+Area+Weighted+Statistics+Of+A+Gridded+Dataset+For+A+Set+Of+Vector+Polygon+Features
         
         Note that varID and stat can be a list of strings.
+        
         """
         
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
