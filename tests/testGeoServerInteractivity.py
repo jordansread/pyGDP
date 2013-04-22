@@ -21,31 +21,61 @@ class TestGeoServerInteractivity(object):
  
     def test_get_shapefile_list(self):
         testPyGDP = pyGDP.pyGDPwebProcessing()
-
-	shapefiles = testPyGDP.getShapefiles()
-
-	assert_not_equal(len(shapefiles), 0)
-
+        
+        shapefiles = testPyGDP.getShapefiles()
+        
+        assert_not_equal(len(shapefiles), 0)
+        
     def test_get_shapefile_attributes(self):
-	testPyGDP = pyGDP.pyGDPwebProcessing()
-	
-	shapefile  = 'sample:CONUS_States'
-
-	attributes = testPyGDP.getAttributes(shapefile)
-
-	assert_equal(len(attributes), 9)
-	
-	assert('STATE' in attributes)
-
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+        
+        shapefile  = 'sample:CONUS_States'
+        
+        attributes = testPyGDP.getAttributes(shapefile)
+        
+        assert_equal(len(attributes), 9)
+        
+        assert('STATE' in attributes)
+        
     def test_get_shapefile_values(self):
-	testPyGDP = pyGDP.pyGDPwebProcessing()
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+        
+        shapefile  = 'sample:CONUS_States'  
 	
-	shapefile  = 'sample:CONUS_States'  
+        attribute = 'STATE'
 	
-	attribute = 'STATE'
+        values    = testPyGDP.getValues(shapefile,attribute)
 	
-	values    = testPyGDP.getValues(shapefile,attribute)
+        assert_equal(len(values), 49)
+        
+        assert('Wisconsin' in values)
 	
-	assert_equal(len(values), 49)
-
-	assert('Wisconsin' in values)
+    def test_getFeatureCollectionGeoType_single(self):
+        testpyGDP = pyGDP.pyGDPwebProcessing()
+        
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+        
+        shapefile  = 'sample:CONUS_States'  
+        
+        attribute = 'STATE'
+        
+        value = 'Wisconsin'
+        
+        testFeatureCollection = testPyGDP._getFeatureCollectionGeoType(shapefile,attribute,value)
+        
+        assert_equal(len(testFeatureCollection.query.filters), 36)
+        
+    def test_getFeatureCollectionGeoType_all(self):
+        testpyGDP = pyGDP.pyGDPwebProcessing()
+        
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+        
+        shapefile  = 'sample:CONUS_States'  
+        
+        attribute = 'STATE'
+        
+        value = 'all_values'
+        
+        testFeatureCollection = testPyGDP._getFeatureCollectionGeoType(shapefile,attribute,value)
+        
+        assert_equal(testFeatureCollection.query.filters, [])
