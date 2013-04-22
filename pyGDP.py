@@ -20,7 +20,7 @@ import sys
 import os
 import zipfile
 
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
@@ -486,6 +486,8 @@ class pyGDPwebProcessing():
         for item in tuples:
             if item[0] == value:
                 filterID.append(item[1])
+        if filterID==[]:
+            raise Exception('Feature attribute value %s was not found in the feature collection.' % value)
         return filterID
     
     def _parseXMLNodesForTagText(self, xml, tag):

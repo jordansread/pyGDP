@@ -1,0 +1,22 @@
+Changes
+=======
+
+1.2.0 (2013-04-23)
+---------------
+
+- Several improvements to install/setup details.
+- CSW search implemented for getDatasetURIs. 'title, abstract, [uri1, uri2, ...]' is response format.
+- urls returned from CSW search that contain dodsC have http replaced with dods.
+- Examples and tests expanded and fixed up substantially.
+- Network and other errors while checking process status are excepted up to ten times before failure.
+- Improvement to FeatureWeightedGridStatistics algorithm, now implements correct multiplicity for all inputs.
+- Fixed up _getFeatureCollectionGeoType to work more predictably and protect from naive requests.
+- In all algorithms, value='all_values' now returns a feature collection that returns all values, 
+  otherwise explicit gmlIDs or values are required.
+- Now catching invalid shapefile attribute values and raising an exception when they are not found.
+
+1.1.1 (2013-01-10)
+---------------
+
+- Versioning applied at 1.1.1, project well underway, still a work in progress.
+- Basic functionality in place to get input parameters and execute all GDP algorithms.
