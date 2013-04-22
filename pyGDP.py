@@ -20,7 +20,7 @@ import sys
 import os
 import zipfile
 
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'

@@ -13,7 +13,7 @@ Changes
 - Fixed up _getFeatureCollectionGeoType to work more predictably and protect from naive requests.
 - In all algorithms, value='all_values' now returns a feature collection that returns all values, 
   otherwise explicit gmlIDs or values are required.
-
+- Now catching invalid shapefile attribute values and raising an exception when they are not found.
 
 1.1.1 (2013-01-10)
 ---------------
