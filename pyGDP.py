@@ -486,6 +486,8 @@ class pyGDPwebProcessing():
         for item in tuples:
             if item[0] == value:
                 filterID.append(item[1])
+        if filterID==[]:
+            raise Exception('Feature attribute value %s was not found in the feature collection.' % value)
         return filterID
     
     def _parseXMLNodesForTagText(self, xml, tag):
