@@ -43,8 +43,8 @@ UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
 CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
 
 # misc variables
-URL_timeout = 2		# seconds
-WPS_attempts= 5		# tries with null response before failing
+URL_timeout = 10		# seconds
+WPS_attempts= 10		# tries with null response before failing
 
 # list of namespaces used by this module
 namespaces = {
@@ -785,7 +785,7 @@ class pyGDPwebProcessing():
                 print 'This is error number %s of 10.' % err_count
                 print 'Sleeping %d seconds...' % sleepSecs
                 err_count+=1
-                if err_count > 10:
+                if err_count > WPS_attempts:
                     raise Exception('The status document failed to return ten times, status checking has aborted. There has been a network or server issue preventing the status document from being retrieved, the request may still be running. For more information, check the status url %s' % execution.statusLocation)
                 sleep(sleepSecs)
     

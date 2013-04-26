@@ -18,6 +18,7 @@ setup(
     license='Public Domain',
     maintainer='Jordan Read',  # Originally Xao Yang
     maintainer_email='jread@usgs.gov',
+    py_modules=['pyGDP'],
     packages=find_packages(),
     install_requires=['setuptools'],
     url='https://github.com/USGS-CIDA/pyGDP',
