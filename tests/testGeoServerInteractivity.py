@@ -74,7 +74,7 @@ class TestGeoServerInteractivity(object):
         
         attribute = 'STATE'
         
-        value = 'all_values'
+        value = None
         
         testFeatureCollection = testPyGDP._getFeatureCollectionGeoType(shapefile,attribute,value)
         

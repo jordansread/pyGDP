@@ -721,7 +721,7 @@ class pyGDPwebProcessing():
         This function returns a featurecollection. It takes a geotype and determines if
         the geotype is a shapfile or polygon. 
         
-        If value is set to the string 'all_values', a FeatureCollection with all features will be returned.
+        If value is set to None, a FeatureCollection with all features will be returned.
         
         """
         
@@ -729,32 +729,29 @@ class pyGDPwebProcessing():
         if isinstance(geoType, list):
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
-            if value==None and gmlIDs==None:
-                raise Exception('must input a value AND attribute for shapefile')
-            else:
-                if value=='all_values':
-                    # Using an empty gmlIDs element results in all features being returned to the constructed WFS query.
-                    gmlIDs=[]
-                    print 'All shapefile attributes will be used.'
-                tmpID = []
-                if gmlIDs is None:
-                    if type(value) == type(tmpID):
-                        gmlIDs = []
-                        for v in value:
-                            tuples = self.getTuples(geoType, attribute)
-                            tmpID = self._getFilterID(tuples, v)
-                            gmlIDs = gmlIDs + tmpID
-                        print tmpID
-                        if tmpID == []:
-                            raise Exception("Didn't find any features matching given attribute values.")
-                    else:
+            if value==None:
+                # Using an empty gmlIDs element results in all features being returned to the constructed WFS query.
+                gmlIDs=[]
+                print 'All shapefile attributes will be used.'
+            tmpID = []
+            if gmlIDs is None:
+                if type(value) == type(tmpID):
+                    gmlIDs = []
+                    for v in value:
                         tuples = self.getTuples(geoType, attribute)
-                        gmlIDs = self._getFilterID(tuples, value)
-                        if gmlIDs==[]:
-                            raise Exception("Didn't find any features matching given attribute value.")
-            
-                query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
-                return WFSFeatureCollection(WFS_URL, query)
+                        tmpID = self._getFilterID(tuples, v)
+                        gmlIDs = gmlIDs + tmpID
+                    print tmpID
+                    if tmpID == []:
+                        raise Exception("Didn't find any features matching given attribute values.")
+                else:
+                    tuples = self.getTuples(geoType, attribute)
+                    gmlIDs = self._getFilterID(tuples, value)
+                    if gmlIDs==[]:
+                        raise Exception("Didn't find any features matching given attribute value.")
+        
+            query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
+            return WFSFeatureCollection(WFS_URL, query)
         else:
             raise Exception('Geotype is not a shapefile or a recognizable polygon.')
     
@@ -801,8 +798,8 @@ class pyGDPwebProcessing():
 
     
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
-                                            gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stat='MEAN', grpby='STATISTIC', 
-                                            timeStep='false', summAttr='false'):
+                                            gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
+                                            timeStep=False, summAttr=False):
         """
         Makes a featureWeightedGridStatistics algorithm call. 
         The web service interface implemented is summarized here: 
@@ -822,11 +819,11 @@ class pyGDPwebProcessing():
                   ("DATASET_URI", dataSetURI),  
                   ("TIME_START",startTime),
                   ("TIME_END",endTime), 
-                  ("REQUIRE_FULL_COVERAGE",coverage), 
+                  ("REQUIRE_FULL_COVERAGE",str(coverage).lower()), 
                   ("DELIMITER",delim), 
                   ("GROUP_BY", grpby),
-                  ("SUMMARIZE_TIMESTEP", timeStep), 
-                  ("SUMMARIZE_FEATURE_ATTRIBUTE",summAttr), 
+                  ("SUMMARIZE_TIMESTEP", str(timeStep).lower()), 
+                  ("SUMMARIZE_FEATURE_ATTRIBUTE",str(summAttr).lower()), 
                   ("FEATURE_COLLECTION", featureCollection)]
                   
         if isinstance(stat, list):
