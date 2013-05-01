@@ -11,8 +11,7 @@ Changes
 - Network and other errors while checking process status are excepted up to ten times before failure.
 - Improvement to FeatureWeightedGridStatistics algorithm, now implements correct multiplicity for all inputs.
 - Fixed up _getFeatureCollectionGeoType to work more predictably and protect from naive requests.
-- In all algorithms, value='all_values' now returns a feature collection that returns all values, 
-  otherwise explicit gmlIDs or values are required.
+- In all algorithms, value=None now returns a feature collection that returns all values, otherwise explicit gmlIDs or values are required.
 - Now catching invalid shapefile attribute values and raising an exception when they are not found.
 
 1.1.1 (2013-01-10)
