@@ -9,11 +9,11 @@ class TestFeatureCoverageWCSIntersection(object):
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
 	shapefile = 'sample:simplified_HUC8s'
-	attribute = 'SUBBASIN'
-	value = 'Alafia'
+	attribute = 'HUC_8'
+	value = '08010211'
 	dataSetURI = 'http://raster.nationalmap.gov/ArcGIS/services/TNM_LandCover/MapServer/WCSServer'
 	dataType = '6'
 
-	outputFile_handle = testPyGDP.submitFeatureCoverageWCSIntersection(shapefile, dataSetURI, dataType, attribute, value, verbose=True)
+	outputFile_handle = testPyGDP.submitFeatureCoverageWCSIntersection(shapefile, dataSetURI, dataType, attribute, value)
 
-	assert_equal(os.path.getsize(outputFile_handle), 1918261)
+	assert_equal(os.path.getsize(outputFile_handle), 1574029)

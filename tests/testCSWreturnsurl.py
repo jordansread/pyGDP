@@ -4,7 +4,7 @@ from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
  
-class TestDatasetIntrospection(object):
+class TestCSWreturnsurl(object):
 
     @classmethod
     def setup_class(klass):
@@ -20,26 +20,12 @@ class TestDatasetIntrospection(object):
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
  
-    def test_get_dataset_parameters(self):
-	DATASET_URI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
-        testPyGDP = pyGDP.pyGDPwebProcessing()
+    def test_get_uri(self):
+	testPyGDP = pyGDP.pyGDPwebProcessing()
+	dataseturis=testPyGDP.getDataSetURI(anyText='prism')
 
-	datatypes = testPyGDP.getDataType(DATASET_URI, True)
+	assert_equal(len(dataseturis), 2)
+	assert_equal(dataseturis[1][2][0], 'dods://cida.usgs.gov/thredds/dodsC/prism')
 
-	assert_equal(len(datatypes), 3)
-
-	assert('ppt' in datatypes)
-
-	
-    def test_get_time_range(self):
-	DATASET_URI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
-        testPyGDP = pyGDP.pyGDPwebProcessing()
-
-	datatype = 'ppt'
-	trange = testPyGDP.getTimeRange(DATASET_URI, datatype)
-
-	assert_equal(len(trange), 2)
-
-	assert_equal(trange[0], '1895-01-01T00:00:00Z')
 
 	

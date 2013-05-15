@@ -7,10 +7,12 @@
 from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
 from owslib.wfs import WebFeatureService
+from owslib.csw import CatalogueServiceWeb
 from owslib.etree import etree
 from StringIO import StringIO
 from urllib import urlencode
 from urllib2 import urlopen
+from time import sleep
 import owslib.util as util
 import base64
 import cgi
@@ -18,11 +20,14 @@ import sys
 import os
 import zipfile
 
+__version__ = '1.2.0'
+
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
-upload_URL = 'http://cida.usgs.gov/gdp/geoserver' 
+upload_URL = 'http://cida.usgs.gov/gdp/geoserver'
 WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
 WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
+CSWURL='http://cida.usgs.gov/gdp/geonetwork/srv/en/csw'
 
 # namespace definition
 WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
@@ -38,8 +43,8 @@ UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
 CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
 
 # misc variables
-URL_timeout = 2		# seconds
-WPS_attempts= 5		# tries with null response before failing
+URL_timeout = 10		# seconds
+WPS_attempts= 10		# tries with null response before failing
 
 # list of namespaces used by this module
 namespaces = {
@@ -481,6 +486,8 @@ class pyGDPwebProcessing():
         for item in tuples:
             if item[0] == value:
                 filterID.append(item[1])
+        if filterID==[]:
+            raise Exception('Feature attribute value %s was not found in the feature collection.' % value)
         return filterID
     
     def _parseXMLNodesForTagText(self, xml, tag):
@@ -649,24 +656,47 @@ class pyGDPwebProcessing():
         return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
         
         
-    def getDataSetURI(self):
-        """
-        This function will not be implemented. This function is only implemented to give a few dataset URIs which may not work
-        with certain datasets and will with others within the bounding box requirements.
-        """ 
-            
-        print 'The dataSetURI outputs a select few URIs and may not work with the specific shapefile you are providing.'
-        print 'To ensure compatibility, we recommend selecting a dataSetURI that is specific to the shapefile.' 
-        print 'Or you may utilize the web gdp @ http://cida.usgs.gov/gdp/ to get a dataSet matching your specified shapefile.'
-        print
-            
-        dataSetURIs = ['dods://regclim.coas.oregonstate.edu:8080/thredds/dodsC/regcmdata/EH5/ena/Daily/RegCM3_Daily_ena_EH5.ncml',
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/sleuth',
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/prism',
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/nsidc'
-                           'dods://cida.usgs.gov/qa/thredds/dodsC/maurer/monthly',
-                           'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml']
-        return dataSetURIs    
+    def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
+				"""
+
+				Searches a given CSW server and returns metadata content for the datasets found.
+
+				Arguments
+				---------
+
+				- anyText - A string that will be submitted to the CSW search. (Optional, default is empty which will return all records.)
+				- CSWURL - A base URL for the CSW server to be searched. (Optional, defaults to the CDIA/GDP CSW server.)
+				- BBox - A lat/lon bounding box in [minx,miny,maxx,maxy] that will be used to limit results to datasets that atleast partially intersect. (Optional)
+
+				"""
+
+				csw = CatalogueServiceWeb(CSWURL, skip_caps=True)
+				csw.getrecords(keywords=[anyText], outputschema='http://www.isotc211.org/2005/gmd', esn='full', maxrecords=100)
+				dataSetURIs = [['title','abstract',['urls']]]
+				for rec in csw.records:
+					title=csw.records[rec].identification.title
+					abstract=csw.records[rec].identification.abstract
+					urls=[]
+					try:
+						for onlineresource in range(len(csw.records[rec].distribution.online)):
+							urls.append(csw.records[rec].distribution.online[onlineresource].url)
+					except AttributeError:
+						pass
+					else:
+						pass
+					for ident in range(len(csw.records[rec].identificationinfo)):
+						try:
+							for operation in range(len(csw.records[rec].identificationinfo[ident].operations)):
+								urls.append(csw.records[rec].identificationinfo[ident].operations[0]['connectpoint'][0].url)
+						except AttributeError:
+							pass
+						else:
+							pass
+					entry=[title,abstract,urls]
+					dataSetURIs.append(entry)
+				for i,dataset in enumerate(dataSetURIs):
+					dataSetURIs[i][2]=[uri.replace("http", "dods") if "/dodsC/" in uri else uri for uri in dataset[2]]
+				return dataSetURIs
     
     def getGMLIDs(self, shapefile, attribute, value):
         """
@@ -689,30 +719,39 @@ class pyGDPwebProcessing():
     def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
         """
         This function returns a featurecollection. It takes a geotype and determines if
-        the geotype is a shapfile or polygon.
+        the geotype is a shapfile or polygon. 
+        
+        If value is set to None, a FeatureCollection with all features will be returned.
+        
         """
         
         # This is a polygon
         if isinstance(geoType, list):
             return GMLMultiPolygonFeatureCollection( [geoType] )
         elif isinstance(geoType, str):
-            if value==None and gmlIDs==None:
-                raise Exception('must input a value AND attribute for shapefile')
-            else:
-                tmpID = []
-                if gmlIDs is None:
-                    if type(value) == type(tmpID):
-                        gmlIDs = []
-                        for v in value:
-                            tuples = self.getTuples(geoType, attribute)
-                            tmpID = self._getFilterID(tuples, v)
-                            gmlIDs = gmlIDs + tmpID
-                    else:
+            if value==None:
+                # Using an empty gmlIDs element results in all features being returned to the constructed WFS query.
+                gmlIDs=[]
+                print 'All shapefile attributes will be used.'
+            tmpID = []
+            if gmlIDs is None:
+                if type(value) == type(tmpID):
+                    gmlIDs = []
+                    for v in value:
                         tuples = self.getTuples(geoType, attribute)
-                        gmlIDs = self._getFilterID(tuples, value)
-                
-                query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
-                return WFSFeatureCollection(WFS_URL, query)
+                        tmpID = self._getFilterID(tuples, v)
+                        gmlIDs = gmlIDs + tmpID
+                    print tmpID
+                    if tmpID == []:
+                        raise Exception("Didn't find any features matching given attribute values.")
+                else:
+                    tuples = self.getTuples(geoType, attribute)
+                    gmlIDs = self._getFilterID(tuples, value)
+                    if gmlIDs==[]:
+                        raise Exception("Didn't find any features matching given attribute value.")
+        
+            query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
+            return WFSFeatureCollection(WFS_URL, query)
         else:
             raise Exception('Geotype is not a shapefile or a recognizable polygon.')
     
@@ -730,7 +769,22 @@ class pyGDPwebProcessing():
             sys.stdout = result
         
         execution = wps.execute(processid, inputs, output)
-        monitorExecution(execution, download=False) # monitors for success
+        
+        sleepSecs=10
+        err_count=1
+        
+        while execution.isComplete()==False:
+            try:
+                monitorExecution(execution, sleepSecs, download=False) # monitors for success
+                err_count=1
+            except Exception:
+                print 'An error occurred while checking status, checking again.'
+                print 'This is error number %s of 10.' % err_count
+                print 'Sleeping %d seconds...' % sleepSecs
+                err_count+=1
+                if err_count > WPS_attempts:
+                    raise Exception('The status document failed to return ten times, status checking has aborted. There has been a network or server issue preventing the status document from being retrieved, the request may still be running. For more information, check the status url %s' % execution.statusLocation)
+                sleep(sleepSecs)
     
         # redirect standard output after successful execution
         sys.stdout = result
@@ -744,10 +798,15 @@ class pyGDPwebProcessing():
 
     
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
-                                            gmlIDs=None, verbose=None, coverage='true', delim='COMMA', stat='MEAN', grpby='STATISTIC', 
-                                            timeStep='false', summAttr='false'):
+                                            gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
+                                            timeStep=False, summAttr=False):
         """
         Makes a featureWeightedGridStatistics algorithm call. 
+        The web service interface implemented is summarized here: 
+        https://my.usgs.gov/confluence/display/GeoDataPortal/Generating+Area+Weighted+Statistics+Of+A+Gridded+Dataset+For+A+Set+Of+Vector+Polygon+Features
+        
+        Note that varID and stat can be a list of strings.
+        
         """
         
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
@@ -755,19 +814,59 @@ class pyGDPwebProcessing():
             return
         
         processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
-        inputs = [("FEATURE_ATTRIBUTE_NAME",attribute), 
-                  ("DATASET_URI", dataSetURI), 
-                  ("DATASET_ID", varID), 
+        
+        solo_inputs = [("FEATURE_ATTRIBUTE_NAME",attribute), 
+                  ("DATASET_URI", dataSetURI),  
                   ("TIME_START",startTime),
                   ("TIME_END",endTime), 
-                  ("REQUIRE_FULL_COVERAGE",coverage), 
+                  ("REQUIRE_FULL_COVERAGE",str(coverage).lower()), 
                   ("DELIMITER",delim), 
-                  ("STATISTICS",stat), 
                   ("GROUP_BY", grpby),
-                  ("SUMMARIZE_TIMESTEP", timeStep), 
-                  ("SUMMARIZE_FEATURE_ATTRIBUTE",summAttr), 
+                  ("SUMMARIZE_TIMESTEP", str(timeStep).lower()), 
+                  ("SUMMARIZE_FEATURE_ATTRIBUTE",str(summAttr).lower()), 
                   ("FEATURE_COLLECTION", featureCollection)]
+                  
+        if isinstance(stat, list):
+            num_stats=len(stat)
+            if num_stats > 7:
+                raise Exception('Too many statistics were submitted.')
+        else:
+            num_stats=1
+                  
+        if isinstance(varID, list):
+            num_varIDs=len(varID)
+        else:
+            num_varIDs=1
+        
+        inputs = [('','')]*(len(solo_inputs)+num_varIDs+num_stats)
+        
+        count=0
+        
+        for solo_input in solo_inputs:
+            inputs[count] = solo_input
+            count+=1
+        
+        if num_stats > 1:
+            for stat_in in stat:
+                if stat_in not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
+                    raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat_in)
+                inputs[count] = ("STATISTICS",stat_in)
+                count+=1
+        elif num_stats == 1:
+            if stat not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
+                raise Exception('The statistic %s is not in the allowed list: "MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"' % stat)
+            inputs[count] = ("STATISTICS",stat)
+            count+=1
+                 
+        if num_varIDs > 1:
+            for var in varID:
+                inputs[count] = ("DATASET_ID",var)
+                count+=1
+        elif num_varIDs == 1:
+            inputs[count] = ("DATASET_ID",varID)
+        
         output = "OUTPUT"
+        
         return self._executeRequest(processid, inputs, output, verbose)
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 

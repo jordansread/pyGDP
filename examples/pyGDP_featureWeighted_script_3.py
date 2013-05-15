@@ -11,41 +11,45 @@ shapefiles = pyGDP.getShapefiles()
 print 'Available shapefiles: '
 for shapefile in shapefiles:
     print shapefile
-print 
 
-# Grab the file and get its attributes:
+
+# Grab the attributes for sample:CONUS_States
 shapefile = 'sample:CONUS_States'
 attributes = pyGDP.getAttributes(shapefile)
 for attr in attributes:
     print attr
-print
 
-# Grab the values from 'OBJECTID' and 'upload:OKCNTYD'
+
+# Grab the values from the STATE attribute of sample:CONUS_States
 usr_attribute = 'STATE'
 values = pyGDP.getValues(shapefile, usr_attribute)
 for v in values:
     print v
-print
 
-# our shapefile = 'upload:OKCNTYD', usr_attribute = 'OBJECTID', and usr_value = 13
-# We get the dataset URI that we are interested in
-dataSetURIs = pyGDP.getDataSetURI()
-for d in dataSetURIs:
-    print d
+# Choose Colorado
+value = ['Colorado']
 
-# Set our datasetURI
-dataSetURI = 'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml'
+# Search for datasets
+dataSetURIs = pyGDP.getDataSetURI(anyText='prism')
+for dataset in dataSetURIs:
+	print dataset
+
+# Set our datasetURI to the OPeNDAP/dods response for the prism dataset.
+dataSetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
+
 # Get the available data types associated with the dataset
-dataType = 'Prcp'
-# Get available time range on the dataset
+dataTypes = pyGDP.getDataType(dataSetURI)
+for dataType in dataTypes:
+	print dataType
+
+dataType = 'ppt'
+
+# Get available time range for the dataset.
 timeRange = pyGDP.getTimeRange(dataSetURI, dataType)
 for t in timeRange:
     print t
 
-"""
-Instead of submitting in a value, we submit a list of gmlIDs associated
-with either a small portion of that value, or multiple values.
-"""
-values = ['Wisconsin', 'Michigan', 'Minnesota']
-path = pyGDP.submitFeatureWeightedGridStatistics(shapefile, dataSetURI, dataType, timeRange[0], timeRange[0], usr_attribute, values)
-print path
+# Execute a GeatureWeightedGridStatistics request and return the path to the output file. 
+# Note that this is for one time step but could be for multiple.
+outputfile = pyGDP.submitFeatureWeightedGridStatistics(shapefile, dataSetURI, dataType, timeRange[0], timeRange[0], usr_attribute, value, verbose=True)
+print outputfile
