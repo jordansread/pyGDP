@@ -844,7 +844,6 @@ class pyGDPwebProcessing():
         rmvCnt=0
         
         for solo_input in solo_inputs:
-			print solo_input[1]
 			if solo_input[1]!=None:
 				inputs[count] = solo_input
 				count+=1
@@ -853,7 +852,6 @@ class pyGDPwebProcessing():
 		
         del inputs[count:count+rmvCnt]
 			
-        print inputs
         if num_stats > 1:
             for stat_in in stat:
                 if stat_in not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
