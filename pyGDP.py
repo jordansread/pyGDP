@@ -1,6 +1,6 @@
 # dependencies: lxml.etree, owslib
 # =============================================================================
-# Authors : Xao Yang, Jordan Walker, Jordan Read, Curtis Price
+# Authors : Xao Yang, Jordan Walker, Jordan Read, Curtis Price, David Blodgett
 #
 # Contact email: jread@usgs.gov
 # =============================================================================
@@ -20,7 +20,7 @@ import sys
 import os
 import zipfile
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
@@ -813,7 +813,7 @@ class pyGDPwebProcessing():
         
         """
         # test for dods:
-        dataSetURI = dodsReplace(dataSetURI)
+        dataSetURI = self.dodsReplace(dataSetURI)
 
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
         if featureCollection is None:
