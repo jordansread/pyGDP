@@ -841,11 +841,19 @@ class pyGDPwebProcessing():
         inputs = [('','')]*(len(solo_inputs)+num_varIDs+num_stats)
         
         count=0
+        rmvCnt=0
         
         for solo_input in solo_inputs:
-            inputs[count] = solo_input
-            count+=1
-        
+			print solo_input[1]
+			if solo_input[1]!=None:
+				inputs[count] = solo_input
+				count+=1
+			else: 
+				rmvCnt+=1
+		
+        del inputs[count:count+rmvCnt]
+			
+        print inputs
         if num_stats > 1:
             for stat_in in stat:
                 if stat_in not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
