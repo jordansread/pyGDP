@@ -654,7 +654,11 @@ class pyGDPwebProcessing():
         
         algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
         return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
-        
+	
+    def dodsReplace(self, dataSetURI, verbose=False):
+		if "/dodsC" in dataSetURI:
+			dataSetURI= dataSetURI.replace("http", "dods")
+		return dataSetURI
         
     def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
 				"""
@@ -808,7 +812,9 @@ class pyGDPwebProcessing():
         Note that varID and stat can be a list of strings.
         
         """
-        
+        # test for dods:
+        dataSetURI = dodsReplace(dataSetURI)
+
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
         if featureCollection is None:
             return
@@ -841,11 +847,17 @@ class pyGDPwebProcessing():
         inputs = [('','')]*(len(solo_inputs)+num_varIDs+num_stats)
         
         count=0
+        rmvCnt=0
         
         for solo_input in solo_inputs:
-            inputs[count] = solo_input
-            count+=1
-        
+			if solo_input[1]!=None:
+				inputs[count] = solo_input
+				count+=1
+			else: 
+				rmvCnt+=1
+		
+        del inputs[count:count+rmvCnt]
+			
         if num_stats > 1:
             for stat_in in stat:
                 if stat_in not in ["MEAN", "MINIMUM", "MAXIMUM", "VARIANCE", "STD_DEV", "WEIGHT_SUM", "COUNT"]:
