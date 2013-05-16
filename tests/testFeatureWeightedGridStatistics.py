@@ -60,7 +60,7 @@ class TestFeatureWeightedGridStatistics(object):
         shapefile  = 'sample:CONUS_States'
         shapefileAttribute  = 'STATE'
         attributeValue 	   = 'Wisconsin'
-        datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
+        datasetURI = 'http://cida.usgs.gov/thredds/dodsC/prism' # Note that this test also tests the http to dods conversion for urls.
         dataType   = ['ppt','tmx']
         Coverage='true'
         Delim='COMMA'
@@ -71,3 +71,21 @@ class TestFeatureWeightedGridStatistics(object):
         outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(geoType=shapefile, dataSetURI=datasetURI, varID=dataType, startTime=timeStart, endTime=timeEnd, attribute=shapefileAttribute, value=attributeValue, gmlIDs=None, verbose=False, coverage=Coverage, delim=Delim, stat=stats, grpby='STATISTIC', timeStep='false', summAttr='false')
 
         assert_equal(os.path.getsize(outputFile_handle), 375)
+        
+    def test_submit_FWGS_no_time(self):
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+        shapefile  = 'sample:simplified_HUC8s'
+        shapefileAttribute  = 'HUC_8'
+        attributeValue 	   = '08010211'
+        datasetURI = 'http://raster.nationalmap.gov/ArcGIS/services/TNM_LandCover/MapServer/WCSServer' # Note that this test also tests the http to dods conversion for urls.
+        dataType   = '6'
+        Coverage='true'
+        Delim='COMMA'
+        stats      = ['MEAN','STD_DEV']
+        timeStart  = None
+        timeEnd    = None
+
+        outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(geoType=shapefile, dataSetURI=datasetURI, varID=dataType, startTime=timeStart, endTime=timeEnd, attribute=shapefileAttribute, value=attributeValue, gmlIDs=None, verbose=False, coverage=Coverage, delim=Delim, stat=stats, grpby='STATISTIC', timeStep='false', summAttr='false')
+
+        assert_equal(os.path.getsize(outputFile_handle), 57)
