@@ -569,23 +569,23 @@ class pyGDPwebProcessing():
     
     def getAttributes(self, shapefile):
         """
-        Given a valid shapefile, this function will create a cgi call 
-        returning a list of attributes associated with the shapefile.
+        Given a valid shapefile(WFS Featuretype as returned by getShapefiles), this function will 
+        make a request for one feature from the featureType and parse out the attributes that come from
+        a namespace not associated with the normal GML schema. There may be a better way to determine 
+        which are shapefile dbf attributes, but this should work pretty well.
         """
-        # makes a call to get an xml document containing list of shapefiles
-        urlen = self._generateFeatureRequest(shapefile)
-        linesToParse = urlopen(urlen, timeout = URL_timeout) 
-        
-        # gets back from the linesToParse document, all lines with 2nd arg
-        lines = self._getLinesContaining(linesToParse, 'xsd:element maxOccurs=')
-        attributes = []
-        
-        # search the line
-        for item in lines:
-            word = self._getStringBetween('name=', item, ' ')
-            # for attributes, will return "attribute", qoutes included, strip qoutes
-            if word[1:len(word) - 1] != "the_geom":
-                attributes.append(word[1: len(word) - 1])
+        wfs = WebFeatureService(WFS_URL, version='1.1.0')
+        feature = wfs.getfeature(typename=shapefile, maxfeatures=1, propertyname=None)
+        gml = etree.parse(feature)
+        gml_root=gml.getroot()
+        name_spaces = gml_root.nsmap
+        for namespace in name_spaces.viewvalues():
+            if namespace not in ['http://www.opengis.net/wfs', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/1999/xlink', 'http://www.opengis.net/gml', 'http://www.opengis.net/ogc', 'http://www.opengis.net/ows']:
+                custom_namespace = namespace
+        attributes = []        
+        for element in gml.iter('{'+custom_namespace+'}*'):
+            if etree.QName(element).localname not in ['the_geom', 'shape', shapefile.split(':')[1]]:
+                attributes.append(etree.QName(element).localname)
         return attributes
     
     def getShapefiles(self):
