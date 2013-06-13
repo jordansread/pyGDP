@@ -584,7 +584,7 @@ class pyGDPwebProcessing():
                 custom_namespace = namespace
         attributes = []        
         for element in gml.iter('{'+custom_namespace+'}*'):
-            if etree.QName(element).localname not in ['the_geom', 'shape', shapefile.split(':')[1]]:
+            if etree.QName(element).localname not in ['the_geom', 'Shape', shapefile.split(':')[1]]:
                 attributes.append(etree.QName(element).localname)
         return attributes
     

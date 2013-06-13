@@ -37,7 +37,22 @@ class TestGeoServerInteractivity(object):
         
         assert('STATE' in attributes)
         
+    def test_get_shapefile_attributes_arc(self):
+        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
+        
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+        shapefile  = 'GeospatialFabric_mows_mapping:NHDPlus_Catchment'
+
+        attributes = testPyGDP.getAttributes(shapefile)
+
+        assert_equal(len(attributes), 7)
+
+        assert('hru_id' in attributes)
+        
     def test_get_shapefile_values(self):
+        pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
+        
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
         shapefile  = 'sample:CONUS_States'  
