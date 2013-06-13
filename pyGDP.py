@@ -596,7 +596,7 @@ class pyGDPwebProcessing():
         shapefiles = wfs.contents.keys()
         return shapefiles
     
-    def getValues(self, shapefile, attribute, getTuples='false'):
+    def getValues(self, shapefile, attribute, getTuples='false', limitFeatures=None):
         """
         Similar to get attributes, given a shapefile and a valid attribute this function
         will make a call to the Web Feature Services returning a list of values associated
@@ -605,22 +605,29 @@ class pyGDPwebProcessing():
         If getTuples = True, will also return the tuples of [feature:id]  along with values [feature]
         """
         
-        urlen = self._generateFeatureRequest(shapefile, attribute)
-        inputObject = urlopen(urlen, timeout = URL_timeout)
-        shapefileterm = shapefile.split(':')
-        
-        strinx = inputObject.read()
-        lines = strinx.split('\n')
-        
-        # gets the tag/namespace name
-        stringSnippet = self._getStringBetween('<', lines[1], ':'+attribute+'>')
-        stringSnippet = stringSnippet.split('<')
-        shapefileterm[0] = stringSnippet[len(stringSnippet) - 1]
-        
-        # look for this pattern: <term[0]:attribute>SOUGHTWORD</term[0]:attribute>
-        values, tuples = self._getGMLIDString('gml:id="', lines[1], '">', '<'+shapefileterm[0] + 
-                                        ':' + attribute + '>', '</' +shapefileterm[0] +':' + 
-                                        attribute + '>')
+        wfs = WebFeatureService(WFS_URL, version='1.1.0')
+
+        feature = wfs.getfeature(typename=shapefile, maxfeatures=limitFeatures, propertyname=[attribute])
+
+        gml = etree.parse(feature)
+
+        values= []
+
+        for el in gml.iter():
+            if attribute in el.tag:
+                if el.text not in values:
+                    values.append(el.text)
+
+        if getTuples == 'true' or getTuples == 'only':
+            tuples = []
+            for featureMember in gml.iter('{'+GML_NAMESPACE+'}featureMember'):
+                for el in featureMember.iter():
+                    if el.get('{'+GML_NAMESPACE+'}id'):
+                        gmlid = el.get('{'+GML_NAMESPACE+'}id')
+                    if attribute in el.tag:
+                        value=el.text
+                tuples.append((value,gmlid))
+
         if getTuples=='true':
             return sorted(values), sorted(tuples)
         elif getTuples=='only':
