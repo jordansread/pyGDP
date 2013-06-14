@@ -759,7 +759,6 @@ class pyGDPwebProcessing():
                     gmlIDs = []
                     for v in value:
                         tuples = self.getTuples(geoType, attribute)
-                        print tuples
                         tmpID = self._getFilterID(tuples, v)
                         gmlIDs = gmlIDs + tmpID
                     print tmpID
@@ -767,7 +766,6 @@ class pyGDPwebProcessing():
                         raise Exception("Didn't find any features matching given attribute values.")
                 else:
                     tuples = self.getTuples(geoType, attribute)
-                    print tuples
                     gmlIDs = self._getFilterID(tuples, value)
                     if gmlIDs==[]:
                         raise Exception("Didn't find any features matching given attribute value.")
