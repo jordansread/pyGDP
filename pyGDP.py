@@ -620,6 +620,7 @@ class pyGDPwebProcessing():
 
         if getTuples == 'true' or getTuples == 'only':
             tuples = []
+            # If features are encoded as a list of featureMember elements.
             for featureMember in gml.iter('{'+GML_NAMESPACE+'}featureMember'):
                 for el in featureMember.iter():
                     if el.get('{'+GML_NAMESPACE+'}id'):
@@ -627,6 +628,14 @@ class pyGDPwebProcessing():
                     if attribute in el.tag:
                         value=el.text
                 tuples.append((value,gmlid))
+            # If features are encoded as a featureMembers element.
+            for featureMember in gml.iter('{'+GML_NAMESPACE+'}featureMembers'):
+                for el in featureMember.iter():
+                    gmlid = el.get('{'+GML_NAMESPACE+'}id')
+                    for feat in el.getchildren():
+                        if attribute in feat.tag:
+                            value=feat.text
+                            tuples.append((value,gmlid))
 
         if getTuples=='true':
             return sorted(values), sorted(tuples)
@@ -750,6 +759,7 @@ class pyGDPwebProcessing():
                     gmlIDs = []
                     for v in value:
                         tuples = self.getTuples(geoType, attribute)
+                        print tuples
                         tmpID = self._getFilterID(tuples, v)
                         gmlIDs = gmlIDs + tmpID
                     print tmpID
@@ -757,6 +767,7 @@ class pyGDPwebProcessing():
                         raise Exception("Didn't find any features matching given attribute values.")
                 else:
                     tuples = self.getTuples(geoType, attribute)
+                    print tuples
                     gmlIDs = self._getFilterID(tuples, value)
                     if gmlIDs==[]:
                         raise Exception("Didn't find any features matching given attribute value.")
