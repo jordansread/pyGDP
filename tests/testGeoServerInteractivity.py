@@ -83,8 +83,6 @@ class TestGeoServerInteractivity(object):
     def test_getFeatureCollectionGeoType_single(self):
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         
-        testpyGDP = pyGDP.pyGDPwebProcessing()
-        
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
         shapefile  = 'sample:CONUS_States'  
