@@ -770,10 +770,9 @@ class pyGDPwebProcessing():
                     if gmlIDs==[]:
                         raise Exception("Didn't find any features matching given attribute value.")
             
+            geometry_name='the_geom'
             if 'arcgis' in WFS_URL or 'ArcGis' in WFS_URL:
-                geometry_name='Shape'
-            else:
-                geometry_name='the_geom'                                
+                geometry_name='Shape'                                
         
             query = WFSQuery(geoType, propertyNames=[geometry_name, attribute], filters=gmlIDs)
             return WFSFeatureCollection(WFS_URL, query)
