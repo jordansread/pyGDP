@@ -769,8 +769,13 @@ class pyGDPwebProcessing():
                     gmlIDs = self._getFilterID(tuples, value)
                     if gmlIDs==[]:
                         raise Exception("Didn't find any features matching given attribute value.")
+            
+            if 'arcgis' in WFS_URL or 'ArcGis' in WFS_URL:
+                geometry_name='Shape'
+            else:
+                geometry_name='the_geom'                                
         
-            query = WFSQuery(geoType, propertyNames=["the_geom", attribute], filters=gmlIDs)
+            query = WFSQuery(geoType, propertyNames=[geometry_name, attribute], filters=gmlIDs)
             return WFSFeatureCollection(WFS_URL, query)
         else:
             raise Exception('Geotype is not a shapefile or a recognizable polygon.')
@@ -830,7 +835,10 @@ class pyGDPwebProcessing():
         """
         # test for dods:
         dataSetURI = self.dodsReplace(dataSetURI)
-
+        
+        if verbose == True:
+            print 'Generating feature collection.'
+        
         featureCollection = self._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
         if featureCollection is None:
             return
