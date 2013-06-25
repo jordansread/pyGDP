@@ -20,7 +20,7 @@ import sys
 import os
 import zipfile
 
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 #global urls for GDP and services
 WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
@@ -426,55 +426,6 @@ class pyGDPwebProcessing():
             else:
                 break
         return value, ntuple
-    
-    def _urlen(self, typename):
-        """
-        Sets up a cgi request to the wfs for features specified.
-        """
-        
-        service_url = WFS_URL
-        
-        qs = []
-        if service_url.find('?') != -1:
-                qs = cgi.parse_qsl(service_url.split('?')[1])
-    
-        params = [x[0] for x in qs]
-        if 'service' not in params:
-            qs.append(('service', 'WFS'))
-        if 'request' not in params:
-            qs.append(('request', 'DescribeFeatureType'))
-        if 'version' not in params:
-            qs.append(('version', '1.1.0'))
-        if 'typename' not in params:
-            qs.append(('typename', typename))
-    
-        urlqs = urlencode(tuple(qs))
-        return service_url.split('?')[0] + '?' + urlqs
-    
-    def _getStringBetween(self, beginterm, line, stopterm):
-        """
-        Helper function. Gets the string between beginterm and stopterm. 
-        Line is the line or superstring to be examined.
-        returns the string inbetween.
-        """
-        
-        begin_index = line.find(beginterm)
-        end_index = line.find(stopterm, begin_index)
-        
-        return line[begin_index + len(beginterm) : end_index ]
-        
-    def _getLinesContaining(self, linesToParse, term):
-        """
-        Given a document, goes through the document and for each line with the
-        occurence of the specified term, add that line to a list.
-        Returns the list.
-        """
-        line_list = []
-        for line in linesToParse:
-            if term in line:
-                line_list.append(line)
-        linesToParse.close()
-        return line_list
     
     def _getFilterID(self,tuples, value):
         """
