@@ -606,7 +606,7 @@ class pyGDPwebProcessing():
         """
         
         wfs = WebFeatureService(WFS_URL, version='1.1.0')
-
+        
         feature = wfs.getfeature(typename=shapefile, maxfeatures=limitFeatures, propertyname=[attribute])
 
         gml = etree.parse(feature)
@@ -775,6 +775,15 @@ class pyGDPwebProcessing():
                 geometry_name='Shape'                                
         
             query = WFSQuery(geoType, propertyNames=[geometry_name, attribute], filters=gmlIDs)
+            
+            # There is certainly a better way to do this, but it would require substantial refactor to pass more back from getValues. 
+            if 'arcgis' in WFS_URL or 'ArcGis' in WFS_URL:
+                geometry_attribute="Shape"
+            else:
+                geometry_attribute="the_geom"
+                
+            query = WFSQuery(geoType, propertyNames=[geometry_attribute, attribute], filters=gmlIDs)
+            
             return WFSFeatureCollection(WFS_URL, query)
         else:
             raise Exception('Geotype is not a shapefile or a recognizable polygon.')
