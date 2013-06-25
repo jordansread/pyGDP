@@ -37,7 +37,22 @@ class TestGeoServerInteractivity(object):
         
         assert('STATE' in attributes)
         
+    def test_get_shapefile_attributes_arc(self):
+        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
+        
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+        shapefile  = 'GeospatialFabric_mows_mapping:NHDPlus_Catchment'
+
+        attributes = testPyGDP.getAttributes(shapefile)
+
+        assert_equal(len(attributes), 7)
+
+        assert('hru_id' in attributes)
+        
     def test_get_shapefile_values(self):
+        pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
+        
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
         shapefile  = 'sample:CONUS_States'  
@@ -49,9 +64,24 @@ class TestGeoServerInteractivity(object):
         assert_equal(len(values), 49)
         
         assert('Wisconsin' in values)
+        
+    def test_get_shapefile_values_arc(self):
+        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
+
+        testPyGDP = pyGDP.pyGDPwebProcessing()
+
+        shapefile='GeospatialFabric_mows_mapping:NHDPlus_Catchment'
+        
+        attribute='hru_id'
+
+        values    = testPyGDP.getValues(shapefile,attribute,limitFeatures=100)
+
+        assert_equal(len(values), 100)
+        
+        assert('100' in values)
 	
     def test_getFeatureCollectionGeoType_single(self):
-        testpyGDP = pyGDP.pyGDPwebProcessing()
+        pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
