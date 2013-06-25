@@ -530,7 +530,7 @@ class pyGDPwebProcessing():
         gml = etree.parse(feature)
         gml_root=gml.getroot()
         name_spaces = gml_root.nsmap
-        for namespace in name_spaces.viewvalues():
+        for namespace in name_spaces.values():
             if namespace not in ['http://www.opengis.net/wfs', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/1999/xlink', 'http://www.opengis.net/gml', 'http://www.opengis.net/ogc', 'http://www.opengis.net/ows']:
                 custom_namespace = namespace
         attributes = []        
