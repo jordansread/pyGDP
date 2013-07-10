@@ -43,7 +43,7 @@ UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
 CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
 
 # misc variables
-URL_timeout = 10		# seconds
+URL_timeout = 60		# seconds
 WPS_attempts= 10		# tries with null response before failing
 
 # list of namespaces used by this module
@@ -572,13 +572,19 @@ class pyGDPwebProcessing():
         if getTuples == 'true' or getTuples == 'only':
             tuples = []
             # If features are encoded as a list of featureMember elements.
+            gmlid_found=False
             for featureMember in gml.iter('{'+GML_NAMESPACE+'}featureMember'):
                 for el in featureMember.iter():
                     if el.get('{'+GML_NAMESPACE+'}id'):
                         gmlid = el.get('{'+GML_NAMESPACE+'}id')
-                    if attribute in el.tag:
+                        att=True
+                        gmlid_found=True
+                    if attribute in el.tag and att==True:
                         value=el.text
-                tuples.append((value,gmlid))
+                        tuples.append((value,gmlid))
+                        att=False
+                if gmlid_found==False:
+                    raise Exception('No gml:id found in source feature service. This form of GML is not supported.')
             # If features are encoded as a featureMembers element.
             for featureMember in gml.iter('{'+GML_NAMESPACE+'}featureMembers'):
                 for el in featureMember.iter():
@@ -721,18 +727,10 @@ class pyGDPwebProcessing():
                     if gmlIDs==[]:
                         raise Exception("Didn't find any features matching given attribute value.")
             
-            geometry_name='the_geom'
-            if 'arcgis' in WFS_URL or 'ArcGis' in WFS_URL:
-                geometry_name='Shape'                                
-        
-            query = WFSQuery(geoType, propertyNames=[geometry_name, attribute], filters=gmlIDs)
+            geometry_attribute='the_geom'
+            if 'arcgis' in WFS_URL.lower():
+                geometry_attribute='Shape'
             
-            # There is certainly a better way to do this, but it would require substantial refactor to pass more back from getValues. 
-            if 'arcgis' in WFS_URL or 'ArcGis' in WFS_URL:
-                geometry_attribute="Shape"
-            else:
-                geometry_attribute="the_geom"
-                
             query = WFSQuery(geoType, propertyNames=[geometry_attribute, attribute], filters=gmlIDs)
             
             return WFSFeatureCollection(WFS_URL, query)
