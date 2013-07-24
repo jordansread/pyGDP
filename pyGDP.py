@@ -770,7 +770,10 @@ class pyGDPwebProcessing():
     
         # redirect standard output after successful execution
         sys.stdout = result
-        monitorExecution(execution, download=True)
+        try: 
+            monitorExecution(execution, download=True)
+        except Exception:
+            raise Exception("The process completed successfully, but an error occurred while downloading the result. You may be able to download the file using the link at the bottom of the status document: %s" % execution.statusLocation)
                 
         result_string = result.getvalue()
         output = result_string.split('\n')
@@ -781,7 +784,7 @@ class pyGDPwebProcessing():
     
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
-                                            timeStep=False, summAttr=False):
+                                            timeStep=False, summAttr=False, weighted=True):
         """
         Makes a featureWeightedGridStatistics algorithm call. 
         The web service interface implemented is summarized here: 
@@ -801,6 +804,8 @@ class pyGDPwebProcessing():
             return
         
         processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
+        if weighted==False:
+            processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureGridStatisticsAlgorithm'
         
         solo_inputs = [("FEATURE_ATTRIBUTE_NAME",attribute), 
                   ("DATASET_URI", dataSetURI),  
