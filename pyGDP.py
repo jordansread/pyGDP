@@ -761,17 +761,27 @@ class pyGDPwebProcessing():
                 err_count=1
             except Exception:
                 print 'An error occurred while checking status, checking again.'
-                print 'This is error number %s of 10.' % err_count
                 print 'Sleeping %d seconds...' % sleepSecs
                 err_count+=1
                 if err_count > WPS_attempts:
-                    raise Exception('The status document failed to return ten times, status checking has aborted. There has been a network or server issue preventing the status document from being retrieved, the request may still be running. For more information, check the status url %s' % execution.statusLocation)
+                    raise Exception('The status document failed to return, status checking has aborted. There has been a network or server issue preventing the status document from being retrieved, the request may still be running. For more information, check the status url %s' % execution.statusLocation)
                 sleep(sleepSecs)
     
         # redirect standard output after successful execution
         sys.stdout = result
-        monitorExecution(execution, download=True)
-                
+        done=False
+        err_count=1
+        while done==False:
+            try: 
+                monitorExecution(execution, download=True)
+                done=True
+            except Exception:
+                print 'An error occurred while trying to download the result file, trying again.'
+                err_count+=1
+            if err_count > WPS_attempts:        
+                raise Exception("The process completed successfully, but an error occurred while downloading the result. You may be able to download the file using the link at the bottom of the status document: %s" % execution.statusLocation)
+            sleep(sleepSecs)
+            
         result_string = result.getvalue()
         output = result_string.split('\n')
         tmp = output[len(output) - 2].split(' ')  
@@ -781,7 +791,7 @@ class pyGDPwebProcessing():
     
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
-                                            timeStep=False, summAttr=False):
+                                            timeStep=False, summAttr=False, weighted=True):
         """
         Makes a featureWeightedGridStatistics algorithm call. 
         The web service interface implemented is summarized here: 
@@ -801,6 +811,8 @@ class pyGDPwebProcessing():
             return
         
         processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureWeightedGridStatisticsAlgorithm'
+        if weighted==False:
+            processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureGridStatisticsAlgorithm'
         
         solo_inputs = [("FEATURE_ATTRIBUTE_NAME",attribute), 
                   ("DATASET_URI", dataSetURI),  
