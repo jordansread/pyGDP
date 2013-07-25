@@ -770,11 +770,19 @@ class pyGDPwebProcessing():
     
         # redirect standard output after successful execution
         sys.stdout = result
-        try: 
-            monitorExecution(execution, download=True)
-        except Exception:
-            raise Exception("The process completed successfully, but an error occurred while downloading the result. You may be able to download the file using the link at the bottom of the status document: %s" % execution.statusLocation)
-                
+        done=False
+        err_count=1
+        while done==False:
+            try: 
+                monitorExecution(execution, download=True)
+                done=True
+            except Exception:
+                print 'An error occurred while trying to download the result file, trying again.'
+                err_count+=1
+            if err_count > WPS_attempts:        
+                raise Exception("The process completed successfully, but an error occurred while downloading the result. You may be able to download the file using the link at the bottom of the status document: %s" % execution.statusLocation)
+            sleep(sleepSecs)
+            
         result_string = result.getvalue()
         output = result_string.split('\n')
         tmp = output[len(output) - 2].split(' ')  
