@@ -461,7 +461,7 @@ class pyGDPwebProcessing():
         Will return a list containing the info requested for (either data types or time range).
         """
         
-        POST = WebProcessingService(WPS_Service, verbose=False)
+        POST = WebProcessingService(WPS_Service, verbose=verbose)
         
         xmlGen = gdpXMLGenerator()
         root = xmlGen.getXMLRequestTree(dataSetURI, algorithm, method, varID, verbose)           

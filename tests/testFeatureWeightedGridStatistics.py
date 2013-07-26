@@ -19,6 +19,7 @@ class TestFeatureWeightedGridStatistics(object):
         """This method is run once after _each_ test method is executed"""
  
     def test_submit_FWGS(self):
+        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
         shapefile  = 'sample:CONUS_States'
@@ -35,6 +36,7 @@ class TestFeatureWeightedGridStatistics(object):
         assert_equal(os.path.getsize(outputFile_handle), 133)
 
     def test_submit_FWGS_multi_stat_var(self):
+        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
         shapefile  = 'sample:CONUS_States'
@@ -55,6 +57,7 @@ class TestFeatureWeightedGridStatistics(object):
         assert_equal(os.path.getsize(outputFile_handle), 375)
 
     def test_submit_FWGS_multi_stat_var_named(self):
+        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
         shapefile  = 'sample:CONUS_States'
@@ -73,6 +76,7 @@ class TestFeatureWeightedGridStatistics(object):
         assert_equal(os.path.getsize(outputFile_handle), 375)
         
     def test_submit_FWGS_no_time(self):
+        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
         shapefile  = 'sample:simplified_HUC8s'
