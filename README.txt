@@ -26,6 +26,8 @@ This should install pyGDP onto your current Python version site-packages.
 
 To install owslib, you can find installation here:
 http://pypi.python.org/pypi/OWSLib/#downloads
+Or install with pip
+    pip install owslib
 Or on their github page:
 https://github.com/geopython/OWSLib
 
@@ -38,6 +40,10 @@ OWSlib and lxml are included in the Enthought Python Distribution (EPD).
 For OSX users, you can installation instructions here:
 http://lxml.de/installation.html
 or use macports
+or install with homebrew (http://brew.sh/) and pip:
+    brew install libxml2
+    pip install lxml
+
 
 Support
 =================
