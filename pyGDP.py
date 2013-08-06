@@ -530,13 +530,21 @@ class pyGDPwebProcessing():
         gml = etree.parse(feature)
         gml_root=gml.getroot()
         name_spaces = gml_root.nsmap
+        
+        attributes = []
+        
         for namespace in name_spaces.values():
-            if namespace not in ['http://www.opengis.net/wfs', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/1999/xlink', 'http://www.opengis.net/gml', 'http://www.opengis.net/ogc', 'http://www.opengis.net/ows']:
+            if namespace not in ['http://www.opengis.net/wfs',
+                                 'http://www.w3.org/2001/XMLSchema-instance',
+                                 'http://www.w3.org/1999/xlink',
+                                 'http://www.opengis.net/gml',
+                                 'http://www.opengis.net/ogc',
+                                 'http://www.opengis.net/ows']:
                 custom_namespace = namespace
-        attributes = []        
-        for element in gml.iter('{'+custom_namespace+'}*'):
-            if etree.QName(element).localname not in ['the_geom', 'Shape', shapefile.split(':')[1]]:
-                attributes.append(etree.QName(element).localname)
+                
+                for element in gml.iter('{'+custom_namespace+'}*'):
+                    if etree.QName(element).localname not in ['the_geom', 'Shape', shapefile.split(':')[1]]:
+                        attributes.append(etree.QName(element).localname)
         return attributes
     
     def getShapefiles(self):
