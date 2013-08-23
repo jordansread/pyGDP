@@ -716,8 +716,9 @@ class pyGDPwebProcessing():
         elif isinstance(geoType, str):
             if value==None:
                 # Using an empty gmlIDs element results in all features being returned to the constructed WFS query.
-                gmlIDs=[]
-                print 'All shapefile attributes will be used.'
+                if gmlIDs is None:
+                    gmlIDs=[]
+                    print 'All shapefile attributes will be used.'
             tmpID = []
             if gmlIDs is None:
                 if type(value) == type(tmpID):
