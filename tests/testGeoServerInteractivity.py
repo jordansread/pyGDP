@@ -46,8 +46,6 @@ class TestGeoServerInteractivity(object):
 
         attributes = testPyGDP.getAttributes(shapefile)
 
-        assert_equal(len(attributes), 7)
-
         assert('hru_id' in attributes)
         
     def test_get_shapefile_values(self):
