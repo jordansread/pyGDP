@@ -9,7 +9,7 @@ class TestFeatureCoverageOPenDAP(object):
         pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
-    	shapefile = 'sample:CONUS_States'
+    	shapefile = 'sample:CONUS_states'
     	attribute = 'STATE'
     	value = 'Alabama'
     	dataSetURI = 'dods://cida.usgs.gov/thredds/dodsC/gmo/GMO_w_meta.ncml'

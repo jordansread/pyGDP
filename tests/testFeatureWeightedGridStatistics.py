@@ -23,7 +23,7 @@ class TestFeatureWeightedGridStatistics(object):
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
-        shapefile  = 'sample:CONUS_States'
+        shapefile  = 'sample:CONUS_states'
         attribute  = 'STATE'
         value 	   = 'Wisconsin'
         userPoly   = [(-102.8184, 39.5273), (-102.8184, 37.418), (-101.2363, 37.418), (-101.2363,39.5273), (-102.8184, 39.5273)]
@@ -41,7 +41,7 @@ class TestFeatureWeightedGridStatistics(object):
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
-        shapefile  = 'sample:CONUS_States'
+        shapefile  = 'sample:CONUS_states'
         attribute  = 'STATE'
         value 	   = 'Wisconsin'
         datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
@@ -63,7 +63,7 @@ class TestFeatureWeightedGridStatistics(object):
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
-        shapefile  = 'sample:CONUS_States'
+        shapefile  = 'sample:CONUS_states'
         shapefileAttribute  = 'STATE'
         attributeValue 	   = 'Wisconsin'
         datasetURI = 'http://cida.usgs.gov/thredds/dodsC/prism' # Note that this test also tests the http to dods conversion for urls.

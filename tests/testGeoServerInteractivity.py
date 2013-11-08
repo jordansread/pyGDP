@@ -28,12 +28,12 @@ class TestGeoServerInteractivity(object):
         
     def test_get_shapefile_attributes(self):
         testPyGDP = pyGDP.pyGDPwebProcessing()
-        
-        shapefile  = 'sample:CONUS_States'
-        
+
+        shapefile  = 'sample:CONUS_states'
+
         attributes = testPyGDP.getAttributes(shapefile)
         
-        assert_equal(len(attributes), 9)
+        assert_equal(len(attributes), 10)
         
         assert('STATE' in attributes)
         
@@ -53,7 +53,7 @@ class TestGeoServerInteractivity(object):
         
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
-        shapefile  = 'sample:CONUS_States'  
+        shapefile  = 'sample:CONUS_states'  
 	
         attribute = 'STATE'
 	
@@ -83,7 +83,7 @@ class TestGeoServerInteractivity(object):
         
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
-        shapefile  = 'sample:CONUS_States'  
+        shapefile  = 'sample:CONUS_states'  
         
         attribute = 'STATE'
         
@@ -98,7 +98,7 @@ class TestGeoServerInteractivity(object):
         
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
-        shapefile  = 'sample:CONUS_States'  
+        shapefile  = 'sample:CONUS_states'  
         
         attribute = 'STATE'
         
