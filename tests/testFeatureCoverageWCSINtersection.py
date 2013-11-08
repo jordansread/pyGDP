@@ -6,7 +6,7 @@ from nose.tools import assert_not_equal
 class TestFeatureCoverageWCSIntersection(object):
  
     def test_submit_WCSIntersection(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
     	shapefile = 'sample:simplified_HUC8s'
@@ -17,4 +17,4 @@ class TestFeatureCoverageWCSIntersection(object):
 
     	outputFile_handle = testPyGDP.submitFeatureCoverageWCSIntersection(shapefile, dataSetURI, dataType, attribute, value)
 
-    	assert_equal(os.path.getsize(outputFile_handle), 1574029)
+    	assert_equal(os.path.getsize(outputFile_handle), 1311757)

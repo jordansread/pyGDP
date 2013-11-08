@@ -19,7 +19,7 @@ class TestFeatureWeightedGridStatistics(object):
         """This method is run once after _each_ test method is executed"""
  
     def test_submit_FWGS(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
@@ -37,7 +37,7 @@ class TestFeatureWeightedGridStatistics(object):
         assert_equal(os.path.getsize(outputFile_handle), 133)
 
     def test_submit_FWGS_multi_stat_var(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
@@ -59,7 +59,7 @@ class TestFeatureWeightedGridStatistics(object):
         assert_equal(os.path.getsize(outputFile_handle), 375)
 
     def test_submit_FWGS_multi_stat_var_named(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
@@ -79,7 +79,7 @@ class TestFeatureWeightedGridStatistics(object):
         assert_equal(os.path.getsize(outputFile_handle), 375)
         
     def test_submit_FWGS_no_time(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
@@ -96,10 +96,10 @@ class TestFeatureWeightedGridStatistics(object):
 
         outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(geoType=shapefile, dataSetURI=datasetURI, varID=dataType, startTime=timeStart, endTime=timeEnd, attribute=shapefileAttribute, value=attributeValue, gmlIDs=None, verbose=False, coverage=Coverage, delim=Delim, stat=stats, grpby='STATISTIC', timeStep='false', summAttr='false')
 
-        assert_equal(os.path.getsize(outputFile_handle), 57)
+        assert_equal(os.path.getsize(outputFile_handle), 58)
 
     def test_submit_FWGS_arc(self):
-          pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+          pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
           pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
           testPyGDP = pyGDP.pyGDPwebProcessing()
 

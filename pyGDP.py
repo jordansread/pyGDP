@@ -214,9 +214,9 @@ class gdpXMLGenerator():
         # </wps:ResponseForm>
         responseFormElement = etree.SubElement(root, util.nspath_eval('wps:ResponseForm', namespaces), attrib={'storeExecuteResponse': 'true', 'status' : 'true'})
         responseDocElement = etree.SubElement(responseFormElement, util.nspath_eval('wps:ResponseDocument', namespaces))
-        outputElement = etree.SubElement(responseDocElement, util.nspath_eval('wps:Output', namespaces), attrib={'asReference': 'true'})
+        outputElement = etree.SubElement(responseDocElement, util.nspath_eval('wps:Output', namespaces), attrib={'asReference': 'false'})
         identifierElement = etree.SubElement(outputElement, util.nspath_eval('ows:Identifier', namespaces))
-        identifierElement.text = 'result'
+        identifierElement.text = 'result_as_xml'
         
         return root
     
@@ -475,13 +475,13 @@ class pyGDPwebProcessing():
         
         execution = POST.execute(None, [], request=request)
         if method == 'getDataSetTime':
-            seekterm = 'time'
+            seekterm = '{xsd/gdptime-1.0.xsd}time'
         elif method == 'getDataType':
-            seekterm = 'name'
+            seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}name'
         elif method == 'getDataLongName':
-            seekterm = 'description'
+            seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}description'
         elif method == 'getDataUnits':
-            seekterm = 'unitsstring'
+            seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}unitsstring'
         if not verbose:
             sys.stdout = old_stdout
     

@@ -21,7 +21,7 @@ class TestDatasetIntrospection(object):
         """This method is run once after _each_ test method is executed"""
  
     def test_get_dataset_parameters(self):
-        pyGDP.WPS_Service= 'http://cida.usgs.gov/qa/climate/gdp/utility/WebProcessingService'
+        pyGDP.WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
         
     	DATASET_URI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
         
@@ -34,7 +34,7 @@ class TestDatasetIntrospection(object):
     	assert('ppt' in datatypes)
 
     def test_get_time_range(self):
-        pyGDP.WPS_Service= 'http://cida.usgs.gov/qa/climate/gdp/utility/WebProcessingService'
+        pyGDP.WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
     	
     	DATASET_URI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
         
