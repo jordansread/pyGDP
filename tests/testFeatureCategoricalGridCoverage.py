@@ -6,10 +6,10 @@ from nose.tools import assert_not_equal
 class TestFeatureCategoricalGridCoverage(object):
  
     def test_submit_FCGC(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/qa/climate/gdp/process/WebProcessingService'
+        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
         testPyGDP = pyGDP.pyGDPwebProcessing()
         
-    	shapefile = 'sample:CONUS_States'
+    	shapefile = 'sample:CONUS_states'
     	attribute = 'STATE'
     	value = 'Rhode Island'
     	dataSetURI = 'http://cida.usgs.gov/ArcGIS/services/statsgo_muid/MapServer/WCSServer'
