@@ -216,8 +216,8 @@ class pyGDPwebProcessing():
     """
     This class allows interactive calls to be made into the GDP.
     """
-    
-    def _init_(self, wfsUrl=WFS_URL, wpsUrl=WPS_URL, version='1.1.0'):
+
+    def __init__(self, wfsUrl=WFS_URL, wpsUrl=WPS_URL, version='1.1.0'):
         self.wfsUrl = wfsUrl
         self.wpsUrl = wpsUrl
         self.version = version
