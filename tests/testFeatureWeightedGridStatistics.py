@@ -100,7 +100,7 @@ class TestFeatureWeightedGridStatistics(object):
 
     def test_submit_FWGS_arc(self):
           pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
-          pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
+          pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/GeospatialFabric/MapServer/WFSServer'
           testPyGDP = pyGDP.pyGDPwebProcessing()
 
           shapefile  = 'GeospatialFabric_mows_mapping:NHDPlus_Catchment'
