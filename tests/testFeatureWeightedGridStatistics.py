@@ -78,39 +78,39 @@ class TestFeatureWeightedGridStatistics(object):
 
         assert_equal(os.path.getsize(outputFile_handle), 375)
         
-    def test_submit_FWGS_no_time(self):
-        pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
-        pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
-        testPyGDP = pyGDP.pyGDPwebProcessing()
+    # def test_submit_FWGS_no_time(self):
+    #     pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
+    #     pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
+    #     testPyGDP = pyGDP.pyGDPwebProcessing()
+    # 
+    #     shapefile  = 'sample:simplified_HUC8s'
+    #     shapefileAttribute  = 'HUC_8'
+    #     attributeValue       = '08010211'
+    #     datasetURI = 'http://raster.nationalmap.gov/ArcGIS/services/TNM_LandCover/MapServer/WCSServer' # Note that this test also tests the http to dods conversion for urls.
+    #     dataType   = '6'
+    #     Coverage='true'
+    #     Delim='COMMA'
+    #     stats      = ['MEAN','STD_DEV']
+    #     timeStart  = None
+    #     timeEnd    = None
 
-        shapefile  = 'sample:simplified_HUC8s'
-        shapefileAttribute  = 'HUC_8'
-        attributeValue 	   = '08010211'
-        datasetURI = 'http://raster.nationalmap.gov/ArcGIS/services/TNM_LandCover/MapServer/WCSServer' # Note that this test also tests the http to dods conversion for urls.
-        dataType   = '6'
-        Coverage='true'
-        Delim='COMMA'
-        stats      = ['MEAN','STD_DEV']
-        timeStart  = None
-        timeEnd    = None
-
-        outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(geoType=shapefile, dataSetURI=datasetURI, varID=dataType, startTime=timeStart, endTime=timeEnd, attribute=shapefileAttribute, value=attributeValue, gmlIDs=None, verbose=False, coverage=Coverage, delim=Delim, stat=stats, grpby='STATISTIC', timeStep='false', summAttr='false')
-
-        assert_equal(os.path.getsize(outputFile_handle), 58)
-
-    def test_submit_FWGS_arc(self):
-          pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
-          pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/GeospatialFabric/MapServer/WFSServer'
-          testPyGDP = pyGDP.pyGDPwebProcessing()
-
-          shapefile  = 'GeospatialFabric_mows_mapping:NHDPlus_Catchment'
-          attribute  = 'hru_id'
-          value='99'
-          datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
-          dataType   = 'ppt'
-          timeStart  = '1900-01-01T00:00:00.000Z'
-          timeEnd    = '1900-02-01T00:00:00.000Z'
-
-          outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value, coverage=False)
-
-          assert_equal(os.path.getsize(outputFile_handle), 95)
+    #     outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(geoType=shapefile, dataSetURI=datasetURI, varID=dataType, startTime=timeStart, endTime=timeEnd, attribute=shapefileAttribute, value=attributeValue, gmlIDs=None, verbose=False, coverage=Coverage, delim=Delim, stat=stats, grpby='STATISTIC', timeStep='false', summAttr='false')
+    # 
+    #     assert_equal(os.path.getsize(outputFile_handle), 58)
+    # 
+    # def test_submit_FWGS_arc(self):
+    #       pyGDP.WPS_URL='http://cida.usgs.gov/gdp/process/WebProcessingService'
+    #       pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/GeospatialFabric/MapServer/WFSServer'
+    #       testPyGDP = pyGDP.pyGDPwebProcessing()
+    # 
+    #       shapefile  = 'GeospatialFabric_mows_mapping:NHDPlus_Catchment'
+    #       attribute  = 'hru_id'
+    #       value='99'
+    #       datasetURI = 'dods://cida.usgs.gov/thredds/dodsC/prism'
+    #       dataType   = 'ppt'
+    #       timeStart  = '1900-01-01T00:00:00.000Z'
+    #       timeEnd    = '1900-02-01T00:00:00.000Z'
+    # 
+    #       outputFile_handle = testPyGDP.submitFeatureWeightedGridStatistics(shapefile, datasetURI, dataType, timeStart, timeEnd, attribute, value, coverage=False)
+    # 
+    #       assert_equal(os.path.getsize(outputFile_handle), 95)
