@@ -66,6 +66,19 @@ WPS_URL    = urls[2]
 WPS_Service= urls[3]
 CSWURL     = urls[4]
 
+# namespace definition
+WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
+WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
+WPS_DEFAULT_VERSION = '1.0.0'
+WFS_NAMESPACE = 'http://www.opengis.net/wfs'
+OGC_NAMESPACE = 'http://www.opengis.net/ogc'
+GML_NAMESPACE = 'http://www.opengis.net/gml'
+GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
+DRAW_NAMESPACE = 'gov.usgs.cida.gdp.draw'
+SMPL_NAMESPACE = 'gov.usgs.cida.gdp.sample'
+UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
+CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
+
 # misc variables
 URL_timeout = 60		# seconds
 WPS_attempts= 10		# tries with null response before failing
