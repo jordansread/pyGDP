@@ -24,7 +24,7 @@ class TestCSWreturnsurl(object):
 	testPyGDP = pyGDP.pyGDPwebProcessing()
 	dataseturis=testPyGDP.getDataSetURI(anyText='prism')
 
-	assert_equal(len(dataseturis), 2)
+	assert_equal(len(dataseturis), 3)
 	assert_equal(dataseturis[1][2][0], 'dods://cida.usgs.gov/thredds/dodsC/prism')
 
 
