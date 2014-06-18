@@ -38,7 +38,7 @@ class TestGeoServerInteractivity(object):
         assert('STATE' in attributes)
         
     def test_get_shapefile_attributes_arc(self):
-        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
+        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/GeospatialFabric/MapServer/WFSServer'
         
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
@@ -64,7 +64,7 @@ class TestGeoServerInteractivity(object):
         assert('Wisconsin' in values)
         
     def test_get_shapefile_values_arc(self):
-        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
+        pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/GeospatialFabric/MapServer/WFSServer'
 
         testPyGDP = pyGDP.pyGDPwebProcessing()
 
