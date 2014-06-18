@@ -45,7 +45,7 @@ def globalURLs(environment):
         WFS_URL    = 'http://cida-test.er.usgs.gov/geoserver/'
         WPS_URL    = 'http://cida-test.er.usgs.gov/gdp-process-wps/WebProcessingService'
         WPS_Service= 'http://cida-test.er.usgs.gov/gdp-utility-wps/WebProcessingService?Service=WPS&Request=GetCapabilities'
-        CSWURL     = 'http://cida-eros-gdpdev.er.usgs.gov/gdp/geonetwork/srv/en/csw'
+        CSWURL     = 'http://cida-test.er.usgs.gov/gdp/geonetwork/srv/en/csw'
 
     if environment == "custom":
         WFS_URL    = raw_input("WFS_URL = ")
