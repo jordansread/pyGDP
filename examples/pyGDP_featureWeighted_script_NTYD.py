@@ -8,10 +8,13 @@ pyGDP = pyGDP.pyGDPwebProcessing()
 
 filePath = 'testUpload.zip'
 #upload the file to geoserver
+
 try:
 	shpfile = pyGDP.uploadShapeFile(filePath)
+
 except Exception:
 	print 'A file of this name already exists, it has not been replaced.'
+	shpfile = 'upload:testUpload'
 else:
 	print 'Shapefile Uploaded'
 
@@ -41,8 +44,8 @@ for v in values:
     print v
 print
 
-#We set our value to 13
-usr_value = 13
+#We set our value to 5
+usr_value = 5
 
 # our shapefile = 'upload:OKCNTYD', usr_attribute = 'OBJECTID', and usr_value = 13
 # We get the dataset URI that we are interested in

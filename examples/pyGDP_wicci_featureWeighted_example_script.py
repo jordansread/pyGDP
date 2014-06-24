@@ -14,7 +14,7 @@ for shapefile in shapefiles:
 
 
 # Grab the attributes for sample:CONUS_States
-shapefile = 'sample:CONUS_States'
+shapefile = 'sample:CONUS_states'
 attributes = pyGDP.getAttributes(shapefile)
 for attr in attributes:
     print attr

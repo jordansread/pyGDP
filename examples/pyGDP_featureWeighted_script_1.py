@@ -14,7 +14,7 @@ for shapefile in shapefiles:
     print shapefile
 
 # Grab the file and get its attributes:
-shapefile = 'sample:CONUS_States'
+shapefile = 'sample:CONUS_states'
 attributes = pyGDP.getAttributes(shapefile)
 for attr in attributes:
     print attr
@@ -24,7 +24,6 @@ usr_attribute = 'STATE'
 values = pyGDP.getValues(shapefile, usr_attribute)
 for v in values:
     print v
-
 
 # Instead of specifically specifying a value, we get request to get
 # the gmlID of these values and append them to a gmlID to be used
