@@ -2,7 +2,8 @@ import pyGDP
 
 pyGDP = pyGDP.pyGDPwebProcessing()
 
-shapefile = 'sample:CONUS_States'
+
+shapefile = 'sample:CONUS_states'
 attribute = 'STATE'
 value = 'Alabama'
 
