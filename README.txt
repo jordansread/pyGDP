@@ -12,7 +12,7 @@ pyGDP has the following algorithms:
 Dependencies
 =================
 
-pyGDP request lxml.etree and owslib
+pyGDP request owslib and lxml.etree (which, in turn, uses libxml2 and libxslt)
 
 Usage
 =================
@@ -21,36 +21,70 @@ You can find example usages and scripts in the examples folder.
 
 Installation
 ==================
-In your pyGDP directory, run python setup.py install
-This should install pyGDP onto your current Python version site-packages.
+1.) Install after cloning the appropriate git:
 
-To install owslib, you can find installation here:
-http://pypi.python.org/pypi/OWSLib/#downloads
-Or install with pip
-    pip install owslib
-Or on their github page:
-https://github.com/geopython/OWSLib
+In your pyGDP-Master directory, run python:
 
-For lxml, window users can find unofficial window binaries of lxml
-and other interesting packages here:
+setup.py install
+
+This should install pyGDP into your current Python version site-packages.
+
+Find owslib at https://github.com/geopython/OWSLib
+
+Find lxml at https://github.com/lxml/lxml
+
+OR
+2.) Install using pip (first install or --update dependencies):
+
+	pip install owslib --update
+
+	pip install lxml --update
+
+You can find libxml2 and libxlst with:
+	
+	pip install libxml2-python
+
+You can install a pyGDP git hub branch (with python v.3.0 or greater), like:
+	
+	pip install git+https://github.com/USGS-CIDA/pyGDP.git
+
+(reference http://codeinthehole.com/writing/using-pip-and-requirementstxt-to-install-from-the-head-of-a-github-branch/)
+
+OR
+3.) Install using Enthought Canopy:
+
+Find and install the lxml and owslib though Package Manager
+
+(Recommended you set Canopy as your default python environment)
+Install pyGDP as in 1.)
+
+
+Having trouble compiling?
+
+Windows users can find the unofficial windows binaries of lxml, owslib, and lots of other packages at:
+
 http://www.lfd.uci.edu/~gohlke/pythonlibs/ 
 
-OWSlib and lxml are included in the Enthought Python Distribution (EPD).
+For OSX users, you can find installation instructions here:
 
-For OSX users, you can installation instructions here:
 http://lxml.de/installation.html
-or use macports
-or install with homebrew (http://brew.sh/) and pip:
+
+OR use macports
+
+OR install with homebrew (http://brew.sh/) and pip:
+
     brew install libxml2
+
     pip install lxml
 
 
 Support
 =================
-Contact jread@usgs.gov for questions, issues.
+Contact gdp@usgs.gov for questions, issues.
 
 Thanks
 =================
 1. Dave Blodgett
 2. Jordan I Walker
 3. Jordan Read
+4. Steve Kochaver
