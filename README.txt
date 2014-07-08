@@ -46,7 +46,9 @@ You can find libxml2 and libxlst with:
 
 You can install the pyGDP git master branch (with python v.3.0 or greater):
 	
-	pip install git+https://github.com/USGS-CIDA/pyGDP.git@master
+	pip install git+https://github.com/USGS-CIDA/pyGDP.git@424bdc2d5d#egg=pyGDP (for the recommended commit as of 7/8/2014)
+
+	pip install git+https://github.com/USGS-CIDA/pyGDP.git@master (for the, possibly unstable, current commit)
 
 (reference http://codeinthehole.com/writing/using-pip-and-requirementstxt-to-install-from-the-head-of-a-github-branch/)
 
