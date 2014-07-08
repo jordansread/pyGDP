@@ -20,7 +20,7 @@ import sys
 import os
 import zipfile
 
-__version__ = '1.2.2'
+__version__ = '1.3.0-dev'
 
 #fist function before any pyGDPwebProcessing can be done. Will be set to production, and
 #can be easily changed for any reason. Might implement per pyGDP instance depending on
