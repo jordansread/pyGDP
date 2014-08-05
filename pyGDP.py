@@ -5,7 +5,6 @@
 # Contact email: jread@usgs.gov
 # =============================================================================
 from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
-from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
 from owslib.wfs import WebFeatureService
 from owslib.csw import CatalogueServiceWeb
 from owslib.etree import etree
@@ -20,83 +19,19 @@ import sys
 import os
 import zipfile
 
+#This series of import functions brings in the namespaces, url, and pyGDP utility
+#variables from the pyGDP_Namespaces file, as well as owslibs own namespaces
+#Check out the pyGDP_Namespaces file to check out precisely how things are
+#sitting. It's good to be aware.
+from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
+from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL
+from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
+from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
+from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UPLD_NAMESPACE
+from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
+from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
+
 __version__ = '1.2.2'
-
-#fist function before any pyGDPwebProcessing can be done. Will be set to production, and
-#can be easily changed for any reason. Might implement per pyGDP instance depending on
-#necessity.
-def globalURLs(environment):
-    
-    if environment == "production":
-        WFS_URL    = 'http://cida.usgs.gov/gdp/geoserver/wfs'
-        upload_URL = 'http://cida.usgs.gov/gdp/geoserver'
-        WPS_URL    = 'http://cida.usgs.gov/gdp/process/WebProcessingService'
-        WPS_Service= 'http://cida.usgs.gov/gdp/utility/WebProcessingService'
-        CSWURL     = 'http://cida.usgs.gov/gdp/geonetwork/srv/en/csw'
-
-    if environment == "development":
-        WFS_URL    = 'http://cida-eros-gdpdev.er.usgs.gov:8082/geoserver/wfs'
-        upload_URL = 'http://cida-eros-gdpdev.er.usgs.gov:8082/geoserver/'
-        WPS_URL    = 'http://cida-eros-gdpdev.er.usgs.gov:8080/gdp-process-wps/WebProcessingService'
-        WPS_Service= 'http://cida-eros-gdpdev.er.usgs.gov:8080/gdp-utility-wps/WebProcessingService?Service=WPS&Request=GetCapabilities'
-        CSWURL     = 'http://cida-eros-gdpdev.er.usgs.gov/gdp/geonetwork/srv/en/csw'
-
-    if environment == "testing":
-        WFS_URL    = 'http://cida-test.er.usgs.gov/geoserver/'
-        WPS_URL    = 'http://cida-test.er.usgs.gov/gdp-process-wps/WebProcessingService'
-        WPS_Service= 'http://cida-test.er.usgs.gov/gdp-utility-wps/WebProcessingService?Service=WPS&Request=GetCapabilities'
-        CSWURL     = 'http://cida-test.er.usgs.gov/gdp/geonetwork/srv/en/csw'
-
-    if environment == "custom":
-        WFS_URL    = raw_input("WFS_URL = ")
-        upload_URL = raw_input("upload_URL = ")
-        WPS_URL    = raw_input("WPS_URL = ")
-        WPS_Service= raw_input("WFS_Service = ")
-        CSWURL     = raw_input("CSWURL = ")
-
-    return(WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL)
-
-#global urls for GDP and services
-
-environment= 'production' #'developemnt' or 'production' pr 'testing' or 'custom'
-urls       = globalURLs(environment)
-WFS_URL    = urls[0]
-upload_URL = urls[1]
-WPS_URL    = urls[2]
-WPS_Service= urls[3]
-CSWURL     = urls[4]
-
-# namespace definition
-WPS_DEFAULT_NAMESPACE="http://www.opengis.net/wps/1.0.0"
-WPS_DEFAULT_SCHEMA_LOCATION = 'http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd'
-WPS_DEFAULT_VERSION = '1.0.0'
-WFS_NAMESPACE = 'http://www.opengis.net/wfs'
-OGC_NAMESPACE = 'http://www.opengis.net/ogc'
-GML_NAMESPACE = 'http://www.opengis.net/gml'
-GML_SCHEMA_LOCATION = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
-DRAW_NAMESPACE = 'gov.usgs.cida.gdp.draw'
-SMPL_NAMESPACE = 'gov.usgs.cida.gdp.sample'
-UPLD_NAMESPACE = 'gov.usgs.cida.gdp.upload'
-CSW_NAMESPACE = 'http://www.opengis.net/cat/csw/2.0.2'
-
-# misc variables
-URL_timeout = 60		# seconds
-WPS_attempts= 10		# tries with null response before failing
-
-# list of namespaces used by this module
-namespaces = {
-     None  	: WPS_DEFAULT_NAMESPACE,
-    'wps'  	: WPS_DEFAULT_NAMESPACE,
-    'ows'  	: DEFAULT_OWS_NAMESPACE,
-    'xlink'	: XLINK_NAMESPACE,
-    'xsi'  	: XSI_NAMESPACE,
-    'wfs'  	: WFS_NAMESPACE,
-    'ogc'  	: OGC_NAMESPACE,
-    'gml'  	: GML_NAMESPACE,
-    'sample': SMPL_NAMESPACE,
-    'upload': UPLD_NAMESPACE,
-    'csw'	: CSW_NAMESPACE
-}
 
 class gdpXMLGenerator():
     """
@@ -693,6 +628,7 @@ class pyGDPwebProcessing():
 				"""
 
 				csw = CatalogueServiceWeb(CSWURL, skip_caps=True)
+                                #Works with owslib version 0.8.6.
 				csw.getrecords(keywords=[anyText], outputschema='http://www.isotc211.org/2005/gmd', esn='full', maxrecords=100)
 				dataSetURIs = [['title','abstract',['urls']]]
 				for rec in csw.records:
@@ -703,17 +639,17 @@ class pyGDPwebProcessing():
 						for onlineresource in range(len(csw.records[rec].distribution.online)):
 							urls.append(csw.records[rec].distribution.online[onlineresource].url)
 					except AttributeError:
-						pass
+						print#pass
 					else:
-						pass
+						print#pass
 					for ident in range(len(csw.records[rec].identificationinfo)):
 						try:
 							for operation in range(len(csw.records[rec].identificationinfo[ident].operations)):
 								urls.append(csw.records[rec].identificationinfo[ident].operations[0]['connectpoint'][0].url)
 						except AttributeError:
-							pass
+							print#pass
 						else:
-							pass
+							print#pass
 					entry=[title,abstract,urls]
 					dataSetURIs.append(entry)
 				for i,dataset in enumerate(dataSetURIs):
