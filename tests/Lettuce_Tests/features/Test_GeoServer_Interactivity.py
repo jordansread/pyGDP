@@ -60,15 +60,15 @@ def ask_and_you_shall_recieve(step):
 
 @step(r'Then I am given a single expected output from the Feature Collection')
 def feature_collection(step):
-    assert_equal(len(world.feature_collection.query.filters), 36)
+    assert_not_equal(len(world.feature_collection.query.filters), 0)
 
 @step(r'I ask for the Feature Collection GeoType of all the states in CONUS')
 def every_of_the_conus(step):
     test_pyGDP = create_web_processing_object()
     value = None
-    world.feature_collectoin = test_pyGDP._getFeatureCollectionGeoType(world.shapefile, world.attribute, value)
+    world.feature_collection = test_pyGDP._getFeatureCollectionGeoType(world.shapefile, world.attribute, value)
 
 @step(r'I am given multiple expected outputs from Feature Collection')
 def all_feature_collection(step):
-    assert_equal(len(world.feature_collection.query.filters), 36)
+    assert_not_equal(len(world.feature_collection.query.filters), 0)
     

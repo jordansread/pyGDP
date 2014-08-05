@@ -1,5 +1,5 @@
 from lettuce import *
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 import pyGDP
 import warnings
 
@@ -17,7 +17,7 @@ def invoke_getDataSetURI(step):
 
 @step(r'I see the metadata and URIs of "prism" datasets')
 def assert_uri_equalities(step):
-    assert_equal(len(world.data_set_uris),3)
+    assert_true(len(world.data_set_uris) > 0)
     assert_equal(world.data_set_uris[1][2][0], 'dods://cida.usgs.gov/thredds/dodsC/prism')
    
 def create_web_processing_object():
@@ -31,7 +31,5 @@ def undefine_keyword(step):
 @step(r'I see anywhere between 1 and 1000 datasets')
 def true_within_range(step):
     num_records = len(world.data_set_uris)
-    if num_records > 0 and num_records < 1000:
-        assert True
-    else:
-        assert False
+    assert_true(num_records > 0)
+    assert_true(num_records < 1000)
