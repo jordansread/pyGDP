@@ -20,9 +20,9 @@ import os
 import zipfile
 
 #This series of import functions brings in the namespaces, url, and pyGDP utility
-#variables from the pyGDP_Namespaces file, as well as owslibs own namespaces
-#Check out the pyGDP_Namespaces file to check out precisely how things are
-#sitting. It's good to be aware.
+#variables from the pyGDP_Namespaces file, as well as owslib's own namespaces
+#Check out the pyGDP_Namespaces file to see precisely how things are
+#what URLs pyGDP is pointing to. It's good to be aware.
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
 from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL
 from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
