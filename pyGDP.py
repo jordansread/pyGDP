@@ -14,7 +14,7 @@ from urllib2 import urlopen
 from time import sleep
 from GDP_XML_Generator import gdpXMLGenerator
 from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
-from pyGDP_WFS_Utilities import *
+from pyGDP_WFS_Utilities import shapefile_value_handle
 import owslib.util as util
 import base64
 import cgi

@@ -1,6 +1,12 @@
 #The functions in this file exist to WFS requests to get the various values that exist for
 #shapefiles on the GDP. These include the shapefiles themselves, the attributes of those
 #shapefiles, and the values of those attributes.
+from owslib.wfs import WebFeatureService
+from owslib.etree import etree
+from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL
+from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
+from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
+from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
 
 def getShapefiles():
     """
