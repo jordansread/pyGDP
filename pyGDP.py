@@ -13,6 +13,7 @@ from urllib import urlencode
 from urllib2 import urlopen
 from time import sleep
 from GDP_XML_Generator import gdpXMLGenerator
+from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
 import owslib.util as util
 import base64
 import cgi
@@ -56,190 +57,19 @@ class pyGDPwebProcessing():
         """
         self.wps.describeprocess(identifier, xml)
 
-    def _encodeZipFolder(self, filename):
-        """
-        This function will encode a zipfile and return the filename.
-        """
-        #check extension
-        if not filename.endswith('.zip'):
-            raise Exception('Wrong filetype.')
-        
-        #encode the file
-        with open(filename, 'rb') as fin:
-            bytesRead = fin.read()
-            encode= base64.b64encode(bytesRead)
-    
-        #renames the file and saves it onto local drive
-        filename = filename.split('.')
-        filename = str(filename[0]) + '_copy.' + str(filename[-1])
-        
-        fout = open(filename, "w")
-        fout.write(encode)
-        fout.close()
-        return filename
-
-    def shapeToZip(self,inShape, outZip=None, allFiles=True):
-        """Packs a shapefile to ZIP format.
-        
-        arguments
-        -inShape -  input shape file
-        
-        -outZip -   output ZIP file (optional)
-          default: <inShapeName>.zip in same folder as inShape
-          (If full path not specified, output is written to
-          to same folder as inShape)
-        
-        -allFiles - Include all files? (optional)
-          True (default) - all shape file components
-          False - just .shp,.shx,.dbf,.prj,shp.xml files
-        
-        reference: Esri, Inc, 1998, Esri Shapefile Technical Description
-          http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf
-        
-        author: Curtis Price, cprice@usgs.gov"""
-    
-        if not os.path.splitext(inShape)[1] == ".shp":
-            raise Exception, "inShape must be a *.shp"
-    
-        if not os.path.exists(inShape):
-            raise Exception, "%s not found" % inShape
-    
-        # get shapefile root name "path/file.shp" -> "file"
-        # and shapefile path
-        rootName = os.path.splitext(os.path.basename(inShape))[0]
-        inShape = os.path.realpath(inShape)
-        inDir = os.path.dirname(inShape)
-    
-        # output zip file path
-        if outZip in [None,""]:
-            # default output: shapefilepath/shapefilename.zip
-            outDir = inDir
-            outZip = os.path.join(outDir,rootName) + ".zip"
-        else:
-            outDir = os.path.dirname(outZip)
-            if outDir.strip() in ["","."]:
-                # if full path not specified, use input shapefile folder
-                outDir = os.path.dirname(os.path.realpath(inShape))
-            else:
-                # if output path does exist, raise an exception
-                if not os.path.exists(outDir):
-                    raise Exception, "Output folder %s not found" % outDir
-            outZip = os.path.join(outDir,outZip)
-            # enforce .zip extension
-            outZip = os.path.splitext(outZip)[0] + ".zip"
-
-        if not os.access(outDir, os.W_OK):
-            raise Exception, "Output directory %s not writeable" % outDir
-
-        if os.path.exists(outZip):
-            os.unlink(outZip)
-
-        try:
-            # open zipfile
-            zf = zipfile.ZipFile(outZip, 'w', zipfile.ZIP_DEFLATED)
-            # write shapefile parts to zipfile
-            ShapeExt = ["shp","shx","dbf","prj","shp.xml"]
-            if allFiles: ShapeExt += ["sbn","sbx","fbn","fbx",
-                                  "ain","aih","isx","mxs","atx","cpg"]
-            for f in ["%s.%s" % (os.path.join(inDir,rootName),ext)
-                  for ext in ShapeExt]:
-                if os.path.exists(f):
-                    zf.write(f)
-                    ##print f # debug print
-            return outZip
-        except Exception, msg:
-            raise Exception, \
-                "Could not write zipfile " + outZip + "\n" + str(msg)
-        finally:
-            try:
-                # close the output file
-                zf.close()
-            except:
-                pass
+    def shapeToZip(self, inShape, outZip=None, allFiles=True):
+        outZip = shape_to_zip.shapeToZip(inShape, outZip=None, allFiles=True)
+        return outZip
 
     def uploadShapeFile(self, filePath):
-        """
-        Given a file, this function encodes the file and uploads it onto geoserver.
-        """
-        
-        # encodes the file, opens it, reads it, and closes it
-        # returns a filename in form of: filename_copy.zip
-        filePath = self._encodeZipFolder(filePath)
-        if filePath is None:
-            return
-        
-        filehandle = open(filePath, 'r')
-        filedata = filehandle.read()
-        filehandle.close()
-        os.remove(filePath)  # deletes the encoded file
-        
-        # this if for naming the file on geoServer
-        filename = filePath.split("/")
-        # gets rid of filepath, keeps only filename eg: file.zip
-        filename = filename[len(filename) - 1]
-        filename = filename.replace("_copy.zip", "")
-        
-        
-        # check to make sure a file with the same name does not exist
-        fileCheckString = "upload:" + filename
-        shapefiles = self.getShapefiles()
-        if fileCheckString in shapefiles:
-            raise Exception('File exists already.')
-        
-        xmlGen = gdpXMLGenerator()
-        root = xmlGen.getUploadXMLtree(filename, upload_URL, filedata)
-        
-        # now we have a complete XML upload request
-        uploadRequest = etree.tostring(root)
-        POST = WebProcessingService(WPS_Service)
-        execution = POST.execute(None, [], request=uploadRequest)
-        monitorExecution(execution)
-        return "upload:"+filename
-    
+        value, ntuple = upload_shapefile.uploadShapefile(filePath)
+        return value, ntuple
+
     def getTuples(self, shapefile, attribute):
         """
         Will return the dictionary tuples only.
         """
         return self.getValues(shapefile, attribute, getTuples='only')
-    
-    def _getGMLIDString(self, GMLbeginterm, line, GMLstopterm, valBeginTerm, valStopTerm):
-        """
-        This function is specific to the output documents from the GDP. This
-        function parses the XML document, to find the correct GMLID associated
-        with a feature. Returns the list of values, and a dictionary [feature:id].
-        """
-        
-        # we are searching for attr-value, gml:id pair
-        value = []
-        ntuple = []
-        begin_index = 0
-        end_index = len(line)
-        tmpline = line
-        # start at the beginning
-        while begin_index < len(line):
-            begin_index = tmpline.find(GMLbeginterm)
-            if begin_index != -1:
-                end_index = tmpline.find(GMLstopterm, begin_index)
-                # we get the gml term
-                gmlterm = tmpline[begin_index + len(GMLbeginterm) : end_index ]
-                
-                # now we get the attribute value
-                begin_index2 = tmpline.find(valBeginTerm)
-                end_index2   = tmpline.find(valStopTerm, begin_index2)    
-                
-                valTerm = tmpline[begin_index2 + len(valBeginTerm) : end_index2 ]
-                #tuple: attr-value, gml:id
-                tmpTuple = valTerm, gmlterm
-                ntuple.append(tmpTuple)
-                
-                tmpline = tmpline[end_index2 :]
-                
-                if valTerm not in value:
-                    value.append(valTerm)
-                begin_index = end_index
-            else:
-                break
-        return value, ntuple
     
     def _getFilterID(self,tuples, value):
         """
