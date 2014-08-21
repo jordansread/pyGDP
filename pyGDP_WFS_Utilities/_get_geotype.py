@@ -1,4 +1,10 @@
-def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
+from pyGDP_WFS_Utilities import shapefile_id_handle, shapefile_value_handle
+
+#Use the import chunks from pyGDP.py to bring in the necessary namespace definitions
+from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL
+from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
+
+def _getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs):
     """
     This function returns a featurecollection. It takes a geotype and determines if
     the geotype is a shapfile or polygon. 
@@ -21,15 +27,15 @@ def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None
             if type(value) == type(tmpID):
                 gmlIDs = []
                 for v in value:
-                    tuples = self.getTuples(geoType, attribute)
-                    tmpID = self._getFilterID(tuples, v)
+                    tuples = shapefile_id_handle.getTuples(geoType, attribute)
+                    tmpID = shapefile_id_handle._getFilterID(tuples, v)
                     gmlIDs = gmlIDs + tmpID
                 print tmpID
                 if tmpID == []:
                     raise Exception("Didn't find any features matching given attribute values.")
             else:
-                tuples = self.getTuples(geoType, attribute)
-                gmlIDs = self._getFilterID(tuples, value)
+                tuples = shapefile_id_handle.getTuples(geoType, attribute)
+                gmlIDs = shapefile_id_handle._getFilterID(tuples, value)
                 if gmlIDs==[]:
                     raise Exception("Didn't find any features matching given attribute value.")
         
