@@ -14,6 +14,7 @@ from urllib2 import urlopen
 from time import sleep
 from GDP_XML_Generator import gdpXMLGenerator
 from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
+from pyGDP_WebData_Utilities import webdata_handle, _webdata_xml_generate
 from pyGDP_WFS_Utilities import shapefile_value_handle, shapefile_id_handle, _get_geotype
 import owslib.util as util
 import base64
@@ -73,51 +74,8 @@ class pyGDPwebProcessing():
     def _getFilterID(self, tuples, value):
         return shapefile_id_handle._getFilterID(tuples, value)
     
-    def _parseXMLNodesForTagText(self, xml, tag):
-        """
-        Parses through a XML tree for text associated with specified tag.
-        Returns a list of the text.
-        """
-        
-        tag_text = []
-        for node in xml.iter():
-            if node.tag == tag:
-                tag_text.append(node.text)
-        return tag_text
-    
     def _generateRequest(self, dataSetURI, algorithm, method, varID=None, verbose=False):
-        """
-        Takes a dataset uri, algorithm, method, and datatype. This function will generate a simple XML document
-        to make the request specified. (Only works for ListOpendapGrids and GetGridTimeRange). 
-        
-        Will return a list containing the info requested for (either data types or time range).
-        """
-        
-        POST = WebProcessingService(WPS_Service, verbose=verbose)
-        
-        xmlGen = gdpXMLGenerator()
-        root = xmlGen.getXMLRequestTree(dataSetURI, algorithm, method, varID, verbose)           
-        
-        # change standard output to not display waiting status
-        if not verbose:
-            old_stdout = sys.stdout
-            result = StringIO()
-            sys.stdout = result   
-        request = etree.tostring(root)
-        
-        execution = POST.execute(None, [], request=request)
-        if method == 'getDataSetTime':
-            seekterm = '{xsd/gdptime-1.0.xsd}time'
-        elif method == 'getDataType':
-            seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}name'
-        elif method == 'getDataLongName':
-            seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}description'
-        elif method == 'getDataUnits':
-            seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}unitsstring'
-        if not verbose:
-            sys.stdout = old_stdout
-    
-        return self._parseXMLNodesForTagText(execution.response, seekterm)
+        return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method, varID, verbose)
     
     def _generateFeatureRequest(self, typename, attribute=None):
         """
@@ -160,31 +118,13 @@ class pyGDPwebProcessing():
         return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures)
     
     def getDataType(self, dataSetURI, verbose=False):
-        """
-        Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
-        If verbose = True, will print on screen the waiting seq. for response document.
-        """
-            
-        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
-        return self._generateRequest(dataSetURI, algorithm, method='getDataType', varID=None, verbose=verbose)
+        return webdata_handle.getDataType(dataSetURI, verbose)
     
     def getDataLongName(self, dataSetURI, verbose=False):
-        """
-            Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
-            If verbose = True, will print on screen the waiting seq. for response document.
-            """
-        
-        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
-        return self._generateRequest(dataSetURI, algorithm, method='getDataLongName', varID=None, verbose=verbose)
+        return webdata_handle.getDataLongName(dataSetURI, verbose)
 
     def getDataUnits(self, dataSetURI, verbose=False):
-        """
-            Set up a get Data type request given a dataSetURI. Returns a list of all available data types.
-            If verbose = True, will print on screen the waiting seq. for response document.
-            """
-        
-        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
-        return self._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
+        return webdata_handle.getDataUnits(dataSetURI, verbose)
 	
     def dodsReplace(self, dataSetURI, verbose=False):
 		if "/dodsC" in dataSetURI:
@@ -192,47 +132,7 @@ class pyGDPwebProcessing():
 		return dataSetURI
         
     def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
-				"""
-
-				Searches a given CSW server and returns metadata content for the datasets found.
-
-				Arguments
-				---------
-
-				- anyText - A string that will be submitted to the CSW search. (Optional, default is empty which will return all records.)
-				- CSWURL - A base URL for the CSW server to be searched. (Optional, defaults to the CDIA/GDP CSW server.)
-				- BBox - A lat/lon bounding box in [minx,miny,maxx,maxy] that will be used to limit results to datasets that atleast partially intersect. (Optional)
-
-				"""
-
-				csw = CatalogueServiceWeb(CSWURL, skip_caps=True)
-                                #Works with owslib version 0.8.6.
-				csw.getrecords(keywords=[anyText], outputschema='http://www.isotc211.org/2005/gmd', esn='full', maxrecords=100)
-				dataSetURIs = [['title','abstract',['urls']]]
-				for rec in csw.records:
-					title=csw.records[rec].identification.title
-					abstract=csw.records[rec].identification.abstract
-					urls=[]
-					try:
-						for onlineresource in range(len(csw.records[rec].distribution.online)):
-							urls.append(csw.records[rec].distribution.online[onlineresource].url)
-					except AttributeError:
-						print#pass
-					else:
-						print#pass
-					for ident in range(len(csw.records[rec].identificationinfo)):
-						try:
-							for operation in range(len(csw.records[rec].identificationinfo[ident].operations)):
-								urls.append(csw.records[rec].identificationinfo[ident].operations[0]['connectpoint'][0].url)
-						except AttributeError:
-							print#pass
-						else:
-							print#pass
-					entry=[title,abstract,urls]
-					dataSetURIs.append(entry)
-				for i,dataset in enumerate(dataSetURIs):
-					dataSetURIs[i][2]=[uri.replace("http", "dods") if "/dodsC/" in uri else uri for uri in dataset[2]]
-				return dataSetURIs
+        return  webdata_handle.getDataSetURI(anyText, CSWURL, BBox)
     
     def getGMLIDs(self, shapefile, attribute, value):
         return shapefile_id_handle.getGMLIDs(shapefile, attribute, value)
