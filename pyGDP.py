@@ -4,24 +4,16 @@
 #
 # Contact email: jread@usgs.gov
 # =============================================================================
-from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
-from owslib.wfs import WebFeatureService
-from owslib.csw import CatalogueServiceWeb
-from owslib.etree import etree
+from pyGDP_WFS_Utilities import shapefile_value_handle, shapefile_id_handle, _get_geotype
+from pyGDP_WebData_Utilities import webdata_handle, _webdata_xml_generate
+from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
+from GDP_XML_Generator import gdpXMLGenerator
+from owslib.wps import WebProcessingService, monitorExecution
 from StringIO import StringIO
 from urllib import urlencode
-from urllib2 import urlopen
 from time import sleep
-from GDP_XML_Generator import gdpXMLGenerator
-from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
-from pyGDP_WebData_Utilities import webdata_handle, _webdata_xml_generate
-from pyGDP_WFS_Utilities import shapefile_value_handle, shapefile_id_handle, _get_geotype
-import owslib.util as util
-import base64
 import cgi
 import sys
-import os
-import zipfile
 
 #This series of import functions brings in the namespaces, url, and pyGDP utility
 #variables from the pyGDP_Namespaces file, as well as owslib's own namespaces
@@ -60,23 +52,6 @@ class pyGDPwebProcessing():
         """
         self.wps.describeprocess(identifier, xml)
 
-    def shapeToZip(self, inShape, outZip=None, allFiles=True):
-        outZip = shape_to_zip.shapeToZip(inShape, outZip=None, allFiles=True)
-        return outZip
-
-    def uploadShapeFile(self, filePath):
-        value, ntuple = upload_shapefile.uploadShapefile(filePath)
-        return value, ntuple
-
-    def getTuples(self, shapefile, attribute):
-        return shapefile_id_handle.getTuples(shapefile, attribute)
-    
-    def _getFilterID(self, tuples, value):
-        return shapefile_id_handle._getFilterID(tuples, value)
-    
-    def _generateRequest(self, dataSetURI, algorithm, method, varID=None, verbose=False):
-        return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method, varID, verbose)
-    
     def _generateFeatureRequest(self, typename, attribute=None):
         """
         This function, given a attribute and a typename or filename will return a list of values associated
@@ -107,50 +82,12 @@ class pyGDPwebProcessing():
             
         urlqs = urlencode(tuple(qs))
         return service_url.split('?')[0] + '?' + urlqs
-
-    def getShapefiles(self):
-        return shapefile_value_handle.getShapefiles()
-    
-    def getAttributes(self, shapefile):
-        return shapefile_value_handle.getAttributes(shapefile)
-    
-    def getValues(self, shapefile, attribute, getTuples='false', limitFeatures=None):
-        return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures)
-    
-    def getDataType(self, dataSetURI, verbose=False):
-        return webdata_handle.getDataType(dataSetURI, verbose)
-    
-    def getDataLongName(self, dataSetURI, verbose=False):
-        return webdata_handle.getDataLongName(dataSetURI, verbose)
-
-    def getDataUnits(self, dataSetURI, verbose=False):
-        return webdata_handle.getDataUnits(dataSetURI, verbose)
 	
     def dodsReplace(self, dataSetURI, verbose=False):
 		if "/dodsC" in dataSetURI:
 			dataSetURI= dataSetURI.replace("http", "dods")
 		return dataSetURI
-        
-    def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
-        return  webdata_handle.getDataSetURI(anyText, CSWURL, BBox)
-    
-    def getGMLIDs(self, shapefile, attribute, value):
-        return shapefile_id_handle.getGMLIDs(shapefile, attribute, value)
-    
-    def getTimeRange(self, dataSetURI, varID, verbose=False):
-        """
-        Set up a get dataset time range request given a datatype and dataset uri. Returns the range
-        of the earliest and latest time.
-        If verbose = True, will print on screen the waiting seq. for response document.
-        """
-        
-        algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.GetGridTimeRange'
-        return self._generateRequest(dataSetURI, algorithm, method='getDataSetTime', varID=varID, verbose=verbose)
-    
-    
-    def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
-        return _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
-    
+	    
     def _executeRequest(self, processid, inputs, output, verbose):
         """
         This function makes a call to the Web Processing Service with
@@ -341,3 +278,56 @@ class pyGDPwebProcessing():
                ("FEATURE_COLLECTION", featureCollection)]
         output = "OUTPUT"
         return self._executeRequest(processid, inputs, output, verbose)
+
+    #pyGDP File Utilities
+    def shapeToZip(self, inShape, outZip=None, allFiles=True):
+        return shape_to_zip.shapeToZip(inShape, outZip=None, allFiles=True)
+
+    def uploadShapeFile(self, filePath):
+        value, ntuple = upload_shapefile.uploadShapefile(filePath)
+        return value, ntuple
+
+    #pyGDP WFS Utilities
+    def getTuples(self, shapefile, attribute):
+        return shapefile_id_handle.getTuples(shapefile, attribute)
+     
+    def getShapefiles(self):
+        return shapefile_value_handle.getShapefiles()
+    
+    def getAttributes(self, shapefile):
+        return shapefile_value_handle.getAttributes(shapefile)
+    
+    def getValues(self, shapefile, attribute, getTuples='false', limitFeatures=None):
+        return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures)
+    
+    def getGMLIDs(self, shapefile, attribute, value):
+        return shapefile_id_handle.getGMLIDs(shapefile, attribute, value)
+    
+    def _getFilterID(self, tuples, value):
+        return shapefile_id_handle._getFilterID(tuples, value)
+    
+    def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
+        return _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+
+    def _generateRequest(self, dataSetURI, algorithm, method, varID=None, verbose=False):
+        return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method, varID, verbose)
+
+    #pyGDP WebData Utilities
+    def getDataLongName(self, dataSetURI, verbose=False):
+        return webdata_handle.getDataLongName(dataSetURI, verbose)
+    
+    def getDataType(self, dataSetURI, verbose=False):
+        return webdata_handle.getDataType(dataSetURI, verbose)
+
+    def getDataUnits(self, dataSetURI, verbose=False):
+        return webdata_handle.getDataUnits(dataSetURI, verbose)
+    
+    def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
+        return  webdata_handle.getDataSetURI(anyText, CSWURL, BBox)
+
+    def getTimeRange(self, dataSetURI, varID, verbose=False):
+        return webdata_handle.getTimeRange(ddataSetURI, varID, verbose)
+
+
+
+

@@ -70,3 +70,13 @@ def getDataUnits(dataSetURI, verbose):
     
     algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.ListOpendapGrids'
     return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method='getDataUnits', varID=None, verbose=verbose)
+
+def getTimeRange(dataSetURI, varID, verbose):
+    """
+    Set up a get dataset time range request given a datatype and dataset uri. Returns the range
+    of the earliest and latest time.
+    If verbose = True, will print on screen the waiting seq. for response document.
+    """
+    
+    algorithm = 'gov.usgs.cida.gdp.wps.algorithm.discovery.GetGridTimeRange'
+    return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method='getDataSetTime', varID=varID, verbose=verbose)

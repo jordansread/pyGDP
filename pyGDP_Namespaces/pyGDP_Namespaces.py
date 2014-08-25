@@ -4,18 +4,19 @@ import _read_config_text
 #Global URLs for GDP and services
 
 #The environ_name can be either production, development, testing, or a custom
-#set of URLs that can be adjust in the human readable pyGDP_URLs.txt file.
+#set of URLs that can be adjusted in the pyGDP_URLs.txt file.
 #The .txt path is currently set to point wherever this script is executed from.
 
 URL_file = os.path.join(os.path.split(_read_config_text.__file__)[0], 'pyGDP_URLs.txt')
-environ_name = 'production'
 
 #URLs are read out from the dictionary created from the .txt file.
 #Here they are prepared to be sent to pyGDP.
-def get_URLs():
+def get_URLs(environ_name):
     urls = _read_config_text.get_urls(URL_file, environ_name)
-    return urls    
-urls=get_URLs()
+    return urls
+
+urls=get_URLs(environ_name = 'production')
+
 WFS_URL    = urls['WFS_URL']
 upload_URL = urls['upload_URL']
 WPS_URL    = urls['WPS_URL']
