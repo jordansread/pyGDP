@@ -84,9 +84,9 @@ class pyGDPwebProcessing():
         return service_url.split('?')[0] + '?' + urlqs
 	
     def dodsReplace(self, dataSetURI, verbose=False):
-		if "/dodsC" in dataSetURI:
-			dataSetURI= dataSetURI.replace("http", "dods")
-		return dataSetURI
+	if "/dodsC" in dataSetURI:
+            dataSetURI= dataSetURI.replace("http", "dods")
+	return dataSetURI
 	    
     def _executeRequest(self, processid, inputs, output, verbose):
         """
