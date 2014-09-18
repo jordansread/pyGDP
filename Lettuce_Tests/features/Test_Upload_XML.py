@@ -11,7 +11,8 @@ def got_those_urls(step):
 
 @step(r'I have my own, pre-encoded, upload shapefile data')
 def read_in_the_data(step):
-    test_file = os.path.join(os.getcwd(), 'testEncodeData.txt')
+    #test_file = os.path.join(os.getcwd(), 'testEncodeData.txt')
+    test_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'testEncodeData.txt')
     encode_data = open(test_file, 'r')
     world.file_data = encode_data.read()
     encode_data.close()

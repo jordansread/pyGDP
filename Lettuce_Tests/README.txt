@@ -1,7 +1,3 @@
-(Install nose tests if not already there)
-
-In command line:
-
-pip install lettuce
+After installing nose and lettuce
 
 lettuce --tag=-not_working             (This removes the currently broken scenarios)

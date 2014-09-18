@@ -26,7 +26,8 @@ Feature: GeoServer Interactivity
 		When I ask for the Feature Collection GeoType of Wisconsin in CONUS
 		Then I am given a single expected output from the Feature Collection
 
-	Scenario: Get All Feature Collectoin GeoTypes
+	@get_feature_geotypes
+	Scenario: Get All Feature Collection GeoTypes
 		Given I already know a shapefile (sample:CONUS_states) that has attributes
 		And I know that one of those attributes is "STATE"
 		When I ask for the Feature Collection GeoType of all the states in CONUS
