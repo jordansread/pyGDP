@@ -19,7 +19,7 @@ def define_dataset_uri(step):
 @step(r'I run that crazy WCS insersection function')
 def test_submit_WCS_Intersection(step):
     test_pyGDP = create_web_processing_object()
-    world.output_file = test_pyGDP.submitFeatureCoverageWCSIntersection(world.shapefile, world.dataSetURI, world.dataType, world.attribute, world.value)
+    world.output_file = test_pyGDP.submitFeatureCoverageWCSIntersection(world.shapefile, world.dataSetURI, world.dataType, world.attribute, world.value, verbose=True)
 
 def create_web_processing_object():
     new_web_processing = pyGDP.pyGDPwebProcessing()
