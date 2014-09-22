@@ -23,9 +23,13 @@ class TestCSWreturnsurl(object):
     def test_get_uri(self):
 	testPyGDP = pyGDP.pyGDPwebProcessing()
 	dataseturis=testPyGDP.getDataSetURI(anyText='prism')
-
-	assert_equal(len(dataseturis), 2)
-	assert_equal(dataseturis[1][2][0], 'dods://cida.usgs.gov/thredds/dodsC/prism')
+	uris=[]
+	for dat in dataseturis:
+	    for uri in dat[2]:
+	        uris.append(uri)
+	
+	assert_equal(len(dataseturis), 3)
+	assert_equal('dods://cida.usgs.gov/thredds/dodsC/prism' in uris, True)
 
 
 	

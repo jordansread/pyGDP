@@ -1,18 +1,46 @@
 import os
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
-import _read_config_text
 #Global URLs for GDP and services
 
-#The environ_name can be either production, development, testing, or a custom
-#set of URLs that can be adjusted in the pyGDP_URLs.txt file.
-#The .txt path is currently set to point wherever this script is executed from.
 
-URL_file = os.path.join(os.path.split(_read_config_text.__file__)[0], 'pyGDP_URLs.txt')
-
-#URLs are read out from the dictionary created from the .txt file.
+#URLs are read out from the dictionary.
 #Here they are prepared to be sent to pyGDP.
 def get_URLs(environ_name):
-    urls = _read_config_text.get_urls(URL_file, environ_name)
+    if environ_name == 'production':
+    
+        urls        = {  'WFS_URL'	        :	'http://cida.usgs.gov/gdp/geoserver/wfs',
+                        'upload_URL'	        :	'http://cida.usgs.gov/gdp/geoserver',
+                        'WPS_URL'	        :	'http://cida.usgs.gov/gdp/process/WebProcessingService',
+                        'WPS_Service'	        :	'http://cida.usgs.gov/gdp/utility/WebProcessingService',
+                        'CSWURL'	        :	'http://cida.usgs.gov/gdp/geonetwork/srv/en/csw'
+                      }
+        
+    if environ_name == 'development':
+        
+        urls        = { 'WFS_URL'	        :	'http://cida-eros-gdpdev.er.usgs.gov:8082/geoserver/wfs',
+                        'upload_URL'        	:	'http://cida-eros-gdpdev.er.usgs.gov:8082/geoserver/',
+                        'WPS_URL'	        :	'http://cida-eros-gdpdev.er.usgs.gov:8080/gdp-process-wps/WebProcessingService',
+                        'WPS_Service'	        :	'http://cida-eros-gdpdev.er.usgs.gov:8080/gdp-utility-wps/WebProcessingService?Service=WPS&Request=GetCapabilities',	
+                        'CSWURL'	        :	'http://cida-test.er.usgs.gov/gdp/geonetwork/srv/en/csw'
+                      }
+        
+    if environ_name == 'testing':
+        
+        urls    =     { 'WFS_URL'	        :	'http://cida-test.er.usgs.gov/geoserver/',
+                        'upload_URL'	        :	'http://cida-eros-gdpdev.er.usgs.gov:8082/geoserver/',
+                        'WPS_URL'	        :	'http://cida-test.er.usgs.gov/gdp-process-wps/WebProcessingService',
+                        'WPS_Service'	        :	'http://cida-test.er.usgs.gov/gdp-utility-wps/WebProcessingService?Service=WPS&Request=GetCapabilities',	
+                        'CSWURL'	        :	'http://cida-test.er.usgs.gov/gdp/geonetwork/srv/en/csw'
+                      }
+        
+    if environ_name == 'custom':
+        
+        urls    =      { 'WFS_URL'	        :	'your input here',	
+                        'upload_URL'	        :	'your input here',
+                        'WPS_URL'	        :	'your input here',
+                        'WPS_Service'	:       	'your input here',	
+                        'CSWURL'	        :	'your input here'
+                       }
     return urls
 
 urls=get_URLs(environ_name = 'production')
