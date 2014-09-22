@@ -24,7 +24,7 @@ def feature_weighted_grid_statistics(step):
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, \
                         world.dataset_uri, world.data_type, world.time_start, world.time_end, \
-                        world.attribute, world.value)
+                        world.attribute, world.value, verbose=True)
 
 def create_web_processing_object():
     new_web_processing = pyGDP.pyGDPwebProcessing()
@@ -46,7 +46,7 @@ def define_stats(step):
 @step(r'I submit my multi-stat FWGS')
 def multi_feature_weighted_grid_statistics(step):
     gmlIDs   =  None
-    verbose  =  False
+    verbose  =  True
     coverage =  'true'
     delim    =  'COMMA'
 
@@ -65,7 +65,7 @@ def full_feature_weighted_grid_statistics(step):
     test_pyGDP = create_web_processing_object()
     outputFile_handle = test_pyGDP.submitFeatureWeightedGridStatistics(geoType=world.shapefile, dataSetURI=world.dataset_uri, \
                     varID=world.data_type, startTime=world.time_start, endTime=world.time_end, attribute=world.attribute, \
-                    value=world.value, gmlIDs=None, verbose=False, coverage='true', delim='COMMA', \
+                    value=world.value, gmlIDs=None, verbose=True, coverage='true', delim='COMMA', \
                     stat=world.stats, grpby='STATISTIC', timeStep='false', summAttr='false')
 
 @step(r'I will be using a HUC 8 shapefile')
@@ -87,7 +87,7 @@ def timeless_FWGS(step):
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(geoType=world.shapefile, dataSetURI=world.dataset_uri, \
                         varID=world.data_type, startTime=time_start, endTime=time_end, attribute=world.attribute, \
-                        value=world.value, gmlIDs=None, verbose=False, coverage='true', delim='COMMA', stat=world.stats, \
+                        value=world.value, gmlIDs=None, verbose=True, coverage='true', delim='COMMA', stat=world.stats, \
                         grpby='STATISTIC', timeStep='false', summAttr='false')
 @step(r'I should get a timeless output that I expect')
 def timeless_output_test(step):
@@ -107,7 +107,7 @@ def arc_FWGS(step):
 
    test_pyGDP = create_web_processing_object()
    world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, world.dataset_uri, world.time_start, \
-                                                                      world.time_end, world.attribute, world.value, coverage=False)
+                                                                      world.time_end, world.attribute, world.value, coverage=False, verbose=True)
 
 @step(r'I should get a custom output that I expect')
 def test_arc_FWGS(step):
