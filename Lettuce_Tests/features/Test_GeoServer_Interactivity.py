@@ -6,7 +6,8 @@ import os
 
 @step(r'I know there are shapefiles on our GeoServer')
 def point_to_geoserver(step):
-    pyGDP.WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
+    #Note that this is the default.
+    WFS_URL = 'http://cida.usgs.gov/gdp/geoserver/wfs'
 
 @step(r'I use the getShapefiles method and I get a list of those files')
 def get_shapefiles(step):

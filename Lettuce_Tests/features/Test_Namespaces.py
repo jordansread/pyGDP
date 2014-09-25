@@ -7,7 +7,6 @@ from lettuce import *
 @step(r'Given I have all my namespaces defined in pyGDP')
 def define_those_namespaces(step):
     world.name_spaces = [
-    'WFS_URL'                       ,\
     'upload_URL'                    ,\
     'WPS_URL'                       ,\
     'WPS_Service'                   ,\

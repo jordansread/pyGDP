@@ -1,5 +1,5 @@
 from owslib.wps import WebProcessingService, monitorExecution
-from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL
+from pyGDP_Namespaces.pyGDP_Namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL
 from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
 from time import strftime, sleep
 import sys

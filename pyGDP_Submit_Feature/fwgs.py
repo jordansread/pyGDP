@@ -3,7 +3,7 @@ from pyGDP_WFS_Utilities import _get_geotype
 
 
 def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
-                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted):
+                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, WFS_URL):
     """
     Makes a featureWeightedGridStatistics algorithm call. 
     The web service interface implemented is summarized here: 
@@ -18,7 +18,7 @@ def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, e
     if verbose == True:
         print 'Generating feature collection.'
     
-    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL)
     if featureCollection is None:
         return
     
