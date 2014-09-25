@@ -1,17 +1,17 @@
 from pyGDP_WFS_Utilities import shapefile_value_handle
 
-def getGMLIDs(shapefile, attribute, value):
+def getGMLIDs(shapefile, attribute, value, WFS_URL):
     """
     This function returns the gmlID associated with a particular attribute value.
     """
-    tuples = getTuples(shapefile, attribute)
+    tuples = getTuples(shapefile, attribute, WFS_URL)
     return _getFilterID(tuples, value)
 
-def getTuples(shapefile, attribute):
+def getTuples(shapefile, attribute, WFS_URL):
     """
     Will return the dictionary tuples only.
     """
-    return shapefile_value_handle.getValues(shapefile, attribute, getTuples='only', limitFeatures=None)
+    return shapefile_value_handle.getValues(shapefile, attribute, getTuples='only', limitFeatures=None, WFS_URL=WFS_URL)
 
 def _getFilterID(tuples, value):
     """

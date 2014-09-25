@@ -56,7 +56,7 @@ def on_wisconsin(step):
 @step(r'I ask for the Feature Collection GeoType of Wisconsin in CONUS')
 def ask_and_you_shall_recieve(step):
     test_pyGDP = create_web_processing_object()
-    world.feature_collection = test_pyGDP._getFeatureCollectionGeoType(world.shapefile, world.attribute, world.value)
+    world.feature_collection = test_pyGDP._getFeatureCollectionGeoType(world.shapefile, world.attribute, world.value, 'http://cida.usgs.gov/gdp/geoserver/wfs')
 
 @step(r'Then I am given a single expected output from the Feature Collection')
 def feature_collection(step):
@@ -66,7 +66,7 @@ def feature_collection(step):
 def every_of_the_conus(step):
     test_pyGDP = create_web_processing_object()
     value = None
-    world.feature_collection = test_pyGDP._getFeatureCollectionGeoType(world.shapefile, world.attribute, value)
+    world.feature_collection = test_pyGDP._getFeatureCollectionGeoType(world.shapefile, world.attribute, value, 'http://cida.usgs.gov/gdp/geoserver/wfs')
 
 @step(r'I am given multiple expected outputs from Feature Collection')
 def all_feature_collection(step):

@@ -3,12 +3,12 @@
 #shapefiles, and the values of those attributes.
 from owslib.wfs import WebFeatureService
 from owslib.etree import etree
-from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL
+from pyGDP_Namespaces.pyGDP_Namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL #WFS_URL, 
 from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
 from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
 from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
 
-def getShapefiles():
+def getShapefiles(WFS_URL):
     """
     Returns a list of available files currently on geoserver.
     """
@@ -16,7 +16,7 @@ def getShapefiles():
     shapefiles = wfs.contents.keys()
     return shapefiles
 
-def getAttributes(shapefile):
+def getAttributes(shapefile, WFS_URL):
     """
     Given a valid shapefile(WFS Featuretype as returned by getShapefiles), this function will 
     make a request for one feature from the featureType and parse out the attributes that come from
@@ -45,7 +45,7 @@ def getAttributes(shapefile):
                     attributes.append(etree.QName(element).localname)
     return attributes
 
-def getValues(shapefile, attribute, getTuples, limitFeatures):
+def getValues(shapefile, attribute, getTuples, limitFeatures, WFS_URL):
     """
     Similar to get attributes, given a shapefile and a valid attribute this function
     will make a call to the Web Feature Services returning a list of values associated

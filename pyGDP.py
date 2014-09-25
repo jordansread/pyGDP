@@ -91,22 +91,22 @@ class pyGDPwebProcessing():
         return shapefile_id_handle.getTuples(shapefile, attribute)
      
     def getShapefiles(self):
-        return shapefile_value_handle.getShapefiles()
+        return shapefile_value_handle.getShapefiles(self.wfsUrl)
     
     def getAttributes(self, shapefile):
-        return shapefile_value_handle.getAttributes(shapefile)
+        return shapefile_value_handle.getAttributes(shapefile, self.wfsUrl)
     
     def getValues(self, shapefile, attribute, getTuples='false', limitFeatures=None):
-        return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures)
+        return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures, self.wfsUrl)
     
     def getGMLIDs(self, shapefile, attribute, value):
-        return shapefile_id_handle.getGMLIDs(shapefile, attribute, value)
+        return shapefile_id_handle.getGMLIDs(shapefile, attribute, value, WFS_URL=self.wfsUrl)
     
     def _getFilterID(self, tuples, value):
         return shapefile_id_handle._getFilterID(tuples, value)
     
     def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
-        return _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+        return _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, self.wfsUrl)
 
     def _generateRequest(self, dataSetURI, algorithm, method, varID=None, verbose=False):
         return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method, varID, verbose)
