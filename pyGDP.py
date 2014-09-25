@@ -93,8 +93,6 @@ from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UP
 from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
 from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
 
-__version__ = '1.2.2'
-
 class pyGDPwebProcessing():
     """
     This class allows interactive calls to be made into the GDP.
