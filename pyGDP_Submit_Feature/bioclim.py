@@ -27,12 +27,13 @@ def submitCustomBioclim(processid="org.n52.wps.server.r.gridded_bioclim",
         bbox_in:  The bounding box to use
                     four item tuple (max long, min lat, min long, max lat) 
     '''
-    _validate_bioclim_inputs(outputfname, verbose=False, **kwargs)
+    _validate_bioclim_inputs(outputfname, verbose=verbose, **kwargs)
     inputs = _parse_bioclim_inputs(**kwargs)
-    _execute_request._executeRequest(processid, inputs, "name", verbose, outputfname)
+    output=_execute_request._executeRequest(processid, inputs, "name", verbose, outputfname)
+    return output
 
     
-def _validate_bioclim_inputs(outputfname, **kwargs):
+def _validate_bioclim_inputs(outputfname, verbose, **kwargs):
     '''Checks that the arguments submitted to submitCustomBioclim are 
     reasonable
     '''
@@ -45,7 +46,7 @@ def _validate_bioclim_inputs(outputfname, **kwargs):
         raise Exception("Invalid or unresponsive OPeNDAP_URI provided:  " + kwargs["OPeNDAP_URI"])
     
     #Check that the passed variable names exist
-    datatypes = webdata_handle.getDataType(kwargs["OPeNDAP_URI"], False)
+    datatypes = webdata_handle.getDataType(kwargs["OPeNDAP_URI"], verbose=verbose)
     for var in ['prcp_var', 'tmax_var', 'tmin_var']: #Note tave_var is not required, not checked here.
         if not kwargs[var] is None:
             if kwargs[var] not in datatypes:
@@ -58,7 +59,7 @@ def _validate_bioclim_inputs(outputfname, **kwargs):
     
     #Check that the start and end times will work
     timerange = webdata_handle.getTimeRange(kwargs["OPeNDAP_URI"], 
-                                  varID=kwargs["prcp_var"], verbose=False)
+                                  varID=kwargs["prcp_var"], verbose=verbose)
     uri_start = dateutil.parser.parse(timerange[0]).replace(tzinfo=None)
     uri_end = dateutil.parser.parse(timerange[1]).replace(tzinfo=None)
     arg_start = datetime.datetime(int(kwargs['start']), 1, 1)
