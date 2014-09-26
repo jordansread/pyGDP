@@ -52,5 +52,24 @@ def _executeRequest(processid, inputs, output, verbose=True, outputFilePath=None
             sleep(sleepSecs)
         if err_count > WPS_attempts:        
             raise Exception("The process completed successfully, but an error occurred while downloading the result. You may be able to download the file using the link at the bottom of the status document: %s" % execution.statusLocation)
+    
+    _check_for_execution_errors(execution)
         
     return outputFilePath
+    
+def _check_for_execution_errors(execution):
+    '''wps does not raise python errors if something goes wrong on the server side
+    we will check for errors, and the succeded status and raise python
+    Exceptions as needed 
+    '''
+    errmsg = ""
+    
+    if execution.status == "ProcessFailed":
+        errmsg = "The remote process failed!\n"
+    
+    if execution.errors:
+        #something went wrong, it would be a shame to pass silently
+        errmsg += "\n".join([err.text for err in execution.errors])
+    
+    if errmsg:
+        raise Exception(errmsg)

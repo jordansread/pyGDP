@@ -2,6 +2,7 @@ from owslib.wps import WebProcessingService
 from StringIO import StringIO
 from owslib.etree import etree
 from GDP_XML_Generator import gdpXMLGenerator
+from pyGDP_Submit_Feature import _execute_request
 import sys
 
 from pyGDP_Namespaces.pyGDP_Namespaces import WPS_Service
@@ -27,6 +28,9 @@ def _generateRequest(dataSetURI, algorithm, method, varID, verbose):
     request = etree.tostring(root)
     
     execution = POST.execute(None, [], request=request)
+    
+    _execute_request._check_for_execution_errors(execution)
+    
     if method == 'getDataSetTime':
         seekterm = '{xsd/gdptime-1.0.xsd}time'
     elif method == 'getDataType':
