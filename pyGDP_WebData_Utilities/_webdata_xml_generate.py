@@ -19,12 +19,7 @@ def _generateRequest(dataSetURI, algorithm, method, varID, verbose):
     
     xmlGen = gdpXMLGenerator()
     root = xmlGen.getXMLRequestTree(dataSetURI, algorithm, method, varID, verbose)           
-    
-    # change standard output to not display waiting status
-    if not verbose:
-        old_stdout = sys.stdout
-        result = StringIO()
-        sys.stdout = result   
+     
     request = etree.tostring(root)
     
     execution = POST.execute(None, [], request=request)
@@ -39,9 +34,7 @@ def _generateRequest(dataSetURI, algorithm, method, varID, verbose):
         seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}description'
     elif method == 'getDataUnits':
         seekterm = '{xsd/gdpdatatypecollection-1.0.xsd}unitsstring'
-    if not verbose:
-        sys.stdout = old_stdout
-
+    
     return _parseXMLNodesForTagText(execution.response, seekterm)
 
 def _parseXMLNodesForTagText(xml, tag):

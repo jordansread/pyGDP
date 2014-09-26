@@ -30,7 +30,7 @@ def run_bioclim(step):
         tmin_var=world.tmin_var,
         prcp_var=world.prcp_var,
         tave_var=world.tave_var,
-        verbose=True
+        verbose=False
         )
         
 @step(r'I want to make sure the file is what I expect from before')
