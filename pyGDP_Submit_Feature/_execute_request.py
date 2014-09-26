@@ -67,7 +67,6 @@ def _check_for_execution_errors(execution):
     if execution.errors:
         #something went wrong, it would be a shame to pass silently
         errmsg += "\n".join([err.text for err in execution.errors])
-        errmsg += "\n" + execution.request
         
     if errmsg:
         raise Exception(errmsg)
