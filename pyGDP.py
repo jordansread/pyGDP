@@ -35,14 +35,14 @@ class pyGDPwebProcessing():
     This class allows interactive calls to be made into the GDP.
     """
     
-    def __init__(self, WFS_URL=None, wpsUrl=WPS_URL, version='1.1.0'):
+    def __init__(self, WFS_URL=None):
         if WFS_URL==None:
             from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL
         wfsUrl=WFS_URL
         self.wfsUrl = wfsUrl
-        self.wpsUrl = wpsUrl
-        self.version = version
-        self.wps = WebProcessingService(wpsUrl)
+        self.wpsUrl = WPS_URL
+        self.version = '1.1.0'
+        self.wps = WebProcessingService(WPS_URL)
         
     def WPSgetCapbilities(self, xml=None):
         """
