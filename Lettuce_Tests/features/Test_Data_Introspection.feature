@@ -8,3 +8,7 @@ Feature: Test Data Introspection
 		When I retrieve the metadata using the getDataType method
 		Then I find that "ppt" is in the big confusing xml that I get back
 		Then I know that the GDP data looks good from both ends
+		
+	Scenario: I made a mistake
+		Given a bad OPeNDAP url
+		Then I get the error I expect

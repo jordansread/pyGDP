@@ -1,7 +1,18 @@
 Changes 
 =======
+1.3.0-dev
+---------------
+
+- New testing framework implemented. Lettuce behavior driven development framework now wraps the nose testing framework.
+- Substantial refactor to reorganize the package into logical sub packages. Backward compatibility was maintained as much as possible. 
+- Improved installation instructions and installation utilities.
+- Examples updated.
+- Dataset availability caused some tests to be permanently broken.
+- Incorporated a function to execute the bioClim WPS algorithm.
+- Incorporated some better exception handling.  
 
 1.2.2 (2013-06-25)
+---------------
 
 - Implemented attribute and attribute value handling for ArcGIS-Server. As of the release of this functionality, debugging of the core-GDP is ongoing for the ArcGIS Server WFS payload.
 

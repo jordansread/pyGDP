@@ -7,7 +7,7 @@ def submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute='
     Makes a featureCategoricalGridCoverage algorithm call. 
     """
     
-    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL)
     if featureCollection is None:
         return
     processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureCategoricalGridCoverageAlgorithm'

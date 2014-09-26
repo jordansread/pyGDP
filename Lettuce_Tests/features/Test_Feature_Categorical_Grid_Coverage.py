@@ -18,7 +18,7 @@ def statsgo_dataset(step):
 @step(r'When I make a Feature Categorical Grid Coverage call')
 def test_FCGC(step):
     test_pyGDP = create_web_processing_object()
-    world.test_output_file_handle = test_pyGDP.submitFeatureCategoricalGridCoverage(world.shapefile, world.dataSetURI, world.dataType, world.attribute, world.value, verbose=True)
+    world.test_output_file_handle = test_pyGDP.submitFeatureCategoricalGridCoverage(world.shapefile, world.dataSetURI, world.dataType, world.attribute, world.value, verbose=False)
 
 def create_web_processing_object():
     new_web_processing = pyGDP.pyGDPwebProcessing()
