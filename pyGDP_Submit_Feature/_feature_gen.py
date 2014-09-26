@@ -1,4 +1,4 @@
-def _generateFeatureRequest(self, typename, attribute=None):
+def _generateFeatureRequest(self, typename, attribute=None, WFS_URL):
     """
     This function, given a attribute and a typename or filename will return a list of values associated
     with the file and the attribute chosen.

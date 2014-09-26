@@ -23,7 +23,7 @@ __version__ = '1.3.0-dev'
 #Check out the pyGDP_Namespaces file to see precisely how things are
 #what URLs pyGDP is pointing to. It's good to be aware.
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
-from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL, upload_URL, WPS_URL, WPS_Service, CSWURL
+from pyGDP_Namespaces.pyGDP_Namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL
 from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
 from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
 from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UPLD_NAMESPACE
@@ -34,12 +34,15 @@ class pyGDPwebProcessing():
     """
     This class allows interactive calls to be made into the GDP.
     """
-
-    def __init__(self, wfsUrl=WFS_URL, wpsUrl=WPS_URL, version='1.1.0'):
+    
+    def __init__(self, WFS_URL=None):
+        if WFS_URL==None:
+            from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL
+        wfsUrl=WFS_URL
         self.wfsUrl = wfsUrl
-        self.wpsUrl = wpsUrl
-        self.version = version
-        self.wps = WebProcessingService(wpsUrl)
+        self.wpsUrl = WPS_URL
+        self.version = '1.1.0'
+        self.wps = WebProcessingService(WPS_URL)
         
     def WPSgetCapbilities(self, xml=None):
         """
@@ -59,21 +62,21 @@ class pyGDPwebProcessing():
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
                                      verbose=False, coverage='true'):      
-        return feature_coverage.submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs, verbose, coverage)    
+        return feature_coverage.submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl)    
     
     def submitFeatureCoverageWCSIntersection(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true'):
-        return feature_coverage.submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage)
+        return feature_coverage.submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl)
     
     def submitFeatureCategoricalGridCoverage(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true', delim='COMMA'):
-        return feature_coverage.submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, delim)
+        return feature_coverage.submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, delim, self.wfsUrl)
 
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
                                             timeStep=False, summAttr=False, weighted=True):
         return fwgs.submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
-                                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted)
+                                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, self.wfsUrl)
 
     #pyGDP File Utilities
     def shapeToZip(self, inShape, outZip=None, allFiles=True):
@@ -88,22 +91,22 @@ class pyGDPwebProcessing():
         return shapefile_id_handle.getTuples(shapefile, attribute)
      
     def getShapefiles(self):
-        return shapefile_value_handle.getShapefiles()
+        return shapefile_value_handle.getShapefiles(self.wfsUrl)
     
     def getAttributes(self, shapefile):
-        return shapefile_value_handle.getAttributes(shapefile)
+        return shapefile_value_handle.getAttributes(shapefile, self.wfsUrl)
     
     def getValues(self, shapefile, attribute, getTuples='false', limitFeatures=None):
-        return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures)
+        return shapefile_value_handle.getValues(shapefile, attribute, getTuples, limitFeatures, self.wfsUrl)
     
     def getGMLIDs(self, shapefile, attribute, value):
-        return shapefile_id_handle.getGMLIDs(shapefile, attribute, value)
+        return shapefile_id_handle.getGMLIDs(shapefile, attribute, value, WFS_URL=self.wfsUrl)
     
     def _getFilterID(self, tuples, value):
         return shapefile_id_handle._getFilterID(tuples, value)
     
     def _getFeatureCollectionGeoType(self, geoType, attribute='the_geom', value=None, gmlIDs=None):
-        return _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+        return _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, self.wfsUrl)
 
     def _generateRequest(self, dataSetURI, algorithm, method, varID=None, verbose=False):
         return _webdata_xml_generate._generateRequest(dataSetURI, algorithm, method, varID, verbose)

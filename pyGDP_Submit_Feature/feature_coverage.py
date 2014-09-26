@@ -2,7 +2,7 @@ from pyGDP_Submit_Feature import _execute_request
 from pyGDP_WFS_Utilities import _get_geotype
 
 def submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
-                                         coverage='true', delim='COMMA'):
+                                         coverage='true', delim='COMMA', WFS_URL=None):
     """
     Makes a featureCategoricalGridCoverage algorithm call. 
     """
@@ -20,12 +20,12 @@ def submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute='
     output = "OUTPUT"
     return _execute_request._executeRequest(processid, inputs, output, verbose)
 
-def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true'):
+def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None):
     """
     Makes a featureCoverageWCSIntersection algorithm call. 
     """
     
-    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL)
     if featureCollection is None:
         return
     processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageIntersectionAlgorithm'
@@ -37,12 +37,12 @@ def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='
     return _execute_request._executeRequest(processid, inputs, output, verbose)
 
 def submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
-                                 verbose=False, coverage='true'):
+                                 verbose=False, coverage='true', WFS_URL=None):
     """
     Makes a featureCoverageOPenDAP algorithm call. 
     """
     
-    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL)
     if featureCollection is None:
         return
     processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageOPeNDAPIntersectionAlgorithm'
@@ -55,12 +55,12 @@ def submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime,
     output = "OUTPUT"
     return _execute_request._executeRequest(processid, inputs, output, verbose)    
 
-def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true'):
+def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None):
     """
     Makes a featureCoverageWCSIntersection algorithm call. 
     """
     
-    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs)
+    featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL)
     if featureCollection is None:
         return
     processid = 'gov.usgs.cida.gdp.wps.algorithm.FeatureCoverageIntersectionAlgorithm'

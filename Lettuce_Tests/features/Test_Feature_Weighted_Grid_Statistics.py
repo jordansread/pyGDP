@@ -26,7 +26,7 @@ def feature_weighted_grid_statistics(step):
                         world.dataset_uri, world.data_type, world.time_start, world.time_end, \
                         world.attribute, world.value, verbose=True)
 
-def create_web_processing_object():
+def create_web_processing_object(WFS_URL=None):
     new_web_processing = pyGDP.pyGDPwebProcessing()
     return new_web_processing
 
@@ -83,7 +83,6 @@ def set_landcover_from_nationalmap(step):
 def timeless_FWGS(step):
     time_start = None
     time_end = None
-
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(geoType=world.shapefile, dataSetURI=world.dataset_uri, \
                         varID=world.data_type, startTime=time_start, endTime=time_end, attribute=world.attribute, \
@@ -95,17 +94,14 @@ def timeless_output_test(step):
 
 @step(r'I have already uploaded the shapefile I want to sceincebase')
 def sciencebase_shapefile(step):
-    
-    pyGDP.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
-
+    world.WFS_URL = 'http://www.sciencebase.gov/arcgis/services/GeospatialFabric/mows_mapping/MapServer/WFSServer'
     world.shapefile  = 'GeospatialFabric_mows_mapping:NHDPlus_Catchment'
     world.attribute  = 'hru_id'
     world.value      = '99'
 
 @step(r'I submit my timestamped FWGS')
 def arc_FWGS(step):
-
-   test_pyGDP = create_web_processing_object()
+   test_pyGDP = create_web_processing_object(world.WFS_URL)
    world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, world.dataset_uri, world.time_start, \
                                                                       world.time_end, world.attribute, world.value, coverage=False, verbose=True)
 
