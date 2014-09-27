@@ -15,6 +15,7 @@ from urllib import urlencode
 from time import sleep
 import cgi
 import sys
+import logging
 
 __version__ = '1.3.0-dev'
 
@@ -29,6 +30,23 @@ from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPA
 from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UPLD_NAMESPACE
 from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
 from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
+
+#putzing around with logging
+logger = logging.getLogger('owslib')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs debug messages to a file.
+fh = logging.FileHandler('owslib.log')
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
 
 class pyGDPwebProcessing():
     """
