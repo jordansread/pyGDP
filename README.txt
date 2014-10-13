@@ -9,6 +9,9 @@ pyGDP has the following algorithms:
 	- FeatureCoverageOPenDap
 	- FeatureCoverageWCSIntersection
 
+Additional documentation can be found at the Geo Data Portal wiki. 
+https://my.usgs.gov/confluence/pages/viewpage.action?pageId=250937417
+
 Dependencies
 =================
 
