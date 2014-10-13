@@ -23,15 +23,17 @@ Installation
 ==================
 1.) Install after cloning the appropriate git:
 
-In your pyGDP-Master directory, run python:
+This can install pyGDP into your current Python version site-packages.
 
-setup.py install
+Use of virtualenv and pip is highly recommended. Sample commands to install pyGDP as a virtual env on a mac/unix operating system are given below. Similar commands can be used on windows. 
 
-This should install pyGDP into your current Python version site-packages.
-
-Find owslib at https://github.com/geopython/OWSLib
-
-Find lxml at https://github.com/lxml/lxml
+>> git clone https://github.com/USGS-CIDA/pyGDP.git
+>> virtualenv -p /usr/bin/python2.7 pyGDP/venv
+>> source pyGDP/venv/bin/activate
+>> pip install -r pyGDP/requirements.txt
+>> cd pyGDP
+>> python setup.py install
+>> lettuce pyGDP/Lettuce_Tests/features/ --tag=-not_working
 
 OR
 2.) Install using pip (first install or --update dependencies):
