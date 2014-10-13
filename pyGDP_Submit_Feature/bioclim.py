@@ -41,7 +41,7 @@ def _validate_bioclim_inputs(outputfname, verbose, **kwargs):
     # May want to have this try a few times to be safe, 
     # some datasets take a long time and can time out once or twice
     try:
-        urllib2.urlopen(kwargs["OPeNDAP_URI"] + ".html")
+        urllib2.urlopen(kwargs["OPeNDAP_URI".replace('dods','http')] + ".html")
     except:
         raise Exception("Invalid or unresponsive OPeNDAP_URI provided:  " + kwargs["OPeNDAP_URI"])
     
