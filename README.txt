@@ -36,11 +36,11 @@ Use of virtualenv and pip is highly recommended. Sample commands to install pyGD
 >> lettuce pyGDP/Lettuce_Tests/features/ --tag=-not_working
 
 OR
-2.) Install using pip (first install or --update dependencies):
+2.) Install using pip (first install or --upgrade dependencies):
 
-	pip install owslib --update
+	pip install owslib --upgrade
 
-	pip install lxml --update
+	pip install lxml --upgrade
 
 You can find libxml2 and libxlst with:
 	
