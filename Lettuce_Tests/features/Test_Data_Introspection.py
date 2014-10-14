@@ -32,3 +32,16 @@ def set_up_namespace(step):
 def set_up_namespace(step):
     test_pyGDP = create_web_processing_object()
     world.xml_data_types = test_pyGDP.getDataType(world.DATASET_URI, False) #Boolean for verbosity
+    
+@step('I am interested in "ppt"')
+def declare_variable(step):
+    world.prism_variable='ppt'
+
+@step('When I retrieve the metadata using the getTimeRange method')
+def get_time_range(step):
+    test_pyGDP = create_web_processing_object()
+    world.prism_timeRange = test_pyGDP.getTimeRange(world.DATASET_URI, world.prism_variable)
+
+@step('Then I find that the start date of prism is as expected.')
+def test_time_range(step):
+    assert('1895-01-01T00:00:00Z' in world.prism_timeRange)

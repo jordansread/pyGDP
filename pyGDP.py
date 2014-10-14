@@ -31,7 +31,7 @@ from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UP
 from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
 from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
 
-#putzing around with logging
+#Get OWSLib Logger
 logger = logging.getLogger('owslib')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs debug messages to a file.
@@ -143,7 +143,7 @@ class pyGDPwebProcessing():
         return  webdata_handle.getDataSetURI(anyText, CSWURL, BBox)
 
     def getTimeRange(self, dataSetURI, varID, verbose=False):
-        return webdata_handle.getTimeRange(ddataSetURI, varID, verbose)
+        return webdata_handle.getTimeRange(dataSetURI, varID, verbose)
 
 
 
