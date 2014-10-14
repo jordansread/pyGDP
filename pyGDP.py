@@ -76,23 +76,33 @@ class pyGDPwebProcessing():
     
     #pyGDP Submit Feature	
     def dodsReplace(self, dataSetURI, verbose=False):
-		return _execute_request.dodsReplace(dataSetURI, verbose)
+        if verbose:
+            ch.setLevel(logging.INFO)
+        return _execute_request.dodsReplace(dataSetURI, verbose)
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
-                                     verbose=False, coverage='true'):      
+                                     verbose=False, coverage='true'):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return feature_coverage.submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl)    
     
     def submitFeatureCoverageWCSIntersection(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true'):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return feature_coverage.submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl)
     
     def submitFeatureCategoricalGridCoverage(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true', delim='COMMA'):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return feature_coverage.submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, delim, self.wfsUrl)
 
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
                                             timeStep=False, summAttr=False, weighted=True):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return fwgs.submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
                                                         verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, self.wfsUrl)
 
@@ -131,18 +141,26 @@ class pyGDPwebProcessing():
 
     #pyGDP WebData Utilities
     def getDataLongName(self, dataSetURI, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getDataLongName(dataSetURI, verbose)
     
     def getDataType(self, dataSetURI, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getDataType(dataSetURI, verbose)
 
     def getDataUnits(self, dataSetURI, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getDataUnits(dataSetURI, verbose)
     
     def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
         return  webdata_handle.getDataSetURI(anyText, CSWURL, BBox)
 
     def getTimeRange(self, dataSetURI, varID, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getTimeRange(dataSetURI, varID, verbose)
 
 
