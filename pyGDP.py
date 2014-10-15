@@ -6,7 +6,7 @@
 # =============================================================================
 from pyGDP_WFS_Utilities import shapefile_value_handle, shapefile_id_handle, _get_geotype
 from pyGDP_WebData_Utilities import webdata_handle, _webdata_xml_generate
-from pyGDP_Submit_Feature import fwgs, _execute_request, feature_coverage
+from pyGDP_Submit_Feature import fwgs, _execute_request, feature_coverage, bioclim
 from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
 from GDP_XML_Generator import gdpXMLGenerator
 from owslib.wps import WebProcessingService, monitorExecution
@@ -105,6 +105,10 @@ class pyGDPwebProcessing():
             ch.setLevel(logging.INFO)
         return fwgs.submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
                                                         verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, self.wfsUrl)
+    def submitCustomBioclim(processid="org.n52.wps.server.r.gridded_bioclim", outputfname=None, verbose=False, **kwargs):
+        if verbose:
+            ch.setLevel(logging.INFO)
+        return bioclim.submitCustomBioclim(processid="org.n52.wps.server.r.gridded_bioclim", outputfname=outputfname, verbose=verbose, **kwargs)
 
     #pyGDP File Utilities
     def shapeToZip(self, inShape, outZip=None, allFiles=True):
