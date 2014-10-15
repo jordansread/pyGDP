@@ -12,3 +12,9 @@ Feature: Test Data Introspection
 	Scenario: I made a mistake
 		Given a bad OPeNDAP url
 		Then I get the error I expect
+		
+	Scenario: I want to know what time range prism has.
+		Given I am pointing to a test "prism" dataset with my URI
+		And I am interested in "ppt"
+		When I retrieve the metadata using the getTimeRange method
+		Then I find that the start date of prism is as expected.

@@ -6,7 +6,7 @@
 # =============================================================================
 from pyGDP_WFS_Utilities import shapefile_value_handle, shapefile_id_handle, _get_geotype
 from pyGDP_WebData_Utilities import webdata_handle, _webdata_xml_generate
-from pyGDP_Submit_Feature import fwgs, _execute_request, feature_coverage
+from pyGDP_Submit_Feature import fwgs, _execute_request, feature_coverage, bioclim
 from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
 from GDP_XML_Generator import gdpXMLGenerator
 from owslib.wps import WebProcessingService, monitorExecution
@@ -17,7 +17,7 @@ import cgi
 import sys
 import logging
 
-__version__ = '1.3.0-dev'
+__version__ = '1.3.1-dev'
 
 #This series of import functions brings in the namespaces, url, and pyGDP utility
 #variables from the pyGDP_Namespaces file, as well as owslib's own namespaces
@@ -31,7 +31,7 @@ from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UP
 from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
 from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
 
-#putzing around with logging
+#Get OWSLib Logger
 logger = logging.getLogger('owslib')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs debug messages to a file.
@@ -76,25 +76,39 @@ class pyGDPwebProcessing():
     
     #pyGDP Submit Feature	
     def dodsReplace(self, dataSetURI, verbose=False):
-		return _execute_request.dodsReplace(dataSetURI, verbose)
+        if verbose:
+            ch.setLevel(logging.INFO)
+        return _execute_request.dodsReplace(dataSetURI, verbose)
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
-                                     verbose=False, coverage='true'):      
+                                     verbose=False, coverage='true'):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return feature_coverage.submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl)    
     
     def submitFeatureCoverageWCSIntersection(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true'):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return feature_coverage.submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl)
     
     def submitFeatureCategoricalGridCoverage(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                              coverage='true', delim='COMMA'):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return feature_coverage.submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, delim, self.wfsUrl)
 
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
                                             timeStep=False, summAttr=False, weighted=True):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return fwgs.submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
                                                         verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, self.wfsUrl)
+    def submitCustomBioclim(processid="org.n52.wps.server.r.gridded_bioclim", outputfname=None, verbose=False, **kwargs):
+        if verbose:
+            ch.setLevel(logging.INFO)
+        return bioclim.submitCustomBioclim(processid="org.n52.wps.server.r.gridded_bioclim", outputfname=outputfname, verbose=verbose, **kwargs)
 
     #pyGDP File Utilities
     def shapeToZip(self, inShape, outZip=None, allFiles=True):
@@ -131,19 +145,27 @@ class pyGDPwebProcessing():
 
     #pyGDP WebData Utilities
     def getDataLongName(self, dataSetURI, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getDataLongName(dataSetURI, verbose)
     
     def getDataType(self, dataSetURI, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getDataType(dataSetURI, verbose)
 
     def getDataUnits(self, dataSetURI, verbose=False):
+        if verbose:
+            ch.setLevel(logging.INFO)
         return webdata_handle.getDataUnits(dataSetURI, verbose)
     
     def getDataSetURI(self, anyText='',CSWURL=CSWURL,BBox=None):
         return  webdata_handle.getDataSetURI(anyText, CSWURL, BBox)
 
     def getTimeRange(self, dataSetURI, varID, verbose=False):
-        return webdata_handle.getTimeRange(ddataSetURI, varID, verbose)
+        if verbose:
+            ch.setLevel(logging.INFO)
+        return webdata_handle.getTimeRange(dataSetURI, varID, verbose)
 
 
 

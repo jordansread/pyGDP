@@ -1,6 +1,6 @@
 from pyGDP_Submit_Feature import _execute_request
 from pyGDP_WFS_Utilities import _get_geotype
-
+from owslib.util import log
 
 def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
                                         verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, WFS_URL):
@@ -15,8 +15,7 @@ def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, e
     # test for dods:
     dataSetURI = _execute_request.dodsReplace(dataSetURI)
     
-    if verbose == True:
-        print 'Generating feature collection.'
+    log.info('Generating feature collection.')
     
     featureCollection = _get_geotype._getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL)
     if featureCollection is None:
