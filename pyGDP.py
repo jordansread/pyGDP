@@ -4,10 +4,10 @@
 #
 # Contact email: jread@usgs.gov
 # =============================================================================
-from pyGDP_WFS_Utilities import shapefile_value_handle, shapefile_id_handle, _get_geotype
-from pyGDP_WebData_Utilities import webdata_handle, _webdata_xml_generate
-from pyGDP_Submit_Feature import fwgs, _execute_request, feature_coverage, bioclim
-from pyGDP_File_Utilities import upload_shapefile, shape_to_zip
+from pygdp import shapefile_value_handle, shapefile_id_handle, _get_geotype
+from pygdp import webdata_handle, _webdata_xml_generate
+from pygdp import fwgs, _execute_request, feature_coverage, bioclim
+from pygdp import upload_shapefile, shape_to_zip
 from GDP_XML_Generator import gdpXMLGenerator
 from owslib.wps import WebProcessingService, monitorExecution
 from StringIO import StringIO
@@ -24,12 +24,12 @@ __version__ = '1.3.1-dev'
 #Check out the pyGDP_Namespaces file to see precisely how things are
 #what URLs pyGDP is pointing to. It's good to be aware.
 from owslib.ows import DEFAULT_OWS_NAMESPACE, XSI_NAMESPACE, XLINK_NAMESPACE
-from pyGDP_Namespaces.pyGDP_Namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL
-from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
-from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
-from pyGDP_Namespaces.pyGDP_Namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UPLD_NAMESPACE
-from pyGDP_Namespaces.pyGDP_Namespaces import URL_timeout, WPS_attempts
-from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
+from pygdp.namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL
+from pygdp.namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
+from pygdp.namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
+from pygdp.namespaces import DRAW_NAMESPACE, SMPL_NAMESPACE, UPLD_NAMESPACE
+from pygdp.namespaces import URL_timeout, WPS_attempts
+from pygdp.namespaces import namespaces
 
 #Get OWSLib Logger
 logger = logging.getLogger('owslib')
@@ -55,7 +55,7 @@ class pyGDPwebProcessing():
     
     def __init__(self, WFS_URL=None):
         if WFS_URL==None:
-            from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL
+            from pygdp.namespaces import WFS_URL
         wfsUrl=WFS_URL
         self.wfsUrl = wfsUrl
         self.wpsUrl = WPS_URL

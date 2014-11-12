@@ -3,10 +3,10 @@
 #shapefiles, and the values of those attributes.
 from owslib.wfs import WebFeatureService
 from owslib.etree import etree
-from pyGDP_Namespaces.pyGDP_Namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL #WFS_URL, 
-from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
-from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
-from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
+from pygdp.namespaces import upload_URL, WPS_URL, WPS_Service, CSWURL #WFS_URL, 
+from pygdp.namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
+from pygdp.namespaces import WPS_DEFAULT_NAMESPACE, CSW_NAMESPACE, WPS_DEFAULT_NAMESPACE, WFS_NAMESPACE, OGC_NAMESPACE, GML_NAMESPACE
+from pygdp.namespaces import namespaces
 
 def getShapefiles(WFS_URL):
     """

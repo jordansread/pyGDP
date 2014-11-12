@@ -4,7 +4,7 @@ Feature: Get Dataset URI from Catalogue Web Service
 	We will make a search for datasets
 	
 	Scenario: Search for "prism" data
-		Given I define the keyword as "prism"
+		Given I define the keyword as "prism climate group"
 		When I invoke the pyGDP.getDataSetURI method
 		Then I see the metadata and URIs of "prism" datasets
 

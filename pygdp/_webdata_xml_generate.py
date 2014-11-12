@@ -2,10 +2,10 @@ from owslib.wps import WebProcessingService
 from StringIO import StringIO
 from owslib.etree import etree
 from GDP_XML_Generator import gdpXMLGenerator
-from pyGDP_Submit_Feature import _execute_request
+from pygdp import _execute_request
 import sys
 
-from pyGDP_Namespaces.pyGDP_Namespaces import WPS_Service
+from pygdp.namespaces import WPS_Service
 
 def _generateRequest(dataSetURI, algorithm, method, varID, verbose):
     """

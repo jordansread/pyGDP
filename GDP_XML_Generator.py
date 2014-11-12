@@ -2,8 +2,8 @@ from owslib.etree import etree
 import owslib.util as util
 
 #Import the appropriate namespace variables.
-from pyGDP_Namespaces.pyGDP_Namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
-from pyGDP_Namespaces.pyGDP_Namespaces import namespaces
+from pygdp.namespaces import WPS_DEFAULT_VERSION, WPS_DEFAULT_SCHEMA_LOCATION, GML_SCHEMA_LOCATION
+from pygdp.namespaces import namespaces
 
 class gdpXMLGenerator():
     """

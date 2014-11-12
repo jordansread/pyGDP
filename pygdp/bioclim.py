@@ -1,5 +1,5 @@
-from pyGDP_Submit_Feature import _execute_request
-from pyGDP_WebData_Utilities import webdata_handle
+from pygdp import _execute_request
+from pygdp import webdata_handle
 import datetime
 import os
 import dateutil.parser

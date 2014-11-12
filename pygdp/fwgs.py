@@ -1,5 +1,5 @@
-from pyGDP_Submit_Feature import _execute_request
-from pyGDP_WFS_Utilities import _get_geotype
+from pygdp import _execute_request
+from pygdp import _get_geotype
 from owslib.util import log
 
 def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,

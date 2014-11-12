@@ -1,7 +1,7 @@
-from pyGDP_WFS_Utilities import shapefile_id_handle, shapefile_value_handle
+from pygdp import shapefile_id_handle, shapefile_value_handle
 
 #Use the import chunks from pyGDP.py to bring in the necessary namespace definitions
-from pyGDP_Namespaces.pyGDP_Namespaces import WFS_URL
+from pygdp.namespaces import WFS_URL
 from owslib.wps import WebProcessingService, WFSFeatureCollection, WFSQuery, GMLMultiPolygonFeatureCollection, monitorExecution
 
 def _getFeatureCollectionGeoType(geoType, attribute, value, gmlIDs, WFS_URL):

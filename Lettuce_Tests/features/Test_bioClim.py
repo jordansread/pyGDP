@@ -1,5 +1,5 @@
 import pyGDP
-from pyGDP_Submit_Feature import bioclim
+from pygdp import bioclim
 from lettuce import *
 from nose.tools import assert_equal
 import os
