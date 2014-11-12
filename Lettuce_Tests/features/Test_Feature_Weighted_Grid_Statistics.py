@@ -24,7 +24,7 @@ def feature_weighted_grid_statistics(step):
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, \
                         world.dataset_uri, world.data_type, world.time_start, world.time_end, \
-                        world.attribute, world.value, verbose=False)
+                        world.attribute, world.value, verbose=False, outputfname='testFWGS_testfile_test')
 
 def create_web_processing_object():
     new_web_processing = pyGDP.pyGDPwebProcessing()
@@ -53,7 +53,7 @@ def multi_feature_weighted_grid_statistics(step):
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, world.dataset_uri, world.data_type, world.time_start, \
                                    world.time_end, world.attribute, world.value, gmlIDs, verbose, coverage, \
-                                   delim, world.stats)
+                                   delim, world.stats, outputfname='testFWGS_testfile_multitest')
     
 @step(r'I should get the multi-stat output that I expect')
 def tests_for_multi_outputs(step):
@@ -66,7 +66,7 @@ def full_feature_weighted_grid_statistics(step):
     outputFile_handle = test_pyGDP.submitFeatureWeightedGridStatistics(geoType=world.shapefile, dataSetURI=world.dataset_uri, \
                     varID=world.data_type, startTime=world.time_start, endTime=world.time_end, attribute=world.attribute, \
                     value=world.value, gmlIDs=None, verbose=False, coverage='true', delim='COMMA', \
-                    stat=world.stats, grpby='STATISTIC', timeStep='false', summAttr='false')
+                    stat=world.stats, grpby='STATISTIC', timeStep='false', summAttr='false',outputfname='testFWGS_testfile_vartest')
 
 @step(r'I will be using a HUC 8 shapefile')
 def huc_shapefile(step):
