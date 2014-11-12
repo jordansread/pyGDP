@@ -1,5 +1,5 @@
 from owslib.csw import CatalogueServiceWeb
-from pyGDP_WebData_Utilities import _webdata_xml_generate
+from pygdp import _webdata_xml_generate
 
 def getDataSetURI(anyText, CSWURL, BBox):
                             """

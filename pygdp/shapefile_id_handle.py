@@ -1,4 +1,4 @@
-from pyGDP_WFS_Utilities import shapefile_value_handle
+from pygdp import shapefile_value_handle
 
 def getGMLIDs(shapefile, attribute, value, WFS_URL):
     """

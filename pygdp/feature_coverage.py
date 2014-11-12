@@ -1,5 +1,5 @@
-from pyGDP_Submit_Feature import _execute_request
-from pyGDP_WFS_Utilities import _get_geotype
+from pygdp import _execute_request
+from pygdp import _get_geotype
 
 def submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
                                          coverage='true', delim='COMMA', WFS_URL=None):
