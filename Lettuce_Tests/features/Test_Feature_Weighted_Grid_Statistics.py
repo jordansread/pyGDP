@@ -24,7 +24,7 @@ def feature_weighted_grid_statistics(step):
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, \
                         world.dataset_uri, world.data_type, world.time_start, world.time_end, \
-                        world.attribute, world.value, verbose=False, outputfname='testFWGS_testfile_test')
+                        world.attribute, world.value, verbose=False, outputfname='testFWGS_testfile_test', sleepSecs=5)
 
 def create_web_processing_object():
     new_web_processing = pyGDP.pyGDPwebProcessing()
@@ -53,7 +53,7 @@ def multi_feature_weighted_grid_statistics(step):
     test_pyGDP = create_web_processing_object()
     world.output_file = test_pyGDP.submitFeatureWeightedGridStatistics(world.shapefile, world.dataset_uri, world.data_type, world.time_start, \
                                    world.time_end, world.attribute, world.value, gmlIDs, verbose, coverage, \
-                                   delim, world.stats, outputfname='testFWGS_testfile_multitest')
+                                   delim, world.stats, outputfname='testFWGS_testfile_multitest', sleepSecs=5)
     
 @step(r'I should get the multi-stat output that I expect')
 def tests_for_multi_outputs(step):

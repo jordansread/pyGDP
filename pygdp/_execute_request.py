@@ -11,7 +11,7 @@ def dodsReplace(dataSetURI, verbose=False):
         dataSetURI= dataSetURI.replace("http", "dods")
     return dataSetURI
 
-def _executeRequest(processid, inputs, output, verbose=True, outputFilePath=None):
+def _executeRequest(processid, inputs, output, verbose=True, outputFilePath=None, sleepSecs=10):
     """
     This function makes a call to the Web Processing Service with
     the specified user inputs.
@@ -20,7 +20,7 @@ def _executeRequest(processid, inputs, output, verbose=True, outputFilePath=None
     
     execution = wps.execute(processid, inputs, output)
     
-    sleepSecs=10
+    sleepSecs=sleepSecs   
     err_count=1
     
     while execution.isComplete()==False:

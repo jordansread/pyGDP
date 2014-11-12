@@ -19,8 +19,7 @@ def dataset_call(step):
 @step(r'I run submitFeatureCoverageOPenDAP in pyGDP')
 def test_FCO(step):
     test_pyGDP = create_web_processing_object()
-    world.output_file = test_pyGDP.submitFeatureCoverageOPenDAP(world.shapefile, world.dataSetURI, world.dataType, world.timeStart, world.timeEnd, world.attribute, world.value, verbose=False, outputfname='testOPenDAP_testfile_test')
-
+    world.output_file = test_pyGDP.submitFeatureCoverageOPenDAP(world.shapefile, world.dataSetURI, world.dataType, world.timeStart, world.timeEnd, world.attribute, world.value, verbose=False, outputfname='testOPenDAP_testfile_test', sleepSecs=15)
 
 def create_web_processing_object():
     new_web_processing = pyGDP.pyGDPwebProcessing()
