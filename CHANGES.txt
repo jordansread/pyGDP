@@ -4,6 +4,8 @@ Changes
 ---------------
 
 - Improved log level control. If pyGDP methods are run in verbose mode, the terminal log handler is set to INFO level rather than ERROR.
+- Implemented ability to change filename and recheck interval in the top-level pyGDP methods.
+- Reorganized package into sub-modules instead of sub-packages.
 
 1.3.0-dev (2014-10-10)
 ---------------
