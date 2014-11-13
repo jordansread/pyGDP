@@ -2,7 +2,7 @@ from pygdp import _execute_request
 from pygdp import _get_geotype
 
 def submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
-                                         coverage='true', delim='COMMA', WFS_URL=None, outputfname=None):
+                                         coverage='true', delim='COMMA', WFS_URL=None, outputfname=None, sleepSecs=10):
     """
     Makes a featureCategoricalGridCoverage algorithm call. 
     """
@@ -18,9 +18,9 @@ def submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute='
            ("REQUIRE_FULL_COVERAGE",coverage),
            ("FEATURE_COLLECTION", featureCollection)]
     output = "OUTPUT"
-    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname)
+    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname, sleepSecs)
 
-def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None, outputfname=None):
+def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None, outputfname=None, sleepSecs=10):
     """
     Makes a featureCoverageWCSIntersection algorithm call. 
     """
@@ -34,10 +34,9 @@ def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='
               ("REQUIRE_FULL_COVERAGE",coverage), 
               ("FEATURE_COLLECTION", featureCollection)]
     output = "OUTPUT"
-    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname)
+    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname, sleepSecs)
 
-def submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
-                                 verbose=False, coverage='true', WFS_URL=None, outputfname=None):
+def submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None, outputfname=None, sleepSecs=10):
     """
     Makes a featureCoverageOPenDAP algorithm call. 
     """
@@ -53,9 +52,9 @@ def submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime,
                ("REQUIRE_FULL_COVERAGE",coverage),
                ("FEATURE_COLLECTION", featureCollection)]
     output = "OUTPUT"
-    return _execute_request._executeRequest(processid, inputs, output, verbose)    
+    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname, sleepSecs)    
 
-def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None, outputfname=None):
+def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False, coverage='true', WFS_URL=None, outputfname=None, sleepSecs=10):
     """
     Makes a featureCoverageWCSIntersection algorithm call. 
     """
@@ -69,4 +68,4 @@ def submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute='
               ("REQUIRE_FULL_COVERAGE",coverage), 
               ("FEATURE_COLLECTION", featureCollection)]
     output = "OUTPUT"
-    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname)
+    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname, sleepSecs)

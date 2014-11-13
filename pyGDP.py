@@ -81,30 +81,30 @@ class pyGDPwebProcessing():
         return _execute_request.dodsReplace(dataSetURI, verbose)
     
     def submitFeatureCoverageOPenDAP(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None, gmlIDs=None, 
-                                     verbose=False, coverage='true', outputfname=None):
+                                     verbose=False, coverage='true', outputfname=None, sleepSecs=10):
         if verbose:
             ch.setLevel(logging.INFO)
-        return feature_coverage.submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl, outputfname)    
+        return feature_coverage.submitFeatureCoverageOPenDAP(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl, outputfname, sleepSecs)    
     
     def submitFeatureCoverageWCSIntersection(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
-                                             coverage='true', outputfname=None):
+                                             coverage='true', outputfname=None, sleepSecs=10):
         if verbose:
             ch.setLevel(logging.INFO)
-        return feature_coverage.submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl, outputfname)
+        return feature_coverage.submitFeatureCoverageWCSIntersection(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, self.wfsUrl, outputfname, sleepSecs)
     
     def submitFeatureCategoricalGridCoverage(self, geoType, dataSetURI, varID, attribute='the_geom', value=None, gmlIDs=None, verbose=False,
-                                             coverage='true', delim='COMMA', outputfname=None):
+                                             coverage='true', delim='COMMA', outputfname=None, sleepSecs=10):
         if verbose:
             ch.setLevel(logging.INFO)
-        return feature_coverage.submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, delim, self.wfsUrl, outputfname)
+        return feature_coverage.submitFeatureCategoricalGridCoverage(geoType, dataSetURI, varID, attribute, value, gmlIDs, verbose, coverage, delim, self.wfsUrl, outputfname, sleepSecs)
 
     def submitFeatureWeightedGridStatistics(self, geoType, dataSetURI, varID, startTime, endTime, attribute='the_geom', value=None,
                                             gmlIDs=None, verbose=None, coverage=True, delim='COMMA', stat='MEAN', grpby='STATISTIC', 
-                                            timeStep=False, summAttr=False, weighted=True, outputfname=None):
+                                            timeStep=False, summAttr=False, weighted=True, outputfname=None, sleepSecs=10):
         if verbose:
             ch.setLevel(logging.INFO)
         return fwgs.submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
-                                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, self.wfsUrl, outputfname)
+                                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, self.wfsUrl, outputfname, sleepSecs)
 
     def submitCustomBioclim(processid="org.n52.wps.server.r.gridded_bioclim", outputfname=None, verbose=False, **kwargs):
         if verbose:

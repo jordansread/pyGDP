@@ -3,7 +3,7 @@ from pygdp import _get_geotype
 from owslib.util import log
 
 def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, endTime, attribute, value, gmlIDs,
-                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, WFS_URL, outputfname):
+                                        verbose, coverage, delim, stat, grpby, timeStep, summAttr, weighted, WFS_URL, outputfname, sleepSecs):
     """
     Makes a featureWeightedGridStatistics algorithm call. 
     The web service interface implemented is summarized here: 
@@ -83,4 +83,4 @@ def submitFeatureWeightedGridStatistics(geoType, dataSetURI, varID, startTime, e
     
     output = "OUTPUT"
     
-    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname)
+    return _execute_request._executeRequest(processid, inputs, output, verbose, outputfname, sleepSecs)
