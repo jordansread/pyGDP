@@ -52,7 +52,6 @@ class pyGDPwebProcessing():
     """
     This class allows interactive calls to be made into the GDP.
     """
-    
     def __init__(self, WFS_URL=None):
         if WFS_URL==None:
             from pygdp.namespaces import WFS_URL
@@ -168,6 +167,22 @@ class pyGDPwebProcessing():
             ch.setLevel(logging.INFO)
         return webdata_handle.getTimeRange(dataSetURI, varID, verbose)
 
-
-
-
+    #Pull up docstrings. 
+    #dodsReplace.__doc__ = _execute_request.dodsReplace.__doc__
+    getAttributes.__doc__ = shapefile_value_handle.getAttributes.__doc__
+    getDataLongName.__doc__ = webdata_handle.getDataLongName.__doc__
+    getDataSetURI.__doc__ = webdata_handle.getDataSetURI.__doc__
+    getDataType.__doc__ = webdata_handle.getDataType.__doc__
+    getDataUnits.__doc__ = webdata_handle.getDataUnits.__doc__
+    getGMLIDs.__doc__ = shapefile_id_handle.getGMLIDs.__doc__
+    getShapefiles.__doc__ = shapefile_value_handle.getShapefiles.__doc__
+    getTimeRange.__doc__ = webdata_handle.getTimeRange.__doc__
+    getTuples.__doc__ = shapefile_id_handle.getTuples.__doc__
+    getValues.__doc__ = shapefile_value_handle.getValues.__doc__
+    shapeToZip.__doc__ = shape_to_zip.shapeToZip.__doc__
+    submitCustomBioclim.__doc__ = bioclim.submitCustomBioclim.__doc__
+    submitFeatureCategoricalGridCoverage.__doc__ = feature_coverage.submitFeatureCategoricalGridCoverage.__doc__
+    submitFeatureCoverageOPenDAP.__doc__ = feature_coverage.submitFeatureCoverageOPenDAP.__doc__
+    submitFeatureCoverageWCSIntersection.__doc__ = feature_coverage.submitFeatureCoverageWCSIntersection.__doc__
+    submitFeatureWeightedGridStatistics.__doc__  = fwgs.submitFeatureWeightedGridStatistics.__doc__
+    uploadShapeFile.__doc__  = upload_shapefile.uploadShapeFile.__doc__
