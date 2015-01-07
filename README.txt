@@ -24,16 +24,13 @@ You can find example usages and scripts in the examples folder.
 
 Installation
 ==================
-1.) Install after cloning the appropriate git:
-
-This can install pyGDP into your current Python version site-packages.
-
-Use of virtualenv and pip is highly recommended. Sample commands to install pyGDP as a virtual env on a mac/unix operating system are given below. Similar commands can be used on windows. 
+1.) Use of virtualenv and pip is highly recommended. Sample commands to install pyGDP as a virtual env on a mac/unix operating system are given below. Similar commands can be used on windows. 
 
 >> git clone https://github.com/USGS-CIDA/pyGDP.git
 >> virtualenv -p /usr/bin/python2.7 pyGDP/venv
 >> source pyGDP/venv/bin/activate
 >> pip install -r pyGDP/requirements.txt
+>> pip install -r pyGDP/testing-requirements.txt
 >> cd pyGDP
 >> python setup.py install
 >> lettuce pyGDP/Lettuce_Tests/features/ --tag=-not_working
@@ -51,7 +48,7 @@ You can find libxml2 and libxlst with:
 
 You can install the pyGDP git master branch (with python v.3.0 or greater):
 	
-	pip install git+https://github.com/USGS-CIDA/pyGDP.git@v1.2.2#egg=pyGDP (for the lastest stable version)
+	pip install git+https://github.com/USGS-CIDA/pyGDP.git@v1.3.1#egg=pyGDP (for the lastest stable version)
 
 	pip install git+https://github.com/USGS-CIDA/pyGDP.git@master (for the, possibly unstable, current commit)
 
