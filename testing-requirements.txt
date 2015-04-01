@@ -1,0 +1,5 @@
+OWSLib==0.8.10
+lxml==3.3.5
+python-dateutil==2.2
+lettuce==0.2.19
+nose==1.3.4
