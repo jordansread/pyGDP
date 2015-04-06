@@ -1,9 +1,9 @@
 pyGDP
-=================
+=====
 
 pyGDP provides a fast and efficient way of making calls to the USGS GeoData Portal.
 
-pyGDP has the following algorithms: 
+pyGDP has the following algorithms:
 	- FeatureCategoricalGridCoverage
 	- FeatureWeightedGridStatistics
 	- FeatureCoverageOPenDap
@@ -62,6 +62,17 @@ Find and install the lxml and owslib though Package Manager
 (Recommended you set Canopy as your default python environment)
 Install pyGDP as in 1.)
 
+OR
+4.) Install using Anaconda/miniconda
+Add the IOOS channel and install pyGDP:
+    conda config --add channels ioos -f
+    conda install pygdp
+
+Install pyGDP without adding the IOOS channel:
+    conda install -c http://conda.alpha.binstar.org/ioos/channel/main pygdp
+
+For more info on Anaconda and the IOOS channel see:
+    https://github.com/ioos/conda-recipes/wiki
 
 Having trouble compiling?
 
