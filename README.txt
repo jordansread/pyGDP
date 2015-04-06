@@ -68,7 +68,7 @@ Add the IOOS channel and install pyGDP:
     conda config --add channels ioos -f
     conda install pygdp
 
-Install pyGDP without adding the IOOS channel:
+Install pyGDP without subscribing to the channel
     conda install -c http://conda.alpha.binstar.org/ioos/channel/main pygdp
 
 For more info on Anaconda and the IOOS channel see:
