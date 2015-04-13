@@ -14,7 +14,7 @@ setup(
     name = 'pyGDP',
     version = __version__,
     description = 'Interface to the USGS GeoData Portal',
-    long_description = open('README.txt').read(),
+    long_description = open('README.md').read(),
     license='Public Domain',
     maintainer='Jordan Read',  # Originally Xao Yang
     maintainer_email='jread@usgs.gov',
